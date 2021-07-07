@@ -1,12 +1,18 @@
 from __future__ import division, unicode_literals, print_function  # for compatibility with Python 2 and 3
 
-import os
-
+import matplotlib as mpl
 import matplotlib.pyplot as plt
-import pims
-
 
 # %matplotlib inline
+
+import numpy as np
+import pandas as pd
+from pandas import DataFrame, Series  # for convenience
+
+import pims
+import trackpy as tp
+
+import os
 
 
 @pims.pipeline
@@ -15,8 +21,11 @@ def gray(image):
 
 
 @pims.pipeline
-def test(image):
-    return image[:, :, 1]  # Take just the green channel
+def as_grey(frame):
+    red = frame[:, :, 0]
+    green = frame[:, :, 1]
+    blue = frame[:, :, 2]
+    return 0.2125 * red + 0.7154 * green + 0.0721 * blue
 
 
 def convert_into_image_sequence(path):
@@ -37,7 +46,7 @@ def convert_into_image_sequence(path):
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     print('Hi PyCharm')
-    frames = test(convert_into_image_sequence('./BW/BW-Isil-video4.avi'))
+    frames = gray(convert_into_image_sequence('./BW/BW-Isil-video4.avi'))
     print('----------')
     frames
     print('Type of Frames ' + str(type(frames)))
@@ -45,9 +54,10 @@ if __name__ == '__main__':
     print(frames[0])
     print('Type of Frames[0] ' + str(type(frames[0])))
     print('----------')
-    frames[0]
-    print('----------')
     plt.imshow(frames[0])
     plt.show()
     print('----------')
+    f = tp.locate(frames[0], 11, True)
+    f.head()
+    tp.annotate(f, frames[0])
     print('Bye PyCharm')
