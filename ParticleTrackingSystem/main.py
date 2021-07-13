@@ -1,18 +1,20 @@
 from __future__ import division, unicode_literals, print_function  # for compatibility with Python 2 and 3
 
-import matplotlib as mpl
-import matplotlib.pyplot as plt
+import os
 
-# %matplotlib inline
+import matplotlib.pyplot as plt
 
 import numpy as np
 import pandas as pd
+#from Cython.Utility.MemoryView import memoryview
 from pandas import DataFrame, Series  # for convenience
 
 import pims
 import trackpy as tp
 
-import os
+
+# %matplotlib inline
+from trackpy.utils import memo
 
 
 @pims.pipeline
@@ -41,7 +43,8 @@ def convert_into_image_sequence(path):
 
 
 # TODO Do not forget to delete the content of the directory after using it.
-
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', None)
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
@@ -57,7 +60,49 @@ if __name__ == '__main__':
     plt.imshow(frames[0])
     plt.show()
     print('----------')
+    # Localise les taches de types Gaussiens d'une taille approxi. dans une image.
     f = tp.locate(frames[0], 11, True)
-    f.head()
+    # Returns information of the first 5 founded particles(y,x,mass,size,ecc,signal,raw_mass,ep,frame)
+    print(f.head())
+    # Mark identified features with white circles.
     tp.annotate(f, frames[0])
+
+    fig, ax = plt.subplots()
+    ax.hist(f['mass'], bins=20)
+
+    # Optionally, label the axes.
+    ax.set(xlabel='mass', ylabel='count')
+    plt.show()
+
+    f = tp.locate(frames[0], 11, minmass=30, invert=True)
+    tp.annotate(f, frames[0])
+
+    # Check for subpixel accuracy
+    #tp.subpx_bias(f)
+    #plt.show()
+
+    #tp.subpx_bias(tp.locate(frames[0], 15, minmass=30, invert=True))
+    #plt.show()
+
+    f = tp.batch(frames[:5], 11, minmass=30, invert=True)
+    print("Batch function returns a: " + str(type(f)))
+    tt = pd.DataFrame(f)
+    #print(tt)
+    #for line in f
+    df = pd.DataFrame({'c1': [10, 11, 12], 'c2': [100, 110, 120]})
+    print(df)
+    increase = []
+    decrease = []
+    for index, row in tt.iterrows():
+        if index == 0:
+            continue
+        print(index, row['mass'])
+
+
+    plt.figure(figsize=(14, 10))
+    tp.annotate(f, frames[0])
+    plt.show()
+
+    t = tp.link_df(f, search_range=5, memory=20)
+    tp.plot_traj(t, label=False, superimpose=None)
     print('Bye PyCharm')
