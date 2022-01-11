@@ -11,7 +11,7 @@ from pandas import DataFrame, Series  # for convenience
 
 import pims
 import trackpy as tp
-
+import inspect
 
 # %matplotlib inline
 from trackpy.utils import memo
@@ -59,55 +59,31 @@ if __name__ == '__main__':
     print('----------')
     plt.imshow(frames[0])
     plt.show()
-    print('----------')
+    print('------##----')
     # Localise les taches de types Gaussiens d'une taille approxi. dans une image.
-    f = tp.locate(frames[0], 11, True)
+    #Ici dans l'image 0
+    f = tp.locate(frames[0], 5, False)
+    print('Type of f ' + str(type(f)))
+    print(f.head())
+    # Localise les taches de types Gaussiens d'une taille approxi. dans une image.
+    #Ici dans l'image 1
+    print('Data of 2nd image')
+    f = tp.locate(frames[1], 5, False)
+
     # Returns information of the first 5 founded particles(y,x,mass,size,ecc,signal,raw_mass,ep,frame)
     print(f.head())
     # Mark identified features with white circles.
     tp.annotate(f, frames[0])
+    print(f.at[0,'mass'])
+    print(f.at[99, 'mass'])
 
-    fig, ax = plt.subplots()
-    ax.hist(f['mass'], bins=20)
-
-    # Optionally, label the axes.
-    ax.set(xlabel='mass', ylabel='count')
-    plt.show()
-
-    f = tp.locate(frames[0], 11, minmass=30, invert=True)
-    tp.annotate(f, frames[0])
-
-    # Check for subpixel accuracy
-    #tp.subpx_bias(f)
-    #plt.show()
-
-    #tp.subpx_bias(tp.locate(frames[0], 15, minmass=30, invert=True))
-    #plt.show()
-
-    # f = tp.batch(frames[:2], 11, minmass=30, invert=True)
-    f = tp.batch(frames[:2], 11, minmass=30, invert=True)
-    print("Batch function returns a: " + str(type(f)))
-    tt = pd.DataFrame(f)
-    #print(tt)
-    #for line in f
-    df = pd.DataFrame({'c1': [10, 11, 12], 'c2': [100, 110, 120]})
-    print(df)
-    increase = []
-    decrease = []
-    for index, row in tt.iterrows():
-        if index == 0:
-            continue
-        print("Idx: ")
-        print(index, row['mass'])
+    x_werte = []
+    cr = 0
+    for image in frames[:]:
+        print('Image type: '+ str(type(image)))
+        print(cr)
+        cr += 1
 
 
-    # plt.figure(figsize=(14, 10))
-    plt.figure(figsize=(9, 5))
-    tp.annotate(f, frames[0])
-    plt.show()
-
-
-
-    t = tp.link_df(f, search_range=5, memory=20)
-    tp.plot_traj(t, label=False, superimpose=None)
+    
     print('Bye PyCharm')
