@@ -65,26 +65,39 @@ if __name__ == '__main__':
     print('Data of 1st image')
     f = tp.locate(frames[0], 5, False)
     print('Type of f ' + str(type(f)))
-    print(f.head())
+    # print(f.head())
     # Localise les taches de types Gaussiens d'une taille approxi. dans une image.
     #Ici dans l'image 1
-    print('Data of 2nd image')
-    f = tp.locate(frames[1], 5, False)
-
-    # Returns information of the first 5 founded particles(y,x,mass,size,ecc,signal,raw_mass,ep,frame)
-    print(f.head())
-    # Mark identified features with white circles.
+    print("first print")
+    f = tp.locate(frames[0], 5, minmass=200.0, maxsize=None, separation=2, noise_size=1,
+                  smoothing_size=None, threshold=None, invert=False, topn=None, preprocess=True,
+                  max_iterations=10, filter_before=None, filter_after=True, characterize=True, engine='python')
+    plt.figure(figsize=(14, 10))
     tp.annotate(f, frames[0])
-    print(f.at[0,'mass'])
-    print(f.at[99, 'mass'])
+    print(f.head())
 
-    x_werte = []
-    cr = 0
-    for image in frames[:]:
-        print('Image type: '+ str(type(image)))
-        print(cr)
-        cr += 1
-
-
-    
+    print("Second print")
+    f = tp.locate(frames[0], 5, minmass=200.0, maxsize=None, separation=2, noise_size=1,
+                  smoothing_size=None, threshold=None, invert=False, topn=400, preprocess=True,
+                  max_iterations=10, filter_before=None, filter_after=True, characterize=True, engine='python')
+    plt.figure(figsize=(14, 10))
+    tp.annotate(f, frames[0])
+    print(f.head())
+    # f = tp.locate(frames[1], 5, minmass=200.0, maxsize=None, separation=2, noise_size=1,
+    #               smoothing_size=None, threshold=None, invert=False, topn=None, preprocess=True,
+    #               max_iterations=10, filter_before=None, filter_after=True, characterize=True, engine='python')
+    # plt.figure(figsize=(14, 10))
+    # tp.annotate(f, frames[0])
+    #
+    # f = tp.locate(frames[2], 5, minmass=200.0, maxsize=None, separation=2, noise_size=1,
+    #               smoothing_size=None, threshold=None, invert=False, topn=None, preprocess=True,
+    #               max_iterations=10, filter_before=None, filter_after=True, characterize=True, engine='python')
+    # plt.figure(figsize=(14, 10))
+    # tp.annotate(f, frames[0])
+    #
+    # f = tp.locate(frames[3], 5, minmass=200.0, maxsize=None, separation=2, noise_size=1,
+    #               smoothing_size=None, threshold=None, invert=False, topn=None, preprocess=True,
+    #               max_iterations=10, filter_before=None, filter_after=True, characterize=True, engine='python')
+    # plt.figure(figsize=(14, 10))
+    # tp.annotate(f, frames[0])
     print('Bye PyCharm')
