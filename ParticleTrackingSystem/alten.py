@@ -69,20 +69,33 @@ if __name__ == '__main__':
     # Localise les taches de types Gaussiens d'une taille approxi. dans une image.
     #Ici dans l'image 1
     print("first print")
-    f = tp.locate(frames[0], 5, minmass=200.0, maxsize=None, separation=2, noise_size=1,
+    f = tp.locate(frames[0], 5, minmass=200.0, maxsize=None, separation=2.5, noise_size=1,
                   smoothing_size=None, threshold=None, invert=False, topn=None, preprocess=True,
                   max_iterations=10, filter_before=None, filter_after=True, characterize=True, engine='python')
     plt.figure(figsize=(14, 10))
-    tp.annotate(f, frames[0])
+    # tp.annotate(f, frames[0])
     print(f.head())
+    ii = f.index
+    print(len(ii))
 
     print("Second print")
     f = tp.locate(frames[0], 5, minmass=200.0, maxsize=None, separation=2, noise_size=1,
                   smoothing_size=None, threshold=None, invert=False, topn=400, preprocess=True,
                   max_iterations=10, filter_before=None, filter_after=True, characterize=True, engine='python')
     plt.figure(figsize=(14, 10))
-    tp.annotate(f, frames[0])
+    # tp.annotate(f, frames[0])
+    print(f.head(400))
+
+    f = tp.locate(frames[59], 5, minmass=200.0, maxsize=None, separation=2, noise_size=1,
+                  smoothing_size=None, threshold=None, invert=False, topn=400, preprocess=True,
+                  max_iterations=10, filter_before=None, filter_after=True, characterize=True, engine='python')
+    plt.figure(figsize=(14, 10))
+    tp.annotate(f, frames[20])
     print(f.head())
+    print(len(f))
+    # print(len(ii))
+    # for i in ii:
+    #     print(i)
     # f = tp.locate(frames[1], 5, minmass=200.0, maxsize=None, separation=2, noise_size=1,
     #               smoothing_size=None, threshold=None, invert=False, topn=None, preprocess=True,
     #               max_iterations=10, filter_before=None, filter_after=True, characterize=True, engine='python')

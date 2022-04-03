@@ -69,22 +69,22 @@ def set_frames_number_in_array(array):
         i += 1
 
 
-def set_particle_in_2d_array(frames, ):
-    arr1 = []
-    print("len(tp.locate(frames[0], 5, False) " + str(len(tp.locate(frames[0], 5, False))))
-    print("len(frames) " + str(len(frames)))
-    ite = 0
-    for i in range(len(frames)):
-        col = []
-        ppf = particle_pre_frame[ite]
-        for j in range(ppf):
-            col.append(0)
-        arr1.append(col)
-        if ite < len(particle_pre_frame) - 1:
-            ite += 1
-    print("Print arr1")
-    print(arr1)
-    return arr1
+# def set_particle_in_2d_array(frames, ):
+#     arr1 = []
+#     print("len(tp.locate(frames[0], 5, False) " + str(len(tp.locate(frames[0], 5, False))))
+#     print("len(frames) " + str(len(frames)))
+#     ite = 0
+#     for i in range(len(frames)):
+#         col = []
+#         ppf = particle_pre_frame[ite]
+#         for j in range(ppf):
+#             col.append(0)
+#         arr1.append(col)
+#         if ite < len(particle_pre_frame) - 1:
+#             ite += 1
+#     print("Print arr1")
+#     print(arr1)
+#     return arr1
 
 # TODO Do not forget to delete the content of the directory after using it.
 pd.set_option('display.max_columns', None)
@@ -98,21 +98,26 @@ if __name__ == '__main__':
     plt.imshow(frames[0])
     plt.show()
 
-    print('------##------')
-
-    # Localise les taches de types Gaussiens d'une taille approxi. dans une image.
-    # Ici dans l'image 0
-    print('Data of 1st image')
+    # print('------##------')
+    #
+    # # Localise les taches de types Gaussiens d'une taille approxi. dans une image.
+    # # Ici dans l'image 0
+    # print('Data of 1st image')
     f = tp.locate(frames[0], 5, False)
     print('Type of f ' + str(type(f)))
     print(f.head())
-    print(len(f))
-    # Localise les taches de types Gaussiens d'une taille approxi. dans une image.
-    # Ici dans l'image 1
-    print('Data of 2nd image')
-    f = tp.locate(frames[1], 5, False)
-    print(f.head())
-    print(len(f))
+    print(f.at[99, 'mass'])
+    print(f.columns)
+    ii = f.index
+    for i in ii:
+        print(i)
+    # print(len(f))
+    # # Localise les taches de types Gaussiens d'une taille approxi. dans une image.
+    # # Ici dans l'image 1
+    # print('Data of 2nd image')
+    # f = tp.locate(frames[1], 5, False)
+    # print(f.head())
+    # print(len(f))
 
     # Stores the number of particles per image in array
     print("Loop is starting...")
@@ -130,37 +135,38 @@ if __name__ == '__main__':
     # Returns information of the first 5 founded particles(y,x,mass,size,ecc,signal,raw_mass,ep,frame)
     # print(f.head())
 
-    # Mark identified features with white circles and show it up.
-    tp.annotate(f, frames[0])
-    print(f.at[0, 'mass'])
-    print(f.at[99, 'mass'])
-    # Gets all attributes of the given label/index
-    print(f.loc[[0]])
+    # # Mark identified features with white circles and show it up.
+    # tp.annotate(f, frames[0])
+    # print(f.at[0, 'mass'])
+    # print(f.at[99, 'mass'])
+    # # Gets all attributes of the given label/index
+    # print(f.loc[[0]])
 
-    print("Trying to add some attributes of a particle in a specific arrays position")
-    rows, cols = (5, 5)
-    arr = [[0 for i in range(cols)] for j in range(rows)]
-
-    arr[0][1] = {'mass': f.at[0, 'mass'], 'size': f.at[0, 'size'], 'signal': f.at[0, 'signal']}
-    print(arr)
-    i = 0
-    for n in arr:
-        arr[i][0] = i
-        i += 1
-
-    print_2d(arr)
+    # print("Trying to add some attributes of a particle in a specific arrays position")
+    # rows, cols = (5, 5)
+    # arr = [[0 for i in range(cols)] for j in range(rows)]
+    #
+    # arr[0][1] = {'mass': f.at[0, 'mass'], 'size': f.at[0, 'size'], 'signal': f.at[0, 'signal']}
+    # print(arr)
+    # i = 0
+    # for n in arr:
+    #     arr[i][0] = i
+    #     i += 1
+    #
+    # print_2d(arr)
     # f = tp.batch(frames[:30], 5, minmass=30, invert=True)
     # print("Batch function returns a: " + str(type(f)))
 
-    rows, cols = (len(frames), len(tp.locate(frames[0], 5, False)))
-    arr2 = [[0 for i in range(cols)] for j in range(rows)]
-
-    i = 0
-    for n in arr2:
-        arr2[i][0] = i
-        i += 1
-    print("type of arr2: " + str(type(arr2)))
+    # rows, cols = (len(frames), len(tp.locate(frames[0], 5, False)))
+    # arr2 = [[0 for i in range(cols)] for j in range(rows)]
+    #
+    # i = 0
+    # for n in arr2:
+    #     arr2[i][0] = i
+    #     i += 1
+    # print("type of arr2: " + str(type(arr2)))
     # rows, cols = (5, 5)
+    print("After looping arrange_array(frames, particle_pre_frame) :")
     arr1 = []
     print("len(tp.locate(frames[0], 5, False) " + str(len(tp.locate(frames[0], 5, False))))
     print("len(frames) " + str(len(frames)))
@@ -173,36 +179,37 @@ if __name__ == '__main__':
         arr1.append(col)
         if ite < len(particle_pre_frame) - 1:
             ite += 1
-    # print("Print arr1")
-    # print(arr1)
+    print("Print arr1")
+    print(arr1)
 
     set_frames_number_in_array(arr1)
-    frame_index, particle_index = 0, 1
-    for r in arr1:
-        re = int(len(r))
-        if frame_index in range(0, len(frames)):
-            f = tp.locate(frames[frame_index], 5, False)
-            for c in r:
-                arr1[frame_index][particle_index] = {'mass': f.at[particle_index, 'mass'],
-                                                     'size': f.at[particle_index, 'size'],
-                                                     'signal': f.at[particle_index, 'signal']}
-                re = int(len(r))
-                re = int(len(r)) - particle_index
-                if int(len(r)) - particle_index != 1:
-                    particle_index += 1
-            particle_index = 1
-            re = int(len(arr1))
-            if frame_index <= int(len(arr1)) - 1:
-                frame_index += 1
-            else:
-                break
-    print_2d(arr1)
-
+    # frame_index, particle_index = 0, 1
+    # for r in arr1:
+    #     re = int(len(r))
+    #     if frame_index in range(0, len(frames)):
+    #         f = tp.locate(frames[frame_index], 5, False)
+    #         for c in r:
+    #             arr1[frame_index][particle_index] = {'mass': f.at[particle_index, 'mass'],
+    #                                                  'size': f.at[particle_index, 'size'],
+    #                                                  'signal': f.at[particle_index, 'signal']}
+    #             re = int(len(r))
+    #             re = int(len(r)) - particle_index
+    #             if int(len(r)) - particle_index != 1:
+    #                 particle_index += 1
+    #         particle_index = 1
+    #         re = int(len(arr1))
+    #         if frame_index <= int(len(arr1)) - 1:
+    #             frame_index += 1
+    #         else:
+    #             break
+    # print_2d(arr1)
+    print("After looping set_frames_number_in_array(p_array) :")
     i = 0
     for n in arr1:
         arr1[i][0] = i
         i += 1
     print("type of arr1: " + str(type(arr1)))
+    print(arr1)
     frame_index, particle_index = 0, 1
     for r in arr1:
         re = int(len(r))
@@ -221,6 +228,6 @@ if __name__ == '__main__':
                 frame_index += 1
             else:
                 break
-    print_2d(arr1)
+    # print_2d(arr1)
 
     print('Bye PyCharm')
