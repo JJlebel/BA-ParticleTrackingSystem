@@ -43,3 +43,4 @@ if __name__ == '__main__':
 
     print_2d(tracker.array)
 
+    tracker.testt(tracker.array)
