@@ -1,0 +1,153 @@
+%Vorlage von Klaus Prüger kprueger{at}uni-bremen.de, 2021
+\documentclass[	pdftex, 
+								a4paper,
+								11pt, DIV11, BCOR5mm,
+								parskip,
+								%openany,
+								] {scrreprt}
+\usepackage[utf8]{inputenc}
+
+
+\usepackage{hyperref}
+\usepackage{comment}
+\usepackage[ngerman]{babel}
+\usepackage[nonumberlist,toc,acronym]{glossaries}
+\usepackage{fancyhdr}
+\usepackage[section]{placeins}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{bibgerm}
+\usepackage{varwidth}
+\usepackage{float}
+
+\usepackage{epstopdf}
+\usepackage{textpos}
+\usepackage{changepage}
+\usepackage{theorem}
+\usepackage{caption}
+\usepackage{framed}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usetikzlibrary{decorations.markings,arrows,positioning,trees,calc,fit,shapes}
+\usepackage[noend]{algorithmic}
+\usepackage{algorithm}
+\usepackage{environ}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage{todonotes}
+
+
+
+
+%Kopfzeile hinzufuegen
+\renewcommand{\sectionmark}[1]{\markboth{#1}{}} % set the \leftmark
+
+\fancypagestyle{plain}{
+    
+    \fancyhead[R]{\leftmark}
+    \fancyhead[L]{Job Jimmy Lebelwa Danmou}
+    \renewcommand{\headrulewidth}{1pt}
+    %\fancyfoot[R]{\thepage}
+}
+
+\pagestyle{fancy}
+
+%Literaturverzeichnis hinzufuegen
+\bibliographystyle{plain}
+%\normalfont
+%\scshape
+
+% Glossar hinzufuegen
+\include{Anhang/glossar}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Dokument Beginn
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\setcounter{page}{-2}
+\pagestyle{empty}
+\pagenumbering{none}
+
+%Formalien
+\include{Formalien/deckblatt}
+
+%\phantomsection
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\pagestyle{empty}
+%\addcontentsline{toc}{chapter}{Eidesstaatliche Erkl\"arung}
+\include{Formalien/eidesstaatliche}
+
+%\phantomsection
+
+%Abstrakt
+%\addcontentsline{toc}{chapter}{Abstract}
+\include{Formalien/abstract}
+
+%Motivation
+%\addcontentsline{toc}{chapter}{Motivation}
+\include{Formalien/motivation}
+
+%Hintergrund Literatur
+%\addcontentsline{toc}{chapter}{Hintergrundliteratur}
+\include{Formalien/hintergrundLiteratur}
+
+%Tools
+%\addcontentsline{toc}{chapter}{Tools}
+\include{Formalien/tools}
+
+%\phantomsection
+
+%Inhaltsverzeichnis
+%\addcontentsline{toc}{chapter}{Inhaltsverzeichnis}
+\tableofcontents
+
+%\phantomsection
+
+\pagestyle{fancy}
+
+%Kapitel
+\include{Kapitel/kapitel}
+
+\phantomsection
+
+%%%%%%%%%%%%%%Anhang%%%%%%%%%%%%%%
+
+%Abbildungsverzeichnis
+\addcontentsline{toc}{chapter}{Abbildungsverzeichnis}
+\listoffigures
+
+\phantomsection
+
+%Tabellenverzeichnis
+\addcontentsline{toc}{chapter}{Tabellenverzeichnis}
+\listoftables
+
+\phantomsection
+
+%Algorithmen
+\addcontentsline{toc}{chapter}{Algorithmen}
+\include{Anhang/algorithmen}
+
+\phantomsection
+
+%Glossar
+\printglossary
+
+\phantomsection
+
+%Quellenverzeichnis
+\addcontentsline{toc}{chapter}{Literaturverzeichnis}
+\bibliography{quellenverzeichnis}
+
+\phantomsection
+
+%Anhang
+\addcontentsline{toc}{chapter}{Anhang}
+\include{Anhang/anhang}
+
+%\phantomsection
+
+\end{document}
