@@ -21,13 +21,14 @@ Werkzeug & Schwerpunkt & Zugänglichkeit & Parameteranzahl \\
  \hline
  OpenPTV & & & \\
  \hline
- ??????  & & & \\
+ STracking  & & & \\
  \hline
- ??????  & & & \\
+ PySTACHIO  & & & \\
  \hline
 \end{tabular}
 
-
+\todo{\href{file:///C:/Users/leb/Downloads/10.21105.joss.04398.pdf}{MyPTV}, \\ \href{https://www.sciencedirect.com/science/article/pii/S2001037021002944}{PySTACHIO},\\ \href{https://spt.readthedocs.io/en/latest/}{SPT}
+\\ \href{https://www.google.com/search?q=Python+package+for+particle+tracking&rlz=1C1CHBF_deDE987DE987&sxsrf=ALiCzsYl2NtGnlFYYupES17uNyNLp8zhIQ:1653590912505&ei=gMuPYoKwHsyMxc8Phquk2AM&start=10&sa=N&ved=2ahUKEwiC8MWX6v33AhVMRvEDHYYVCTsQ8NMDegQIARBQ&biw=1920&bih=969}{Python package for particle tracking}}
 
 
 %\addcontentsline{toc}{section}{Kapitel-1}
@@ -72,7 +73,7 @@ Beachte, dass einfachheitshalber, während der gesamten Parametereinstellung nur
 	Hier wird es ein Antwortversuch auf die zuletzt gestellte Frage eingegangen. Zur Erreichung dieses Zieles wird mit der Erkennung begonnen, indem nur die geforderten Parameter(raw\_image und diameter) verwendet werden und nach und nach weitere hinzugefügt werden, um die Suche zu verfeinern. 
 	
 	\begin{enumerate}
-    			\item locate(f, d): Wobei f = raw\_image und d = diameter. \\ \\
+    			\item \textbf{locate(f, d): Wobei f = raw\_image und d = diameter.} \\ \\
     			 Während frames[0] entspricht in diesem Fall dem ersten Bild der Videoaufnahme bzw. der Imagesequenz. \texttt{frames} hingegen bilden die Gesamtheit der Bilder des Videos im Laufe der Zeit und damit die Sequenz der Bilder.  Diese Angabe, die vom Typ Array ist, stellt eine Voraussetzung für die Ausführung von Funktionen dar. \\
     			 Für den Durchmesser wird zunächst willkürlich eine ziemlich kleine ungerade Zahl genommen, um die Ergebnisse zu sehen und eine Annäherung an den Wert, den wir verwenden sollen, zu erhalten. Zunächst nehmen wir also einen Durchmesser von drei (d=3).  
     			 
@@ -116,7 +117,9 @@ Aus diesem Grund wurde nacheinander der Durchmesser von sieben und dann von fün
     \end{minipage}
 \end{figure}
 
-In Anbetracht unseres Ziels, einen Durchmesser zu finden, der die Erkennung möglichst vieler Partikel ermöglicht und gleichzeitig möglichst wenig unerwünschte Partikel enthält, ist es besser, mit dem Durchmesser 5 fortzufahren. 
+In Anbetracht des Ziels, einen Durchmesser zu finden, der die Erkennung möglichst vieler Partikel ermöglicht und gleichzeitig möglichst wenig unerwünschte Partikel enthält, ist es besser, mit dem Durchmesser 5 fortzufahren. Denn aus den zuvor verwendeten Durchmessern geht hervor, dass bei diesem Bild die Anzahl der nicht-lokalisierten Teilchen umso größer ist, je höher der Durchmesser ist. 
+Dies ist nicht als Allgemeingültigkeit zu verstehen, da verschiedene Videos unterschiedliche Arten von Partikeln mit variierenden Größen und Dicken aufweisen. Es wäre ratsam, die Parameter bei jedem neuen Video zu testen.
+Tatsächlich lassen sich insgesamt 475 Partikeln finden, von denen ca. 121 unerwünscht waren und kaum fehlten. Dies entspricht einer ungefähren Rate von 25.47\%.
 
 \begin{figure}[H]
     \centering
@@ -136,19 +139,42 @@ In Anbetracht unseres Ziels, einen Durchmesser zu finden, der die Erkennung mög
 %    			Insgesamt lassen sich 207 Partikeln finden, von denen 22 unerwünscht waren  und 91 fehlten. Dies entspricht einer ungefähren Rate von 10,628\% für die unerwünschten und einer Rate von 43,9617\% für die nicht gefundenen.
 
     			
-    			\item locate(frames[0], 11, minmass=1000.0 ): \\ \\
-    			Da ca. nur 10\% der letzten Suche unerwünschte Elemente waren, wird den Durchschnitt der \textit{minmass} aller Teilchen berechnet und als \textit{minmass} verwendet. Aus der vorherigen \textsc{Panda.Dataframe} genügt es den Mittelwert aus den Werten der \textit{mass}-Spalte zu berechnen, um auf \textit{minmass} von ca. 2490.21 zu gelangen. Das Resultat wird dann wie folgt aussehen:
+    			\item \textbf{locate(f, d, minmass)}:\\ \\
+%    			Da ca. nur 10\% der letzten Suche unerwünschte Elemente waren, wird den Durchschnitt der \textit{minmass} aller Teilchen berechnet und als \textit{minmass} verwendet. Aus der vorherigen \textsc{Panda.Dataframe} genügt es den Mittelwert aus den Werten der \textit{mass}-Spalte zu berechnen, um auf \textit{minmass} von ca. 2490.21 zu gelangen. Das Resultat wird dann wie folgt aussehen:
+Wie bereits erwähnt, spiegelt \textit{minmass} die inhärente und eingebaute minimale Helligkeit jedes lokalisierten Partikels wider. Das Ziel ist es nun, die zuvor ermittelten, zu dunklen Partikel herauszufiltern. Daher ist es notwendig, methodisch mit dem Parameter \textit{minmass} zu spielen, um dieses Ziel zu erreichen. Es gibt natürlich mehrere Möglichkeiten, den optimalen Wert für die gesuchte Parameter zu finden. Allerdings wird hier die folgende Logik verfolgt:\\
+
+Aus dem DataFrame der letzten Suche (locate(frames[0], 5)) wurde ja 475 Partikel gefunden. Davon sind ca. 25.47\%, also 121 unerwünscht. Diese Zahl entspricht so fast allen gefundenen zu dunklen Partikel. In anderen Worten, stellt sie die Elemente dar, deren \textit{minmass} zu niedrig ist.
+So könnte der Dataframe verwendet werden und ihn nach der Spalte \textit{mass} absteigend sortieren. 
+Dies würde dazu führen, dass unsere dunkelsten Partikel am Ende der Liste (Tabelle) positioniert werden und die hellsten ganz oben. Dazu muss keine Funktion implementiert werden, sondern es genügt, die Funktion \textit{sort\_values()} aus der Panda. Dataframe-Bibliothek aufzurufen. Der Aufruf sowie die Tabelle sähe jeweils dann wie folgt aus:\\ \texttt{dataframe.sort\_values(by=['mass'], ascending=False)}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/df_initial.png}
+    \caption{Ein Teil des initialen Dataframes}
+    %\label{fig:bild_label}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/df_sorted.png}
+    \caption{Ein Teil des sortierten Dataframes}
+    %\label{fig:bild_label}
+\end{figure}
+
+Jetzt wird es auf dem sortierten Dataframe eine weitere Funktion aufgerufen, um lediglich nur die 354 (also 475-121)gewünschte Partikel bwz. hellsten zu behalten. Eine solche Funktion \textit{head()} wird auch von Panda-Dataframe bereitgestellt. Aus diesem Ergebnis reicht es aus, die von Python angebotene Funktion \textit{min()} auszuführen, um den kleinsten Wert in der Spalte \textit{mass} zu erhalten. 
+Die Aufrufe sähen dann wie folgt aus:\\
+\texttt{dataframe.head(354)} \\
+\texttt{min(dataframe['mass'])}\\
+
+\textbf{189.7280490025089} ist hier das Ergebnis der vorherigen Vorgänge und damit auch den minimalen Wert von \textit{mass}, den ein Partikel haben muss. Es sei der \textit{minmass} Parameter der Funktion \textit{locate()}.
+
+
+
+%Es wurde zwar fast alle \textit{False Positive} beseitigt, aber dafür wurde eine viel zu hohe Anzahl an \textit{True Negative} nicht gefunden. Die Lösung für dieses Problem besteht darin, den Wert von "minmass"  schrittweise zu verringern, bis ein zufriedenstellendes Ergebnis erzielt wird.
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_minmass_01.png}
-    \caption{locate with 'mimass=2490,21'}
-    %\label{fig:bild_label}
-\end{figure}
-Es wurde zwar fast alle \textit{False Positive} beseitigt, aber dafür wurde eine viel zu hohe Anzahl an \textit{True Negative} nicht gefunden. Die Lösung für dieses Problem besteht darin, den Wert von "minmass" schrittweise zu verringern, bis ein zufriedenstellenderes Ergebnis erzielt wird.
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_minmass_02.png}
-    \caption{locate with 'mimass=1000'}
+    \caption{locate with 'mimass=189.7280490025089'}
     %\label{fig:bild_label}
 \end{figure}
 
