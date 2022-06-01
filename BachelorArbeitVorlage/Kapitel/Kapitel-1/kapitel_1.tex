@@ -51,7 +51,7 @@ Dieser verfügt über eine reihe von Parametern, anhand derer die Qualität der 
 %    			\item maxsize: float\\
 %    			Maximaler Gyrationsradius der Helligkeit.
     			\item separation: float\\
-    			Minimaler Abstand zwischen den Partikeln.    			
+    			Minimaler Abstand zwischen den Partikeln. Der Standardwert ist \textit{diameter + 1}   			
     			\item noise\_size: float or tuple\\
     			Breite des Gaußschen Unschärfekerns, in Pixeln. Der Standardwert ist 1.
     			\item topn: interger\\
@@ -139,7 +139,7 @@ Tatsächlich lassen sich insgesamt 475 Partikeln finden, von denen ca. 121 unerw
 %    			Insgesamt lassen sich 207 Partikeln finden, von denen 22 unerwünscht waren  und 91 fehlten. Dies entspricht einer ungefähren Rate von 10,628\% für die unerwünschten und einer Rate von 43,9617\% für die nicht gefundenen.
 
     			
-    			\item \textbf{locate(f, d, minmass)}:\\ \\
+    			\item {\Large \textbf{locate(f, d, minmass)}}:\\ \\
 %    			Da ca. nur 10\% der letzten Suche unerwünschte Elemente waren, wird den Durchschnitt der \textit{minmass} aller Teilchen berechnet und als \textit{minmass} verwendet. Aus der vorherigen \textsc{Panda.Dataframe} genügt es den Mittelwert aus den Werten der \textit{mass}-Spalte zu berechnen, um auf \textit{minmass} von ca. 2490.21 zu gelangen. Das Resultat wird dann wie folgt aussehen:
 Wie bereits erwähnt, spiegelt \textit{minmass} die inhärente und eingebaute minimale Helligkeit jedes lokalisierten Partikels wider. Das Ziel ist es nun, die zuvor ermittelten, zu dunklen Partikel herauszufiltern. Daher ist es notwendig, methodisch mit dem Parameter \textit{minmass} zu spielen, um dieses Ziel zu erreichen. Es gibt natürlich mehrere Möglichkeiten, den optimalen Wert für die gesuchte Parameter zu finden. Allerdings wird hier die folgende Logik verfolgt:\\
 
@@ -149,14 +149,14 @@ Dies würde dazu führen, dass unsere dunkelsten Partikel am Ende der Liste (Tab
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/df_initial.png}
+    \includegraphics[scale=0.45]{Grafiken/trackpyBilder/df_initial.png}
     \caption{Ein Teil des initialen Dataframes}
     %\label{fig:bild_label}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/df_sorted.png}
+    \includegraphics[scale=0.45]{Grafiken/trackpyBilder/df_sorted.png}
     \caption{Ein Teil des sortierten Dataframes}
     %\label{fig:bild_label}
 \end{figure}
@@ -166,7 +166,7 @@ Die Aufrufe sähen dann wie folgt aus:\\
 \texttt{dataframe.head(354)} \\
 \texttt{min(dataframe['mass'])}\\
 
-\textbf{189.7280490025089} ist hier das Ergebnis der vorherigen Vorgänge und damit auch den minimalen Wert von \textit{mass}, den ein Partikel haben muss. Es sei der \textit{minmass} Parameter der Funktion \textit{locate()}.
+\textbf{189.72805} ist hier das Ergebnis der vorherigen Vorgänge und damit auch den minimalen Wert von \textit{mass}, den ein Partikel haben muss. Es sei der \textit{minmass} Parameter der Funktion \textit{locate()}.
 
 
 
@@ -174,12 +174,67 @@ Die Aufrufe sähen dann wie folgt aus:\\
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_minmass_01.png}
-    \caption{locate with 'mimass=189.7280490025089'}
+    \caption{locate with 'mimass=189.72805'}
     %\label{fig:bild_label}
 \end{figure}
 
-		\item locate(frames[0], 11, minmass=1000.0, separation=2, noise\_size=1.5): \\ \\
-    			Hier wird es einfach Werte bei \textit{separtion} und \textit{noise\_size} ausprobiert, um auf die bessere Resultate zu kommen. Dies ergibt in diesem Fall:
+Aus diesem Bild geht hervor, dass fast alle gewünschten Partikel lokalisiert bleiben. Allerdings werden einige von ihnen doppelt gezählt, was Gegenstand der Verwendung anderer Parameter sein wird. Dennoch gibt es noch einige Partikel, die nicht lokalisiert werden sollten. Es handelt sich dabei um etwa 12 Teilchen. Es wäre daher ratsam, die \textit{minmass} schrittweise zu erhöhen, bis ein zufriedenstellendes Ergebnis erzielt wird.\\
+Zum Festlegen des Wertes, der in jedem Schritt verwendet werden soll, schauen Sie in der Tabelle (Dataframe), die mit \textit{dataframe.sort\_vaules(by=['mass'], ascending=False}) erstellt wurde, beginnend mit der 121. Zeile von unten nach oben.(121. Zeile entspricht der Anzahl der Teilchen mit geringer Helligkeit)
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.55]{Grafiken/trackpyBilder/df\_steps.png}
+    \caption{Sortierte Tabelle}
+    %\label{fig:bild_label}
+\end{figure}
+
+So werden nach und nach die Werte 197,1016 (d. h. 197), 197,6688 (d. h. 198) und so weiter verwendet.\\
+Die Verwendung der Funktion \texttt{locate(frames[0], 5, \textbf{minmass=197})} ergibt so gut wie keine Änderung der Lokalisierung. Da insgesamt immer noch 353 Partikel  erkannt wurde. Daher wird sich der nächste Versuch mit dem folgenden Wert beschäftigen. Genauer gesagt "minmass = 198". \\
+Auch hier wurden nur zwei Teilchen weniger gefunden. Das sind insgesamt 351 Partikel. Obwohl es fast unmöglich ist, diese beiden Teilchen auf dem Bild zu erkennen. 
+Es wäre klug, den nächsten Wert unserer Tabelle zu nehmen, der derzeit bei 203,6244 (also 204) liegt, und erneut zu versuchen, eine Lokalisierung durchzuführen. (Siehe )
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_minmass_02.png}
+    \caption{locate with 'mimass=197'}
+    %\label{fig:bild_label}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_minmass_04(204).png}
+    \caption{locate with 'mimass=204'}
+    %\label{fig:bild_label}
+\end{figure}
+
+Bei der Verfolgung dieser Logik kommt es hier schnell auf einen \textit{minmass} Wert von \textbf{210}.\\
+Wo es deutlich zu erkennen ist, dass weitere unerwünschte Partikel nicht mit erkannt wurde. Es wurde insgesamt hier \textbf{345} Partikel gefunden. Jedoch muss es festgestellt werden, dass ab \textbf{211} nach oben, werden zwar weniger unerwünschte Partikel gefangen, aber auch erwünschte. 
+Wie es die Veranschaulichung auf Bild (Bild 212)zeigt. 
+Deswegen wird es dem weiteren  den Parameter  \textbf{Separation} gewidmet, um weitere unerwünschte zu eliminieren.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_minmass_07(210).png}
+    \caption{locate with 'mimass=210'}
+    %\label{fig:bild_label}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_minmass_08(212).png}
+    \caption{locate with 'mimass=212'}
+    %\label{fig:bild_label}
+\end{figure}
+
+
+		\item {\Large \textbf{locate(f, d, minmass, sepration)}}: \\ \\
+    			Hier wird es einfach Werte bei \texttt{separtion} ausprobiert, um auf die bessere Resultate zu kommen. 
+    			Es wäre interessant zu erwähnen, dass es sich dabei um den minimalen Abstand zwischen zwei Teilchen handelt. Der Standardwert ist Durchmesser + 1. In diesem Fall ist es 6. 
+Mit diesem neuen Parameter werden wir versuchen, all jene Partikel zu eliminieren, die doppelt erkannt werden. Ohne die Qualität der bisherigen Erkennung zu beeinträchtigen.  
+
+Denn es scheint offensichtlich, dass, wenn der Wert zu hoch ist, mehrere bisher erkannte Partikel nicht mehr erkannt werden. Weil sie zu nahe beieinander liegen.
     			
 \begin{figure}[H]
     \centering
