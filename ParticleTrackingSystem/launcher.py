@@ -19,7 +19,7 @@ from trackpy.utils import memo
 
 from ParticleTrackingSystem.video_utility import Video_Utility, gray
 from ParticleTrackingSystem.tracker import Tracker, set_frames_number_in_array, tp_locate, \
-    get_particles_per_image_as_array, print_2d
+    get_particles_per_image_as_array, print_2d, test, is_a_dictionary
 
 if __name__ == '__main__':
     video_utility = Video_Utility()
@@ -43,4 +43,17 @@ if __name__ == '__main__':
 
     print_2d(tracker.array)
 
-    tracker.testt(tracker.array)
+    tracker.arrange_panda(tracker.array)
+
+
+    def gg(hd):
+        xx, yy = [], []
+        for e in hd:
+            if is_a_dictionary():
+                xx.append(e['x'])
+                yy.append(e['y'])
+            else:
+                continue
+        return xx, yy
+        # tracker.event_finder(tracker.dataframe)
+    # tracker.testt(tracker.array)

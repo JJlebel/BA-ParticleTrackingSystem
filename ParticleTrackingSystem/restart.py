@@ -17,6 +17,8 @@ import inspect
 # %matplotlib inline
 from trackpy.utils import memo
 
+from ParticleTrackingSystem.tracker import is_a_dictionary
+
 
 @pims.pipeline
 def gray(image):
@@ -103,14 +105,14 @@ if __name__ == '__main__':
     # # Localise les taches de types Gaussiens d'une taille approxi. dans une image.
     # # Ici dans l'image 0
     # print('Data of 1st image')
-    f = tp.locate(frames[0], 5, False)
-    print('Type of f ' + str(type(f)))
-    print(f.head())
-    print(f.at[99, 'mass'])
-    print(f.columns)
-    ii = f.index
-    for i in ii:
-        print(i)
+    # f = tp.locate(frames[0], 5, False)
+    # print('Type of f ' + str(type(f)))
+    # print(f.head())
+    # print(f.at[99, 'mass'])
+    # print(f.columns)
+    # ii = f.index
+    # for i in ii:
+    #     print(i)
     # print(len(f))
     # # Localise les taches de types Gaussiens d'une taille approxi. dans une image.
     # # Ici dans l'image 1
@@ -120,18 +122,66 @@ if __name__ == '__main__':
     # print(len(f))
 
     # Stores the number of particles per image in array
-    print("Loop is starting...")
-    particle_pre_frame = []
-    print("type of particle_pre_frame: " + str(type(particle_pre_frame)))
-    cnt = 0
-    for i in frames:
-        f = tp.locate(frames[cnt], 5, False)
-        print("Number of particle frame[" + str(cnt) + "]" + str(len(f)))
-        particle_pre_frame.append(len(f))
-        cnt += 1
-        # break
-    print("Loop is ending...")
+    # print("Loop is starting...")
+    # particle_pre_frame = []
+    # print("type of particle_pre_frame: " + str(type(particle_pre_frame)))
+    # cnt = 0
+    # for i in frames:
+    #     f = tp.locate(frames[cnt], 5, False)
+    #     print("Number of particle frame[" + str(cnt) + "]" + str(len(f)))
+    #     particle_pre_frame.append(len(f))
+    #     cnt += 1
+    #     # break
+    # print("Loop is ending...")
+    mi = 210
+    sep = 5+7
+    f3 = tp.locate(frames[0], 5, minmass=mi, separation=sep)
+    plt.figure(figsize=(14, 10))
+    tp.annotate(f3, frames[0])
+    print(f3.head(5))
 
+    tp.subpx_bias(f3)
+    plt.show()
+    print(f"By separation:{sep}  ==>  len: {len(f3)}")
+
+
+    # def gg(hd):
+    #     xx, yy = [], []
+    #     for e in hd:
+    #         if is_a_dictionary(e):
+    #             xx.append(e['x'])
+    #             yy.append(e['y'])
+    #         else:
+    #             continue
+    #
+    #     plt.plot(xx, xy)
+    #     plt.gca().set_aspect("equal")
+    #     plt.show()
+
+    # print(frames[0])
+    # f4 = tp.locate(frames[0], 11, minmass=1000.0, maxsize=None, separation=2, noise_size=1,
+    # smoothing_size=None, threshold=None, invert=False, topn=300, preprocess=True,
+    # max_iterations=10, filter_before=None, filter_after=True, characterize=True, engine='python')
+    # plt.figure(figsize=(14, 10))
+    # tp.annotate(f4, frames[0])
+    # print(f4.head(5))
+    #
+    # tp.subpx_bias(f4)
+    # plt.show()
+
+
+    # f3 = tp.locate(frames[0], 11, minmass=1000.0, maxsize=None, separation=2, noise_size=1,
+    #           smoothing_size=None, threshold=None, invert=False, topn=400, preprocess=True,
+    #           max_iterations=10, filter_before=None, filter_after=True, characterize=True, engine='python')
+    # plt.figure(figsize=(14, 10))
+    # tp.annotate(f3, frames[0])
+    # print(f3.head(5))
+
+    # f7 = tp.locate(frames[7], 11, minmass=1000.0, maxsize=None, separation=2, noise_size=1,
+    #             smoothing_size=None, threshold=None, invert=False, topn=400, preprocess=True,
+    #             max_iterations=10, filter_before=None, filter_after=True, characterize=True, engine='python')
+    # plt.figure(figsize=(14, 10))
+    # tp.annotate(f7, frames[7])
     # Returns information of the first 5 founded particles(y,x,mass,size,ecc,signal,raw_mass,ep,frame)
     # print(f.head())
 
@@ -166,23 +216,23 @@ if __name__ == '__main__':
     #     i += 1
     # print("type of arr2: " + str(type(arr2)))
     # rows, cols = (5, 5)
-    print("After looping arrange_array(frames, particle_pre_frame) :")
-    arr1 = []
-    print("len(tp.locate(frames[0], 5, False) " + str(len(tp.locate(frames[0], 5, False))))
-    print("len(frames) " + str(len(frames)))
-    ite = 0
-    for i in range(len(frames)):
-        col = []
-        ppf = particle_pre_frame[ite]
-        for j in range(ppf):
-            col.append(0)
-        arr1.append(col)
-        if ite < len(particle_pre_frame) - 1:
-            ite += 1
-    print("Print arr1")
-    print(arr1)
-
-    set_frames_number_in_array(arr1)
+    # print("After looping arrange_array(frames, particle_pre_frame) :")
+    # arr1 = []
+    # print("len(tp.locate(frames[0], 5, False) " + str(len(tp.locate(frames[0], 5, False))))
+    # print("len(frames) " + str(len(frames)))
+    # ite = 0
+    # for i in range(len(frames)):
+    #     col = []
+    #     ppf = particle_pre_frame[ite]
+    #     for j in range(ppf):
+    #         col.append(0)
+    #     arr1.append(col)
+    #     if ite < len(particle_pre_frame) - 1:
+    #         ite += 1
+    # print("Print arr1")
+    # print(arr1)
+    #
+    # set_frames_number_in_array(arr1)
     # frame_index, particle_index = 0, 1
     # for r in arr1:
     #     re = int(len(r))
@@ -203,31 +253,43 @@ if __name__ == '__main__':
     #         else:
     #             break
     # print_2d(arr1)
-    print("After looping set_frames_number_in_array(p_array) :")
-    i = 0
-    for n in arr1:
-        arr1[i][0] = i
-        i += 1
-    print("type of arr1: " + str(type(arr1)))
-    print(arr1)
-    frame_index, particle_index = 0, 1
-    for r in arr1:
-        re = int(len(r))
-        if frame_index in range(0, len(frames)):
-            f = tp.locate(frames[frame_index], 5, False)
-            for c in r:
-                arr1[frame_index][particle_index] = {'x': f.at[particle_index, 'x'],
-                                                     'y': f.at[particle_index, 'y']}
-                re = int(len(r))
-                re = int(len(r)) - particle_index
-                if int(len(r)) - particle_index != 1:
-                    particle_index += 1
-            particle_index = 1
-            re = int(len(arr1))
-            if frame_index <= int(len(arr1)) - 1:
-                frame_index += 1
-            else:
-                break
-    # print_2d(arr1)
-
+    # print("After looping set_frames_number_in_array(p_array) :")
+    # i = 0
+    # for n in arr1:
+    #     arr1[i][0] = i
+    #     i += 1
+    # print("type of arr1: " + str(type(arr1)))
+    # print(arr1)
+    # frame_index, particle_index = 0, 1
+    # for r in arr1:
+    #     re = int(len(r))
+    #     if frame_index in range(0, len(frames)):
+    #         f = tp.locate(frames[frame_index], 5, False)
+    #         for c in r:
+    #             arr1[frame_index][particle_index] = {'x': f.at[particle_index, 'x'],
+    #                                                  'y': f.at[particle_index, 'y']}
+    #             re = int(len(r))
+    #             re = int(len(r)) - particle_index
+    #             if int(len(r)) - particle_index != 1:
+    #                 particle_index += 1
+    #         particle_index = 1
+    #         re = int(len(arr1))
+    #         if frame_index <= int(len(arr1)) - 1:
+    #             frame_index += 1
+    #         else:
+    #             break
+    # # print_2d(arr1)
+    # df = pd.DataFrame()
+    # df.insert(0, "Part_index", pd.NA)
+    # index = 0
+    # for elt in arr1:
+    #     df.insert(index+1, "F" + str(index), pd.NA)
+    #     index += 1
+    # print(df)
+    # indexes = []
+    # for elt in arr1:
+    #     for elt_1 in elt:
+    #         if not is_a_dictionary(elt_1):
+    #             continue
+    #         indexes.append(elt_1["i"])
     print('Bye PyCharm')

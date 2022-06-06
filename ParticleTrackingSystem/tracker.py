@@ -67,11 +67,46 @@ def range_with_floats(start, stop, step):
         start += step
 
 
+def test(arr: list):
+    df = pd.DataFrame()
+    df.insert(0, "Part_index", pd.NA)
+    index = 0
+    for elt in arr:
+        df.insert(index + 1, "F" + str(index), pd.NA)
+        index += 1
+    print(df)
+    tmp = []
+    for elt in arr:
+        for elt_1 in elt:
+            if not is_a_dictionary(elt_1):
+                continue
+            tmp.append(elt_1["i"])
+    indexes = list(set(tmp))
+    i = 0
+    for lists in arr:
+        for dic in lists:
+            tmp = 0
+            if not is_a_dictionary(dic):
+                continue
+            while dic["i"] != indexes[i]:
+                if i < len(indexes):
+                    i += 1
+                else:
+                    break
+
+            while tmp < len(indexes):
+                df.loc[tmp, 'Part_index'] = indexes[tmp]
+                tmp += 1
+        break
+    return df, indexes
+
+
 class Tracker:
     def __init__(self):
         self._frames = None
         self.array = None
         self.partikel = None
+        self.dataframe = None
         self.video_utility = Video_Utility()
 
     def get_frames(self):
@@ -97,6 +132,12 @@ class Tracker:
 
     def set_video_utility(self, video):
         self.video_utility = video
+
+    def get_dataframe(self):
+        return self.dataframe
+
+    def set_dataframe(self, dataframe):
+        self.dataframe = dataframe
 
     def arrange_array(self, frames, particle_pre_frame):
         # particle_pre_frame = get_particles_per_image_as_array(frames)
@@ -137,41 +178,123 @@ class Tracker:
                 else:
                     break
 
-    def testt(self, arr):
+    def arrange_panda(self, p_array: list):
+        te = test(p_array)
+        self.dataframe = te[0].copy()
+        col_ind = 0
+        for col_name, data in self.dataframe.items():
+            if str(col_name) == "Part_index": continue
+            f_ind = 0
+            cell = 1
+            for c in data:
+                if not is_a_dictionary(c) and not isinstance(c, int):
+                    try:
+                        p = p_array[col_ind][cell]["i"]
+                        print(
+                            f"Pi (2D Array): {p} VS Part_index (Dataframe): {self.dataframe.loc[f_ind, 'Part_index']}")
+                        if p == self.dataframe.at[f_ind, 'Part_index']:
+                            data[f_ind] = p_array[col_ind][cell]
+                        else:
+                            f_ind = p
+                        print(p_array[col_ind][cell])
+                    except IndexError:
+                        break
+                if cell <= len(p_array[col_ind]) and f_ind <= len(data):
+                    cell += 1
+                    f_ind += 1
+                    print(f"f_ind: {f_ind}  and  cell: {cell}")
+                else:
+                    break
+            if col_ind < len(p_array):
+                col_ind += 1
+            else:
+                break
+
+    def event_finder(self, df):
+        df = self.dataframe
+        from scipy.spatial import distance
+        merge, split = [], []
+        eucli_dist = None
+        col_ind = 0
+        for col_name, data in df.items():
+            if str(col_name) == "Part_index": continue
+            f_ind = 0
+            frame = 0
+            for c in data:
+                if c == pd.NA:
+                    f_ind += 1
+                    continue
+                event = Event()
+                tmp = None
+                print(is_a_dictionary(c))
+                print(c != data[f_ind])
+                print(is_a_dictionary(data[f_ind]))
+                if is_a_dictionary(c) and c != data[f_ind] and is_a_dictionary(data[f_ind]):
+                    point_a = (c["x"], c["y"])
+                    point_b = (data[f_ind]["x"], data[f_ind]["y"])
+                    print(f"point_a: {point_a} and point_b: {point_b}")
+                    eucli_dist = distance.euclidean(point_a, point_b)
+                    tmp = True if elt_decimal(eucli_dist, 3) in range_with_floats(0.0, 0.055, 0.001) else False
+
+                elif data[f_ind] == pd.NA:
+                    while data[f_ind] == pd.NA and f_ind < len(data):
+                        f_ind += 1
+                    point_a = (c["x"], c["y"])
+                    point_b = (data[f_ind]["x"], data[f_ind]["y"])
+                    print(f"point_a: {point_a} and point_b: {point_b}")
+                    eucli_dist = distance.euclidean(point_a, point_b)
+                    f_ind += 1
+
+                    tmp = True if elt_decimal(eucli_dist, 3) in range_with_floats(0.0, 0.055, 0.001) else False
+
+                if tmp:
+                    event.frame = frame
+                    event.first_particle = c
+                    event.second_particle = data[f_ind]
+                    event.event_type = EventType.MERGE
+                    merge.append(event)
+            frame += 1
+            print(merge)
+            break
+
+    def merge_event_finder(self, arr):
         from scipy.spatial import distance
         merge, split = [], []
         eucli_dist = None
         for elt in arr:
             print(elt)
-            index, pointer = 0, 1
             for elt_1 in elt:
+                index, pointer = 0, 1
                 event = Event()
                 if not is_a_dictionary(elt_1):
                     continue
                 print(elt_1)
                 bb = elt[pointer]
-
-                while elt_1 == elt[pointer] and pointer < (len(elt_1) - 2):
+                cc = len(elt)
+                cb = len(elt) - 2
+                while pointer < (len(elt) - 2):
+                    if elt_1 == elt[pointer]:
+                        pass
                     pointer += 1
-                if elt_1 != elt[pointer]:
-                    point_a = (elt_1["x"], elt_1["y"])
-                    point_b = (elt[pointer]["x"], elt[pointer]["y"])
-                    eucli_dist = distance.euclidean(point_a, point_b)
+                    if elt_1 != elt[pointer]:
+                        point_a = (elt_1["x"], elt_1["y"])
+                        point_b = (elt[pointer]["x"], elt[pointer]["y"])
+                        eucli_dist = distance.euclidean(point_a, point_b)
 
-                    tmp = True if elt_decimal(eucli_dist, 1) in range_with_floats(0.0, 0.2, 0.1) else False
+                        tmp = True if elt_decimal(eucli_dist, 3) in range_with_floats(0.0, 0.055, 0.001) else False
 
                     if tmp:
                         event.frame = elt[0]
                         event.first_particle = elt_1
                         event.second_particle = elt[pointer]
                         event.event_type = EventType.MERGE
-                        merge.append(event)
-
+                        if not event in merge:
+                            merge.append(event)
                 # else:
                 #     pointer += 1
-            break
+            # break
         print("Merge list: (" + str(len(merge)) + ")")
         for i in merge:
-            print("first_particle: " + str(i.first_particle) + " \n" + " second_particle: "
+            print("first_particle: " + str(i.first_particle) + " \n" + "second_particle: "
                   + str(i.second_particle) + " frame: " + str(i.frame))
         print("Merge list: (" + str(len(merge)) + ")")
