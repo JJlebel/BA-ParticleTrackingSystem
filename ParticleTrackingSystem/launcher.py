@@ -45,15 +45,70 @@ if __name__ == '__main__':
 
     tracker.arrange_panda(tracker.array)
 
+    xx, yy, labels = [], [], []
 
-    def gg(hd):
-        xx, yy = [], []
-        for e in hd:
-            if is_a_dictionary():
+
+    def plot_row(series):
+        if len(xx) > 0 or len(yy) > 0 or len(labels) > 0:
+            xx.clear()
+            yy.clear()
+            labels.clear()
+        for e in series:
+            if is_a_dictionary(e):
                 xx.append(e['x'])
                 yy.append(e['y'])
             else:
                 continue
+
+        plt.plot(xx, yy, 'bo')
+        # plt.gca().set_aspect("equal")
+        plt.show()
         return xx, yy
-        # tracker.event_finder(tracker.dataframe)
+
+
+    def plot_column_points(series):
+        if len(xx) > 0 or len(yy) > 0 or len(labels) > 0:
+            xx.clear()
+            yy.clear()
+            labels.clear()
+        for e in series:
+            if is_a_dictionary(e):
+                xx.append(e['x'])
+                yy.append(e['y'])
+                labels.append(e["i"])
+            else:
+                continue
+        colors = random_color_generator(len(xx))
+
+        plt.scatter(xx, yy, c=colors)
+        # for label, xi, yi in zip(labels, xx, yy):
+        #     plt.annotate(label, xy=(xi, yi), textcoords='offset pixels', xytext=(xi, yi),
+        #                  ha='center', va='center_baseline', arrowprops={'width': 0.01})
+        # for label, xi, yi in zip(labels, xx, yy):
+        #     plt.annotate(label, xy=(xi, yi), textcoords='offset pixels', xytext=(xi, yi),
+        #                  ha='left', va='bottom', arrowprops={'width': 0.0001})
+        plt.show()
+        return xx, yy, labels, colors
+
+
+    def random_color_generator(no_of_colors):
+        import random
+        colors = ["#" + ''.join([random.choice('0123456789ABCDEF') for i in range(6)]) for j in range(no_of_colors)]
+        return colors
+
+    def show_rows_particle(number):
+        plot_row(tracker.dataframe.iloc[number])
+
+    def show_frames_particle(number):
+        plot_column_points(tracker.dataframe["F"+str(number)])
+
+    def show_tracked_particle(f_no):
+        f4 = tp_locate(frames, f_no)
+        plt.figure(figsize=(14, 10))
+        tp.annotate(f4, frames[f_no])
+        plt.show()
+
+    plot_column_points(tracker.dataframe["F0"])
+    plot_row(tracker.dataframe.iloc[0])
+    # tracker.event_finder(tracker.dataframe)
     # tracker.testt(tracker.array)

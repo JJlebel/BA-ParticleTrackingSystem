@@ -41,9 +41,7 @@ def get_particles_per_image_as_array(frames):
 
 
 def tp_locate(frames, image):
-    return tp.locate(frames[image], 11, minmass=1000.0, maxsize=None, separation=2, noise_size=1,
-                     smoothing_size=None, threshold=None, invert=False, topn=400, preprocess=True,
-                     max_iterations=10, filter_before=None, filter_after=True, characterize=True, engine='python')
+    return tp.locate(frames[image], 5, minmass=210, separation=6.3, engine='python')
 
 
 def print_2d(array_to_print):
@@ -54,7 +52,9 @@ def print_2d(array_to_print):
 
 
 def elt_decimal(number, decimal_number):
-    return round(number % 1, decimal_number)
+    # % 1 ensures that integer part disappears
+    # return round(number % 1, decimal_number)
+    return round(number, decimal_number)
 
 
 def is_a_dictionary(element):

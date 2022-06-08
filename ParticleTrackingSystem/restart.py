@@ -134,15 +134,26 @@ if __name__ == '__main__':
     #     # break
     # print("Loop is ending...")
     mi = 210
-    sep = 5+7
-    f3 = tp.locate(frames[0], 5, minmass=mi, separation=sep)
+    sep = 5+1.3
+    noi = 1.1
+    m_ite = 100
+    top = 250
+    f3 = tp.locate(frames[0], 5, minmass=mi, separation=sep, topn=top)
     plt.figure(figsize=(14, 10))
     tp.annotate(f3, frames[0])
     print(f3.head(5))
 
     tp.subpx_bias(f3)
     plt.show()
-    print(f"By separation:{sep}  ==>  len: {len(f3)}")
+    print(f"By topn:{top}  ==>  len: {len(f3)}")
+
+    # f3 = tp.batch(frames[:99], 5, minmass=mi, separation=sep)
+
+
+    # def elt_decimal(number, decimal_number):
+    #     return round(number % 1, decimal_number)
+    #
+    # print(f"elt_decimal of 2.654321 gives => {elt_decimal(2.654321, 3)}")
 
 
     # def gg(hd):

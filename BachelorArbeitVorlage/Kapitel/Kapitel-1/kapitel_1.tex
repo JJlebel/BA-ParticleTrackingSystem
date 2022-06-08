@@ -231,28 +231,59 @@ Deswegen wird es dem weiteren  den Parameter  \textbf{Separation} gewidmet, um w
 
 		\item {\Large \textbf{locate(f, d, minmass, sepration)}}: \\ \\
     			Hier wird es einfach Werte bei \texttt{separtion} ausprobiert, um auf die bessere Resultate zu kommen. 
-    			Es wäre interessant zu erwähnen, dass es sich dabei um den minimalen Abstand zwischen zwei Teilchen handelt. Der Standardwert ist Durchmesser + 1. In diesem Fall ist es 6. 
+    			Es wäre interessant zu erwähnen, dass es sich dabei um den minimalen Abstand zwischen zwei Teilchen handelt. Der Standardwert ist \textit{Durchmesser + 1}. In diesem Fall ist es 6. 
 Mit diesem neuen Parameter werden wir versuchen, all jene Partikel zu eliminieren, die doppelt erkannt werden. Ohne die Qualität der bisherigen Erkennung zu beeinträchtigen.  
 
 Denn es scheint offensichtlich, dass, wenn der Wert zu hoch ist, mehrere bisher erkannte Partikel nicht mehr erkannt werden. Weil sie zu nahe beieinander liegen.
-    			
+Bei \texttt{separation = 6} bleibt die Erkennung unverändert und ergibt auch eine Anzahl von \textbf{345}.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_separation__noise_size.png}
-    \caption{locate with 'sep=3.0 and n\_s=1.5'}
+    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_separation_(6).png}
+    \caption{locate with 'sep=6.0'}
+    %\label{fig:bild_label}
+\end{figure}
+
+Es wird dann als nächstes zuerst \textbf{7} als Parameterwert ausprobieren. Trotz der relativ kleinen Anzahl an insgesamt erkannten Partikel also \textbf{312}. Was auf dem folgenden Bild sichtbar ist, wird es ungefähr \textbf{10} gewünschte Partikel verloren. Diese sind in gelb auf dem Bild markiert. Natürlich hat der Parameterwert nicht nur Verschlechterung gezogen sondern auch positive Effekte. So ist es auch leicht in grün auf dem Bild Ausbesserungen zu sehen. Es handelt sich hier nämlich um \textbf{6} Partikel, die sich mehrfach erkennen lies. 
+Allerdings, da die Anzahl an nicht mehr erkannte gewünschte Elemente größer ist als die von nicht gewünschten die eliminiert wurde, wird der Wert des Parameters dann nach unten korrigiert.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_separation_(7).png}
+    \caption{locate with 'sep=7.0'}
+    %\label{fig:bild_label}
+\end{figure}
+
+Mit den aufeinanderfolgenden Werten \textbf{6.8, 6.7, 6.5 und 6.4} kommt es neben einigen Verbesserungen immer zu mehreren Verschlechterungen, die später mit anderen Parametern nur schwer zu korrigieren sind. 
+Genau aus diesem Grund wird hier als  \textbf{separation} der Wert \textbf{6.3} betrachtet.
+Wobei fast lediglich nur Verbesserungen zu notieren sind. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_separation_(6,3).png}
+    \caption{locate with 'sep=6.3'}
     %\label{fig:bild_label}
 \end{figure}
 
 
-\item locate(frames[0], 11, minmass=1000.0, separation=2, noise\_size=1.5, topn=250):    \\ \\ 
-		Nachdem alle vorherige Parameter eingesetzt worden sind, wenn der Dataframe immer noch sanierungsbedürftig ist, wird auch \textit{topn} zum Einsatz gebracht. Dazu wird die Anzahl an bestehende unerwünschte Elemente geschätzt und von der gesamten Anzahl an gefundenen Elemente abgezogen. Somit wird \textit{topn} in dem Fall hier auf \textit{250} geschätzt. (siehe Bild)
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_topn.png}
-    \caption{locate with 'topn=250'}
-    %\label{fig:bild_label}
-\end{figure}
+%\item locate(frames[0], 11, minmass=1000.0, separation=2, noise\_size=1.5, topn=250):    \\ \\ 
+%		Nachdem alle vorherige Parameter eingesetzt worden sind, wenn der Dataframe immer noch sanierungsbedürftig ist, wird auch \textit{topn} zum Einsatz gebracht. Dazu wird die Anzahl an bestehende unerwünschte Elemente geschätzt und von der gesamten Anzahl an gefundenen Elemente abgezogen. Somit wird \textit{topn} in dem Fall hier auf \textit{250} geschätzt. (siehe Bild)
+%\begin{figure}[H]
+%    \centering
+%    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_topn.png}
+%    \caption{locate with 'topn=250'}
+%    %\label{fig:bild_label}
+%\end{figure}
 \end{enumerate}
+Es scheint hier wichtig zu erwähnen, dass es kein Parameter gibt, dessen Wert adäquat für alle Arten von Bildern oder Partikeln. So sollte es immer Parametrisierung als erster Schritt
+durchgeführt werden.
+Allerdings sind im konkreten Fall dieses Videos bzw. Bildes die Parameterwerte, die am besten geeignet erscheinen, wie folgt: \\
+\begin{center}
+{\Large \textit{locate(frames[0], 5, minmass=210, separation=6.3})}
+\end{center}
+
+
+\todo{kapitel1: Which  Library to use(avaible/)
+Kapite2: Choosing good parameters for trackpy
+kap3(Main Challenge):The Challenge of keeping particle count constant over frames.}
 \subsection{Machine Learning}
 
 
