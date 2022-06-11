@@ -182,8 +182,6 @@ class Tracker:
         te = test(p_array)
         self.dataframe = te[0].copy()
         col_ind = 0
-        dif = 0
-        continue_again = False
         for col_name, data in self.dataframe.items():
             if str(col_name) == "Part_index": continue
             r_ind = 0
