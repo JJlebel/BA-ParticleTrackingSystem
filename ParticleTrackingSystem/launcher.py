@@ -61,6 +61,8 @@ if __name__ == '__main__':
                 continue
 
         plt.plot(xx, yy, 'bo')
+        plt.gca().invert_yaxis()
+        plt.figure(figsize=(14, 10))
         # plt.gca().set_aspect("equal")
         plt.show()
         return xx, yy
@@ -81,6 +83,8 @@ if __name__ == '__main__':
         colors = random_color_generator(len(xx))
 
         plt.scatter(xx, yy, c=colors)
+        plt.gca().invert_yaxis()
+        plt.figure(figsize=(14, 10))
         # for label, xi, yi in zip(labels, xx, yy):
         #     plt.annotate(label, xy=(xi, yi), textcoords='offset pixels', xytext=(xi, yi),
         #                  ha='center', va='center_baseline', arrowprops={'width': 0.01})
@@ -108,7 +112,15 @@ if __name__ == '__main__':
         tp.annotate(f4, frames[f_no])
         plt.show()
 
-    plot_column_points(tracker.dataframe["F0"])
+    def non_nan_len(series):
+        res = 0
+        for e in series:
+            if is_a_dictionary(e):
+                res += 1
+        return res
+
+    plot_column_points(tracker.dataframe["F66"])
     plot_row(tracker.dataframe.iloc[0])
+    show_tracked_particle(66)
     # tracker.event_finder(tracker.dataframe)
     # tracker.testt(tracker.array)

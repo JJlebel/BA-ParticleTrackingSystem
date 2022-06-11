@@ -182,27 +182,40 @@ class Tracker:
         te = test(p_array)
         self.dataframe = te[0].copy()
         col_ind = 0
+        dif = 0
+        continue_again = False
         for col_name, data in self.dataframe.items():
             if str(col_name) == "Part_index": continue
-            f_ind = 0
+            r_ind = 0
             cell = 1
+            print(f"Type of data in col_name {type(data)}")
             for c in data:
+                print(f"Type of c in data: {type(c)}")
                 if not is_a_dictionary(c) and not isinstance(c, int):
                     try:
-                        p = p_array[col_ind][cell]["i"]
-                        print(
-                            f"Pi (2D Array): {p} VS Part_index (Dataframe): {self.dataframe.loc[f_ind, 'Part_index']}")
-                        if p == self.dataframe.at[f_ind, 'Part_index']:
-                            data[f_ind] = p_array[col_ind][cell]
-                        else:
-                            f_ind = p
+                        # takes the index of the particle within the dictionary in the initial 2D-array
+                        pi_array = p_array[col_ind][cell]["i"]
+                        # takes the index of the particle in the 'Part_index'-column of the dataframe
+                        pi_dataframe = self.dataframe.loc[r_ind, 'Part_index']
+
+                        if pi_array != pi_dataframe:
+                            r_ind += 1
+                            continue
+
+                        print(f"Pi (2D Array): {pi_array} VS Part_index (Dataframe): {pi_dataframe}")
+
+                        if pi_array == pi_dataframe:
+                            data[r_ind] = p_array[col_ind][cell]
+                        # else:
+                        #     r_ind = pi_array
+                        #     # data[r_ind] = p_array[col_ind][cell]
                         print(p_array[col_ind][cell])
                     except IndexError:
                         break
-                if cell <= len(p_array[col_ind]) and f_ind <= len(data):
+                if cell <= len(p_array[col_ind]) and r_ind <= len(data):
                     cell += 1
-                    f_ind += 1
-                    print(f"f_ind: {f_ind}  and  cell: {cell}")
+                    r_ind += 1
+                    print(f"r_ind: {r_ind}  and  cell: {cell}")
                 else:
                     break
             if col_ind < len(p_array):
