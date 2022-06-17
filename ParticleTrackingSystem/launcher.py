@@ -32,16 +32,12 @@ if __name__ == '__main__':
     tracker.set_minmass(210)
     tracker.set_separation(6.3)
 
-
-    # particle_per_frame = get_particles_per_image_as_array(frames)
     particle_per_frame = tracker.get_particles_per_image_as_array(frames)
 
     set_frames_number_in_array(frames)
     tracker.arrange_array(frames, particle_per_frame)
 
     set_frames_number_in_array(tracker.array)
-
-    # print_2d(tracker.array)
 
     tracker.set_particle_value_in_array(frames)
 
@@ -89,12 +85,6 @@ if __name__ == '__main__':
         plt.scatter(xx, yy, c=colors)
         plt.gca().invert_yaxis()
         plt.figure(figsize=(14, 10))
-        # for label, xi, yi in zip(labels, xx, yy):
-        #     plt.annotate(label, xy=(xi, yi), textcoords='offset pixels', xytext=(xi, yi),
-        #                  ha='center', va='center_baseline', arrowprops={'width': 0.01})
-        # for label, xi, yi in zip(labels, xx, yy):
-        #     plt.annotate(label, xy=(xi, yi), textcoords='offset pixels', xytext=(xi, yi),
-        #                  ha='left', va='bottom', arrowprops={'width': 0.0001})
         plt.show()
         return xx, yy, labels, colors
 

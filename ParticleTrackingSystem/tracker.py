@@ -25,69 +25,14 @@ def set_frames_number_in_array(p_array):
         i += 1
 
 
-# Stores the number of particles per image in array
-# def get_particles_per_image_as_array(frames):
-# particle_pre_frame = []
-# cnt = 0
-#
-# ci = 0
-# mean = 0
-# for i in frames:
-#     if ci == 10:
-#         mean = np.mean(particle_pre_frame[cnt-ci:cnt])
-#         print(f"Mean of {cnt-ci}-{cnt}: {mean}")
-#         ci = 0
-#
-#     f = tp_locate(frames, cnt, 5, minmass=210, separation=6.3)
-#     # if len(f) < mean:
-#     print("Number of particle frame[" + str(cnt) + "]: " + str(len(f)))
-#     particle_pre_frame.append(len(f))
-#     cnt += 1
-#     ci += 1
-
-# particle_pre_frame = []
-# cnt = 0
-# max_size = 0
-# # the less percentage of particle that the image should localise.
-# min_particle_percentage = 85.0
-# i_percent = 0
-# for i in frames:
-#     f = tp_locate(frames, cnt, 5, minmass=210, separation=6.3)
-#     if cnt == 0:
-#         max_size = len(f)
-#
-#     if cnt > 0 and ((len(f)/max_size)*100) <= min_particle_percentage:
-#         while ((len(f) / max_size) * 100) <= min_particle_percentage:
-#             f = tp_locate(frames, cnt, 5, minmass=210, separation=6.3)
-#
-#     print("Number of particle frame[" + str(cnt) + "]: " + str(len(f)))
-#     particle_pre_frame.append(len(f))
-#     cnt += 1
-#
-# return particle_pre_frame
-
-
 def tp_locate(frames, image, diameter, minmass=None,
               separation=None, maxsize=None, noise_size=1,
               smoothing_size=None, threshold=None, topn=None, preprocess=True,
               max_iterations=10, characterize=True, engine='python'):
     if separation is None:
-        separation = diameter+1
+        separation = diameter + 1
     if smoothing_size is None:
         smoothing_size = diameter
-    # arguments["minmass"] = None,
-    # arguments["separation"] = diameter + 1,
-    # # arguments["percentile"] = self.percentile,
-    # arguments["maxsize"] = None,
-    # arguments["noise_size"] = 1,
-    # arguments["smoothing_size"] = diameter,
-    # arguments["threshold"] = None,
-    # arguments["topn"] = None,
-    # arguments["preprocess"] = True,
-    # arguments["max_iterations"] = 10,
-    # # arguments["filter_before"] = self.filter_before,
-    # arguments["characterize"] = True
-    # arguments["engine"] = self.engine
     return tp.locate(frames[image],
                      diameter,
                      minmass=minmass,
@@ -267,7 +212,7 @@ class Tracker:
         return self.engine
 
     def set_engine(self, new_engine):
-        self.filter_before = new_engine
+        self.engine = new_engine
 
     # -------------------------------------------------------------------
     def get_frames(self):
@@ -305,36 +250,6 @@ class Tracker:
 
     def set_particle_pre_frame(self, particle_pre_frame):
         self.particle_pre_frame = particle_pre_frame
-
-    # def tp_locate(self, frames, image, diameter, **arguments):
-    #     arguments["minmass"] = self.minmass,
-    #     arguments["separation"] = self.separation,
-    #     arguments["percentile"] = self.percentile,
-    #     arguments["maxsize"] = self.maxsize,
-    #     arguments["noise_size"] = self.noise_size,
-    #     arguments["smoothing_size"] = self.smoothing_size,
-    #     arguments["threshold"] = self.threshold,
-    #     arguments["topn"] = self.topn,
-    #     arguments["preprocess"] = self.preprocess,
-    #     arguments["max_iterations"] = self.max_iterations,
-    #     # arguments["filter_before"] = self.filter_before,
-    #     arguments["characterize"] = self.characterize,
-    #     # arguments["engine"] = self.engine
-    #     return tp.locate(frames[image],
-    #                      diameter,
-    #                      arguments["minmass"],
-    #                      arguments["separation"],
-    #                      arguments["percentile"],
-    #                      arguments["maxsize"],
-    #                      arguments["noise_size"],
-    #                      arguments["smoothing_size"],
-    #                      arguments["threshold"],
-    #                      arguments["topn"],
-    #                      arguments["preprocess"],
-    #                      arguments["max_iterations"],
-    #                      # arguments["filter_before"],
-    #                      arguments["characterize"])#,
-    #                      # arguments["engine"])
 
     # Stores the number of particles per image in array
     def get_particles_per_image_as_array(self, frames):
@@ -397,7 +312,8 @@ class Tracker:
         for r in self.array:
             re = int(len(r))
             if frame_index in range(0, len(frames)):
-                f = tp_locate(frames, frame_index, 5, minmass=self.particle_pre_frame[frame_index]["minmass"], separation=self.separation)
+                f = tp_locate(frames, frame_index, 5, minmass=self.particle_pre_frame[frame_index]["minmass"],
+                              separation=self.separation)
                 index = f.index
                 print(index)
                 for c in r:
