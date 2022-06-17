@@ -97,8 +97,8 @@ if __name__ == '__main__':
     print('Hi PyCharm')
     frames = gray(convert_into_image_sequence('./BW/BW-Isil-video4.avi'))
     print('----------')
-    plt.imshow(frames[0])
-    plt.show()
+    # plt.imshow(frames[0])
+    # plt.show()
 
     # print('------##------')
     #
@@ -138,14 +138,15 @@ if __name__ == '__main__':
     noi = 1.1
     m_ite = 100
     top = 250
-    f3 = tp.locate(frames[0], 5, minmass=mi, separation=sep, topn=top)
+    thre = 20
+    f3 = tp.locate(frames[0], 5, minmass=mi, separation=sep, threshold=thre)
     plt.figure(figsize=(14, 10))
     tp.annotate(f3, frames[0])
-    print(f3.head(5))
+    # print(f3.head(5))
 
-    tp.subpx_bias(f3)
+    # tp.subpx_bias(f3)
     plt.show()
-    print(f"By topn:{top}  ==>  len: {len(f3)}")
+    print(f"By threshold:{thre}  ==>  len: {len(f3)}")
 
     # f3 = tp.batch(frames[:99], 5, minmass=mi, separation=sep)
 

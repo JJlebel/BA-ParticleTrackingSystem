@@ -18,8 +18,8 @@ import inspect
 from trackpy.utils import memo
 
 from ParticleTrackingSystem.video_utility import Video_Utility, gray
-from ParticleTrackingSystem.tracker import Tracker, set_frames_number_in_array, tp_locate, \
-    get_particles_per_image_as_array, print_2d, test, is_a_dictionary
+from ParticleTrackingSystem.tracker import Tracker, set_frames_number_in_array,\
+    print_2d, set_empty_panda, is_a_dictionary, tp_locate#, get_particles_per_image_as_array
 
 if __name__ == '__main__':
     video_utility = Video_Utility()
@@ -27,10 +27,14 @@ if __name__ == '__main__':
     video_utility.frames = gray(video_utility.convert_into_image_sequence())
     frames = video_utility.frames
 
-    tracker = Tracker()
+    tracker = Tracker(5)
     tracker.set_frames(frames)
+    tracker.set_minmass(210)
+    tracker.set_separation(6.3)
 
-    particle_per_frame = get_particles_per_image_as_array(frames)
+
+    # particle_per_frame = get_particles_per_image_as_array(frames)
+    particle_per_frame = tracker.get_particles_per_image_as_array(frames)
 
     set_frames_number_in_array(frames)
     tracker.arrange_array(frames, particle_per_frame)
@@ -107,7 +111,7 @@ if __name__ == '__main__':
         plot_column_points(tracker.dataframe["F"+str(number)])
 
     def show_tracked_particle(f_no):
-        f4 = tp_locate(frames, f_no)
+        f4 = tp_locate(frames, f_no, 5)
         plt.figure(figsize=(14, 10))
         tp.annotate(f4, frames[f_no])
         plt.show()
@@ -122,5 +126,3 @@ if __name__ == '__main__':
     plot_column_points(tracker.dataframe["F66"])
     plot_row(tracker.dataframe.iloc[0])
     show_tracked_particle(66)
-    # tracker.event_finder(tracker.dataframe)
-    # tracker.testt(tracker.array)
