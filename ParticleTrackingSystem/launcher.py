@@ -32,7 +32,7 @@ if __name__ == '__main__':
     tracker.set_minmass(210)
     tracker.set_separation(6.3)
 
-    particle_per_frame = tracker.get_particles_per_image_as_array(frames)
+    particle_per_frame = tracker.get_particles_per_image_as_array(frames, max_particle_percentage=100)
 
     set_frames_number_in_array(frames)
     tracker.arrange_array(frames, particle_per_frame)
@@ -101,7 +101,7 @@ if __name__ == '__main__':
         plot_column_points(tracker.dataframe["F"+str(number)])
 
     def show_tracked_particle(f_no):
-        f4 = tp_locate(frames, f_no, 5)
+        f4 = tp_locate(frames, f_no, tracker.get_diameter())
         plt.figure(figsize=(14, 10))
         tp.annotate(f4, frames[f_no])
         plt.show()

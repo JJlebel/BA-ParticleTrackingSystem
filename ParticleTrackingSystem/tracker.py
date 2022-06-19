@@ -19,6 +19,11 @@ from ParticleTrackingSystem.video_utility import Video_Utility
 
 
 def set_frames_number_in_array(p_array):
+    """
+
+    :param p_array:
+    :return:
+    """
     i = 0
     for n in p_array:
         p_array[i][0] = i
@@ -29,6 +34,24 @@ def tp_locate(frames, image, diameter, minmass=None,
               separation=None, maxsize=None, noise_size=1,
               smoothing_size=None, threshold=None, topn=None, preprocess=True,
               max_iterations=10, characterize=True, engine='python'):
+    """
+
+    :param frames:
+    :param image:
+    :param diameter:
+    :param minmass:
+    :param separation:
+    :param maxsize:
+    :param noise_size:
+    :param smoothing_size:
+    :param threshold:
+    :param topn:
+    :param preprocess:
+    :param max_iterations:
+    :param characterize:
+    :param engine:
+    :return:
+    """
     if separation is None:
         separation = diameter + 1
     if smoothing_size is None:
@@ -57,6 +80,12 @@ def print_2d(array_to_print):
 
 
 def elt_decimal(number, decimal_number):
+    """
+
+    :param number:
+    :param decimal_number:
+    :return:
+    """
     # % 1 ensures that integer part disappears
     # return round(number % 1, decimal_number)
     return round(number, decimal_number)
@@ -67,12 +96,24 @@ def is_a_dictionary(element):
 
 
 def range_with_floats(start, stop, step):
+    """
+
+    :param start:
+    :param stop:
+    :param step:
+    :return:
+    """
     while stop > start:
         yield start
         start += step
 
 
 def set_empty_panda(arr: list):
+    """
+
+    :param arr:
+    :return:
+    """
     df = pd.DataFrame()
     df.insert(0, "Part_index", pd.NA)
     index = 0
@@ -251,15 +292,28 @@ class Tracker:
     def set_particle_pre_frame(self, particle_pre_frame):
         self.particle_pre_frame = particle_pre_frame
 
+    def updated_frame(self, frames, f_no, ):
+
+        pass
+
     # Stores the number of particles per image in array
-    def get_particles_per_image_as_array(self, frames):
+    def get_particles_per_image_as_array(self, frames, min_particle_percentage=85.0, max_particle_percentage=110.0):
+        """
+        Parameters
+        ----------
+        :param frames:
+        :param min_particle_percentage:
+        :param max_particle_percentage:
+        :return:
+        """
         # particle_pre_frame = []
         self.particle_pre_frame.clear()
         cnt = 0
         max_size = 0
-        # the less percentage of particle that the image should localise.
-        min_particle_percentage = 85.0
-        max_particle_percentage = 110.0
+        # the lowest percentage of particles that the image should localise.
+        min_particle_percentage = min_particle_percentage
+        # the highest percentage of particles that the image should localise.
+        max_particle_percentage = max_particle_percentage
         i_percent = 0
         new_minmass = self.minmass
         for i in frames:
@@ -274,8 +328,14 @@ class Tracker:
                     if new_minmass > 0:
                         f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass, separation=self.separation)
                         i_percent = ((len(f) / max_size) * 100)
-                        if i_percent > min_particle_percentage:
+                        if min_particle_percentage < i_percent < max_particle_percentage:
                             break
+                        elif i_percent >= max_particle_percentage:
+                            new_minmass += 5
+                            f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass, separation=self.separation)
+                            i_percent = ((len(f) / max_size) * 100)
+                            if min_particle_percentage < i_percent < max_particle_percentage:
+                                break
                         new_minmass -= 5
                         len(f)
                 self.particle_pre_frame.append({"len": len(f), "minmass": new_minmass})
@@ -283,8 +343,17 @@ class Tracker:
             elif cnt > 0 and i_percent >= max_particle_percentage:
                 while i_percent >= max_particle_percentage:
                     if new_minmass > 0:
-                        new_minmass += 5
                         f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass, separation=self.separation)
+                        i_percent = ((len(f) / max_size) * 100)
+                        if min_particle_percentage < i_percent < max_particle_percentage:
+                            break
+                        elif i_percent <= min_particle_percentage:
+                            new_minmass -= 5
+                            f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass, separation=self.separation)
+                            i_percent = ((len(f) / max_size) * 100)
+                            if min_particle_percentage < i_percent < max_particle_percentage:
+                                break
+                        new_minmass += 5
                         len(f)
                 self.particle_pre_frame.append({"len": len(f), "minmass": new_minmass})
 
@@ -296,6 +365,12 @@ class Tracker:
         return self.particle_pre_frame
 
     def arrange_array(self, frames, particle_pre_frame):
+        """
+
+        :param frames:
+        :param particle_pre_frame:
+        :return:
+        """
         self.array = []
         ite = 0
         for i in range(len(frames)):
@@ -308,6 +383,11 @@ class Tracker:
                 ite += 1
 
     def set_particle_value_in_array(self, frames):
+        """
+
+        :param frames:
+        :return:
+        """
         frame_index, particle_index = 0, 1
         for r in self.array:
             re = int(len(r))
@@ -335,6 +415,11 @@ class Tracker:
                     break
 
     def arrange_panda(self, p_array: list):
+        """
+
+        :param p_array:
+        :return:
+        """
         te = set_empty_panda(p_array)
         self.dataframe = te[0].copy()
         col_ind = 0

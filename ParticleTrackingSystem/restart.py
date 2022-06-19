@@ -148,7 +148,7 @@ if __name__ == '__main__':
     plt.show()
     print(f"By threshold:{thre}  ==>  len: {len(f3)}")
 
-    # f3 = tp.batch(frames[:99], 5, minmass=mi, separation=sep)
+    f4 = tp.batch(frames[:99], 5, minmass=mi, separation=sep)
 
 
     # def elt_decimal(number, decimal_number):
