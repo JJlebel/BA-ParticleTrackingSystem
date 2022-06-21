@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
     tracker.set_particle_value_in_array(frames)
 
-    print_2d(tracker.array)
+    # print_2d(tracker.array)
 
     tracker.arrange_panda(tracker.array)
 
@@ -101,7 +101,8 @@ if __name__ == '__main__':
         plot_column_points(tracker.dataframe["F"+str(number)])
 
     def show_tracked_particle(f_no):
-        f4 = tp_locate(frames, f_no, tracker.get_diameter())
+        min = particle_per_frame[f_no]["minmass"]
+        f4 = tp_locate(frames, f_no, tracker.get_diameter(), minmass=min)
         plt.figure(figsize=(14, 10))
         tp.annotate(f4, frames[f_no])
         plt.show()
@@ -115,4 +116,10 @@ if __name__ == '__main__':
 
     plot_column_points(tracker.dataframe["F66"])
     plot_row(tracker.dataframe.iloc[0])
+    show_tracked_particle(66)
+    print(f"Array len of F66 before: {particle_per_frame[66]['len']}")
+    print(f"Dataframe len of F66 before: {non_nan_len(tracker.dataframe['F66'])}")
+    tracker.updated_frame(frames, 66, minmass=170)
+    print(f"Array len of F66 after: {particle_per_frame[66]['len']}")
+    print(f"Dataframe len of F66 after: {non_nan_len(tracker.dataframe['F66'])}")
     show_tracked_particle(66)

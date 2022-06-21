@@ -51,6 +51,12 @@ def tp_locate(frames, image, diameter, minmass=None,
     :param characterize:
     :param engine:
     :return:
+    DataFrame([x, y, mass, size, ecc, signal, raw_mass])
+        where "x, y" are appropriate to the dimensionality of the image,
+        mass means total integrated brightness of the blob,
+        size means the radius of gyration of its Gaussian-like profile,
+        ecc is its eccentricity (0 is circular),
+        and raw_mass is the total integrated brightness in raw_image.
     """
     if separation is None:
         separation = diameter + 1
@@ -154,7 +160,7 @@ class Tracker:
         self.partikel = None
         self.dataframe = None
         self.video_utility = Video_Utility()
-        self.particle_pre_frame = []
+        self.particle_per_frame = []
         self.diameter = diameter
         self.minmass = None
         self.separation = self.diameter + 1
@@ -286,15 +292,39 @@ class Tracker:
     def set_dataframe(self, dataframe):
         self.dataframe = dataframe
 
-    def get_particle_pre_frame(self):
-        return self.particle_pre_frame
+    def get_particle_per_frame(self):
+        return self.particle_per_frame
 
-    def set_particle_pre_frame(self, particle_pre_frame):
-        self.particle_pre_frame = particle_pre_frame
+    def set_particle_per_frame(self, particle_per_frame):
+        self.particle_per_frame = particle_per_frame
 
-    def updated_frame(self, frames, f_no, ):
+    def updated_frame(self, frames, f_no, minmass=None, separation=None, maxsize=None, topn=None, engine='python'):
+        """
 
-        pass
+        :param frames:
+        :param f_no:
+        :param minmass:
+        :param separation:
+        :param maxsize:
+        :param topn:
+        :param engine:
+        :return:
+        """
+        if minmass is None:
+            minmass = self.get_minmass()
+        if separation is None:
+            separation = self.get_separation()
+        if maxsize is None:
+            maxsize = self.get_maxsize()
+        if topn is None:
+            topn = self.get_topn()
+        ppf = self.get_particle_per_frame()
+        f = tp_locate(frames, f_no, self.get_diameter(), minmass=minmass, separation=separation, maxsize=maxsize, topn=topn, engine=engine)
+        ppf[f_no] = {"len": len(f), "minmass": minmass}
+        self.set_particle_per_frame(ppf)
+
+        self.set_particle_value_in_array(frames)
+        self.arrange_panda(self.array)
 
     # Stores the number of particles per image in array
     def get_particles_per_image_as_array(self, frames, min_particle_percentage=85.0, max_particle_percentage=110.0):
@@ -307,7 +337,7 @@ class Tracker:
         :return:
         """
         # particle_pre_frame = []
-        self.particle_pre_frame.clear()
+        self.particle_per_frame.clear()
         cnt = 0
         max_size = 0
         # the lowest percentage of particles that the image should localise.
@@ -331,14 +361,16 @@ class Tracker:
                         if min_particle_percentage < i_percent < max_particle_percentage:
                             break
                         elif i_percent >= max_particle_percentage:
-                            new_minmass += 5
-                            f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass, separation=self.separation)
-                            i_percent = ((len(f) / max_size) * 100)
-                            if min_particle_percentage < i_percent < max_particle_percentage:
-                                break
+                            while i_percent >= max_particle_percentage:
+                                new_minmass += 5
+                                f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass,
+                                              separation=self.separation)
+                                i_percent = ((len(f) / max_size) * 100)
+                                if min_particle_percentage < i_percent < max_particle_percentage:
+                                    break
                         new_minmass -= 5
-                        len(f)
-                self.particle_pre_frame.append({"len": len(f), "minmass": new_minmass})
+                        # len(f)
+                self.particle_per_frame.append({"len": len(f), "minmass": new_minmass})
 
             elif cnt > 0 and i_percent >= max_particle_percentage:
                 while i_percent >= max_particle_percentage:
@@ -348,21 +380,23 @@ class Tracker:
                         if min_particle_percentage < i_percent < max_particle_percentage:
                             break
                         elif i_percent <= min_particle_percentage:
-                            new_minmass -= 5
-                            f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass, separation=self.separation)
-                            i_percent = ((len(f) / max_size) * 100)
-                            if min_particle_percentage < i_percent < max_particle_percentage:
-                                break
+                            while i_percent >= max_particle_percentage:
+                                new_minmass -= 5
+                                f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass,
+                                              separation=self.separation)
+                                i_percent = ((len(f) / max_size) * 100)
+                                if min_particle_percentage < i_percent < max_particle_percentage:
+                                    break
                         new_minmass += 5
-                        len(f)
-                self.particle_pre_frame.append({"len": len(f), "minmass": new_minmass})
+                        # len(f)
+                self.particle_per_frame.append({"len": len(f), "minmass": new_minmass})
 
             else:
-                self.particle_pre_frame.append({"len": len(f), "minmass": self.minmass})
+                self.particle_per_frame.append({"len": len(f), "minmass": self.minmass})
 
             print("Number of particle frame[" + str(cnt) + "]: " + str(len(f)))
             cnt += 1
-        return self.particle_pre_frame
+        return self.particle_per_frame
 
     def arrange_array(self, frames, particle_pre_frame):
         """
@@ -375,7 +409,7 @@ class Tracker:
         ite = 0
         for i in range(len(frames)):
             col = []
-            ppf = particle_pre_frame[ite]["minmass"]
+            ppf = particle_pre_frame[ite]["len"]
             for j in range(ppf):
                 col.append(0)
             self.array.append(col)
@@ -388,14 +422,20 @@ class Tracker:
         :param frames:
         :return:
         """
+        if self.get_array() is not None and is_a_dictionary(self.get_array()[0][1]):
+            self.array.clear()
+            set_frames_number_in_array(frames)
+            self.arrange_array(frames, self.particle_per_frame)
+            set_frames_number_in_array(self.array)
+        #
         frame_index, particle_index = 0, 1
         for r in self.array:
             re = int(len(r))
             if frame_index in range(0, len(frames)):
-                f = tp_locate(frames, frame_index, 5, minmass=self.particle_pre_frame[frame_index]["minmass"],
+                f = tp_locate(frames, frame_index, 5, minmass=self.particle_per_frame[frame_index]["minmass"],
                               separation=self.separation)
                 index = f.index
-                print(index)
+                # print(index)
                 for c in r:
                     jj = index[particle_index - 1]
                     self.array[frame_index][particle_index] = {'i': index[particle_index - 1],
@@ -420,6 +460,7 @@ class Tracker:
         :param p_array:
         :return:
         """
+
         te = set_empty_panda(p_array)
         self.dataframe = te[0].copy()
         col_ind = 0
@@ -441,20 +482,14 @@ class Tracker:
                             r_ind += 1
                             continue
 
-                        # print(f"Pi (2D Array): {pi_array} VS Part_index (Dataframe): {pi_dataframe}")
-
                         if pi_array == pi_dataframe:
                             data[r_ind] = p_array[col_ind][cell]
-                        # else:
-                        #     r_ind = pi_array
-                        #     # data[r_ind] = p_array[col_ind][cell]
-                        print(p_array[col_ind][cell])
+                        # print(p_array[col_ind][cell])
                     except IndexError:
                         break
                 if cell <= len(p_array[col_ind]) and r_ind <= len(data):
                     cell += 1
                     r_ind += 1
-                    # print(f"r_ind: {r_ind}  and  cell: {cell}")
                 else:
                     break
             if col_ind < len(p_array):
