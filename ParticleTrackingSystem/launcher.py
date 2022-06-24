@@ -104,8 +104,9 @@ if __name__ == '__main__':
         min = particle_per_frame[f_no]["minmass"]
         f4 = tp_locate(frames, f_no, tracker.get_diameter(), minmass=min)
         plt.figure(figsize=(14, 10))
-        tp.annotate(f4, frames[f_no])
+        fig = tp.annotate(f4, frames[f_no])
         plt.show()
+        return fig
 
     def non_nan_len(series):
         res = 0
@@ -114,12 +115,20 @@ if __name__ == '__main__':
                 res += 1
         return res
 
+    def save_all_frame():
+        i = 0
+        for i in range(0, len(particle_per_frame)):
+            name = "./locatedImages/frame_" + str(i) + ".png"
+            r = show_tracked_particle(i)
+            r.get_figure().savefig(name)
+            i += 1
+
     plot_column_points(tracker.dataframe["F66"])
     plot_row(tracker.dataframe.iloc[0])
     show_tracked_particle(66)
     print(f"Array len of F66 before: {particle_per_frame[66]['len']}")
     print(f"Dataframe len of F66 before: {non_nan_len(tracker.dataframe['F66'])}")
-    tracker.updated_frame(frames, 66, minmass=170)
-    print(f"Array len of F66 after: {particle_per_frame[66]['len']}")
-    print(f"Dataframe len of F66 after: {non_nan_len(tracker.dataframe['F66'])}")
-    show_tracked_particle(66)
+    # tracker.updated_frame(frames, 66, minmass=170)
+    # print(f"Array len of F66 after: {particle_per_frame[66]['len']}")
+    # print(f"Dataframe len of F66 after: {non_nan_len(tracker.dataframe['F66'])}")
+    # show_tracked_particle(66)
