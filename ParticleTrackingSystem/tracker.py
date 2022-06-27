@@ -351,7 +351,7 @@ class Tracker:
             f = tp_locate(frames, cnt, self.diameter, minmass=self.minmass, separation=self.separation)
             if cnt == 0:
                 max_size = len(f)
-
+            print(f"((len(f) / max_size) * 100)= {((len(f) / max_size) * 100)}")
             if cnt > 0 and ((len(f) / max_size) * 100) <= min_particle_percentage:
                 i_percent = ((len(f) / max_size) * 100)
                 while i_percent <= min_particle_percentage:
@@ -372,7 +372,8 @@ class Tracker:
                         # len(f)
                 self.particle_per_frame.append({"len": len(f), "minmass": new_minmass})
 
-            elif cnt > 0 and i_percent >= max_particle_percentage:
+            elif cnt > 0 and ((len(f) / max_size) * 100) >= max_particle_percentage:
+                i_percent = ((len(f) / max_size) * 100)
                 while i_percent >= max_particle_percentage:
                     if new_minmass > 0:
                         f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass, separation=self.separation)
