@@ -17,9 +17,17 @@ import inspect
 # %matplotlib inline
 from trackpy.utils import memo
 
-from ParticleTrackingSystem.video_utility import Video_Utility, gray
-from ParticleTrackingSystem.tracker import Tracker, set_frames_number_in_array,\
-    print_2d, set_empty_panda, is_a_dictionary, tp_locate#, get_particles_per_image_as_array
+try:
+    from ParticleTrackingSystem.video_utility import Video_Utility, gray
+except ImportError:
+    from video_utility import Video_Utility, gray
+
+try:
+    from ParticleTrackingSystem.tracker import Tracker, set_frames_number_in_array, \
+    print_2d, set_empty_panda, is_a_dictionary, tp_locate  # , get_particles_per_image_as_array
+except ImportError:
+    from tracker import Tracker, set_frames_number_in_array, \
+        print_2d, set_empty_panda, is_a_dictionary, tp_locate  # , get_particles_per_image_as_array
 
 if __name__ == '__main__':
     video_utility = Video_Utility()
@@ -94,11 +102,14 @@ if __name__ == '__main__':
         colors = ["#" + ''.join([random.choice('0123456789ABCDEF') for i in range(6)]) for j in range(no_of_colors)]
         return colors
 
+
     def show_rows_particle(number):
         plot_row(tracker.dataframe.iloc[number])
 
+
     def show_frames_particle(number):
-        plot_column_points(tracker.dataframe["F"+str(number)])
+        plot_column_points(tracker.dataframe["F" + str(number)])
+
 
     def show_tracked_particle(f_no):
         min = particle_per_frame[f_no]["minmass"]
@@ -108,6 +119,7 @@ if __name__ == '__main__':
         plt.show()
         return fig
 
+
     def non_nan_len(series):
         res = 0
         for e in series:
@@ -115,13 +127,20 @@ if __name__ == '__main__':
                 res += 1
         return res
 
+
     def save_all_frame():
         i = 0
         for i in range(0, len(particle_per_frame)):
-            name = "./locatedImages/frame_" + str(i) + ".png"
+            if i < 10:
+                name = "./locatedImages/frame_00" + str(i) + ".png"
+            elif 10 >= i < 100:
+                name = "./locatedImages/frame_0" + str(i) + ".png"
+            else:
+                name = "./locatedImages/frame_" + str(i) + ".png"
             r = show_tracked_particle(i)
             r.get_figure().savefig(name)
             i += 1
+
 
     plot_column_points(tracker.dataframe["F66"])
     plot_row(tracker.dataframe.iloc[0])
@@ -132,3 +151,35 @@ if __name__ == '__main__':
     # print(f"Array len of F66 after: {particle_per_frame[66]['len']}")
     # print(f"Dataframe len of F66 after: {non_nan_len(tracker.dataframe['F66'])}")
     # show_tracked_particle(66)
+
+
+    from bokeh.io import curdoc
+    from bokeh.plotting import figure, show, output_file
+    from bokeh.layouts import layout
+    from bokeh.models import (Button, ColumnDataSource)
+    # from .data import process_data
+    from os import listdir
+    from os.path import isfile, join
+
+
+    locatedImages = [f"./locatedImages/{f}" for f in listdir('./locatedImages/') if isfile(join('./locatedImages/', f))]
+    sorted(locatedImages, key=lambda i: i[0][-7:-4])
+
+    output_file('image.html', title='Tracked particle')
+
+
+    # Add plot
+    p = figure(
+        x_range=(0, 0.7),
+        y_range=(0, 0.7),
+        x_axis_label='x-coordinate',
+        y_axis_label='y-coordinate',
+        title='Frame55'
+    )
+
+
+    # Render glyph
+    p.image_url(url=[locatedImages[55]], x=-0.1, y=0.6, w=0.8, h=0.6)
+
+    # Show results
+    show(p)

@@ -14,8 +14,12 @@ import pims
 import trackpy as tp
 import inspect
 
-from ParticleTrackingSystem.event import Event, EventType
-from ParticleTrackingSystem.video_utility import Video_Utility
+try:
+    from ParticleTrackingSystem.event import Event, EventType
+    from ParticleTrackingSystem.video_utility import Video_Utility
+except:
+    from event import Event, EventType
+    from video_utility import Video_Utility
 
 
 def set_frames_number_in_array(p_array):
@@ -346,54 +350,60 @@ class Tracker:
         max_particle_percentage = max_particle_percentage
         i_percent = 0
         new_minmass = self.minmass
+        mod = 0
         for i in frames:
-            # f = tp_locate(frames, cnt, 5, minmass=210, separation=6.3)
-            f = tp_locate(frames, cnt, self.diameter, minmass=self.minmass, separation=self.separation)
+            f = tp_locate(frames, cnt, self.diameter, minmass=self.minmass, separation=self.separation, maxsize=self.maxsize, topn=self.topn, engine=self.engine)
             if cnt == 0:
                 max_size = len(f)
             print(f"((len(f) / max_size) * 100)= {((len(f) / max_size) * 100)}")
             if cnt > 0 and ((len(f) / max_size) * 100) <= min_particle_percentage:
                 i_percent = ((len(f) / max_size) * 100)
                 while i_percent <= min_particle_percentage:
+                    mod += 1
                     if new_minmass > 0:
-                        f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass, separation=self.separation)
+                        f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass, separation=self.separation, maxsize=self.maxsize, topn=self.topn, engine=self.engine)
                         i_percent = ((len(f) / max_size) * 100)
                         if min_particle_percentage < i_percent < max_particle_percentage:
                             break
                         elif i_percent >= max_particle_percentage:
                             while i_percent >= max_particle_percentage:
+                                mod += 1
                                 new_minmass += 5
-                                f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass,
-                                              separation=self.separation)
+                                f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass, separation=self.separation,
+                                              maxsize=self.maxsize, topn=self.topn, engine=self.engine)
                                 i_percent = ((len(f) / max_size) * 100)
                                 if min_particle_percentage < i_percent < max_particle_percentage:
                                     break
                         new_minmass -= 5
                         # len(f)
-                self.particle_per_frame.append({"len": len(f), "minmass": new_minmass})
+                self.particle_per_frame.append({"len": len(f), "minmass": new_minmass, "Mod": mod})
+                mod = 0
 
             elif cnt > 0 and ((len(f) / max_size) * 100) >= max_particle_percentage:
                 i_percent = ((len(f) / max_size) * 100)
                 while i_percent >= max_particle_percentage:
+                    mod += 1
                     if new_minmass > 0:
-                        f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass, separation=self.separation)
+                        f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass, separation=self.separation, maxsize=self.maxsize, topn=self.topn, engine=self.engine)
                         i_percent = ((len(f) / max_size) * 100)
                         if min_particle_percentage < i_percent < max_particle_percentage:
                             break
                         elif i_percent <= min_particle_percentage:
                             while i_percent >= max_particle_percentage:
+                                mod += 1
                                 new_minmass -= 5
-                                f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass,
-                                              separation=self.separation)
+                                f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass, separation=self.separation,
+                                              maxsize=self.maxsize, topn=self.topn, engine=self.engine)
                                 i_percent = ((len(f) / max_size) * 100)
                                 if min_particle_percentage < i_percent < max_particle_percentage:
                                     break
                         new_minmass += 5
                         # len(f)
-                self.particle_per_frame.append({"len": len(f), "minmass": new_minmass})
+                self.particle_per_frame.append({"len": len(f), "minmass": new_minmass, "Mod": mod})
+                mod = 0
 
             else:
-                self.particle_per_frame.append({"len": len(f), "minmass": self.minmass})
+                self.particle_per_frame.append({"len": len(f), "minmass": self.minmass, "Mod": mod})
 
             print("Number of particle frame[" + str(cnt) + "]: " + str(len(f)))
             cnt += 1

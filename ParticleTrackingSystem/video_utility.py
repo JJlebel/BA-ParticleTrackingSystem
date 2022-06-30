@@ -3,7 +3,7 @@ from __future__ import division, unicode_literals, print_function  # for compati
 import os
 import pims
 
-from ParticleTrackingSystem.main import convert_into_image_sequence
+# from ParticleTrackingSystem.main import convert_into_image_sequence
 
 
 @pims.pipeline
