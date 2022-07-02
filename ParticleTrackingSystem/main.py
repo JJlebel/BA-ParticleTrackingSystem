@@ -6,11 +6,9 @@ import matplotlib.pyplot as plt
 
 from array import *
 import numpy as np
-import pandas
 import pandas as pd
-# from Cython.Utility.MemoryView import memoryview
 from pandas import DataFrame, Series  # for convenience
-from os import listdir
+from os import listdir, remove
 from os.path import isfile, join
 
 import pims
@@ -58,10 +56,13 @@ if __name__ == '__main__':
 
     xx, yy, labels = [], [], []
 
-    locatedImages = [f"./static/locatedImages/{f}" for f in
-                     listdir('./static/locatedImages/')
-                     if isfile(join('./static/locatedImages/', f))]
-    sorted(locatedImages, key=lambda i: i[0][-7:-4])
+    try:
+        locatedImages = [f"./static/locatedImages/{f}" for f in
+                         listdir('./static/locatedImages/')
+                         if isfile(join('./static/locatedImages/', f))]
+        sorted(locatedImages, key=lambda i: i[0][-7:-4])
+    except FileNotFoundError:
+        pass
 
     def plot_row(series):
         if len(xx) > 0 or len(yy) > 0 or len(labels) > 0:
@@ -136,6 +137,9 @@ if __name__ == '__main__':
 
 
     def save_all_frame():
+        if len(listdir("./static/locatedImages/")) > 0:
+            for e in listdir('./static/locatedImages/'):
+                remove(f"./static/locatedImages/{e}")
         i = 0
         for i in range(0, len(particle_per_frame)):
             if i < 10:
@@ -149,11 +153,16 @@ if __name__ == '__main__':
             i += 1
 
     def generate_output():
+        if 'output.csv' in listdir('./static/'):
+            remove("./static/output.csv")
         for_csv = pd.DataFrame()
+        locatedImages = [f"./static/locatedImages/{f}" for f in
+                         listdir('./static/locatedImages/')
+                         if isfile(join('./static/locatedImages/', f))]
+        sorted(locatedImages, key=lambda i: i[0][-7:-4])
         length = [x["len"] for x in particle_per_frame]
         minmass = [x["minmass"] for x in particle_per_frame]
         mod = [x["Mod"] for x in particle_per_frame]
-        for_csv.drop(['Images', 'Length', 'Minmass'], inplace=True, axis=1)
         i = 0
         h = ["Images", "Length", "Minmass", "Mod"]
         hh = [locatedImages, length, minmass, mod]
@@ -162,11 +171,14 @@ if __name__ == '__main__':
             i += 1
         for_csv.to_csv('./static/output.csv', columns=["Images", "Length", "Minmass", "Mod"])
 
-    plot_column_points(tracker.dataframe["F66"])
-    plot_row(tracker.dataframe.iloc[0])
-    show_tracked_particle(66)
-    print(f"Array len of F66 before: {particle_per_frame[66]['len']}")
-    print(f"Dataframe len of F66 before: {non_nan_len(tracker.dataframe['F66'])}")
+    save_all_frame()
+    generate_output()
+
+    # plot_column_points(tracker.dataframe["F66"])
+    # plot_row(tracker.dataframe.iloc[0])
+    # show_tracked_particle(66)
+    # print(f"Array len of F66 before: {particle_per_frame[66]['len']}")
+    # print(f"Dataframe len of F66 before: {non_nan_len(tracker.dataframe['F66'])}")
     # tracker.updated_frame(frames, 66, minmass=170)
     # print(f"Array len of F66 after: {particle_per_frame[66]['len']}")
     # print(f"Dataframe len of F66 after: {non_nan_len(tracker.dataframe['F66'])}")
@@ -188,11 +200,7 @@ from bokeh.layouts import layout
 from bokeh.models import (Button, SingleIntervalTicker, ColumnDataSource, Slider, Label, CustomJS)
 from os import listdir
 from os.path import isfile, join
-from PIL import Image
 import pandas as pd
-
-    # im = Image.open('./locatedImages/frame_8.png')
-    # im.show()
 
 try:
     locatedImages = [f"ParticleTrackingSystem/static/locatedImages/{f}" for f in listdir('ParticleTrackingSystem/static/locatedImages/')
