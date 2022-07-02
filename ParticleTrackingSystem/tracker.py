@@ -370,15 +370,32 @@ class Tracker:
 
     def updated_frame(self, frames, f_no, minmass=None, separation=None, maxsize=None, topn=None, engine='python'):
         """
+            Updates the particle detection made on a specific image. This is done using the given parameters.
+            Only parameters with values other than None will be considered. Otherwise, their values will be reset.
 
-        :param frames:
-        :param f_no:
-        :param minmass:
-        :param separation:
-        :param maxsize:
-        :param topn:
-        :param engine:
-        :return:
+
+        Parameters
+        ----------
+        frames: Array
+            the list of all frames
+        f_no: int
+            The number of the image to be modified.
+        minmass: float
+            The minimum integrated brightness. This is a crucial parameter for
+            eliminating spurious features.
+            Recommended minimum values are 100 for integer images and 1 for float
+            images. Defaults to 0 (no filtering).
+        separation: float or tuple
+            Minimum separation between features.
+            Default is diameter + 1. May be a tuple, see diameter for details.
+        maxsize:float
+            maximum radius-of-gyration of brightness, default None
+        topn:   integer
+            Return only the N brightest features above minmass.
+            If None (default), return all features above minmass.
+        engine: {'auto', 'python', 'numba'}
+
+        :return: Nothting
         """
         if minmass is None:
             minmass = self.get_minmass()
@@ -400,11 +417,12 @@ class Tracker:
     # Stores the number of particles per image in array
     def get_particles_per_image_as_array(self, frames, min_particle_percentage=85.0, max_particle_percentage=110.0):
         """
+
         Parameters
         ----------
-        :param frames:
-        :param min_particle_percentage:
-        :param max_particle_percentage:
+        frames:
+        min_particle_percentage:
+        max_particle_percentage:
         :return:
         """
         # particle_pre_frame = []
