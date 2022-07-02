@@ -4,111 +4,282 @@ import os
 
 import matplotlib.pyplot as plt
 
+from array import *
 import numpy as np
+import pandas
 import pandas as pd
-#from Cython.Utility.MemoryView import memoryview
+# from Cython.Utility.MemoryView import memoryview
 from pandas import DataFrame, Series  # for convenience
+from os import listdir
+from os.path import isfile, join
 
 import pims
 import trackpy as tp
-
+import inspect
 
 # %matplotlib inline
 from trackpy.utils import memo
 
+try:
+    from ParticleTrackingSystem.video_utility import Video_Utility, gray
+except ImportError:
+    from video_utility import Video_Utility, gray
 
-@pims.pipeline
-def gray(image):
-    return image[:, :, 1]  # Take just the green channel
+try:
+    from ParticleTrackingSystem.tracker import Tracker, set_frames_number_in_array, \
+    print_2d, set_empty_panda, is_a_dictionary, tp_locate  # , get_particles_per_image_as_array
+except ImportError:
+    from tracker import Tracker, set_frames_number_in_array, \
+        print_2d, set_empty_panda, is_a_dictionary, tp_locate  # , get_particles_per_image_as_array
 
-
-@pims.pipeline
-def as_grey(frame):
-    red = frame[:, :, 0]
-    green = frame[:, :, 1]
-    blue = frame[:, :, 2]
-    return 0.2125 * red + 0.7154 * green + 0.0721 * blue
-
-
-def convert_into_image_sequence(path):
-    dirName = 'ImageSequence'
-    try:
-        os.mkdir(dirName)
-        print("Directory ", dirName, " Created ")
-    except FileExistsError:
-        print("Directory ", dirName, " already exists")
-    os.system("cd " + str(dirName))
-    os.system("ffmpeg -i " + path + " -f image2 " + dirName + "/video-frame%05d.png")
-    return pims.open('./' + dirName + '/*.png')
-
-
-# TODO Do not forget to delete the content of the directory after using it.
-pd.set_option('display.max_columns', None)
-pd.set_option('display.max_rows', None)
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print('Hi PyCharm')
-    frames = gray(convert_into_image_sequence('./BW/BW-Isil-video4.avi'))
-    print('----------')
-    frames
-    print('Type of Frames ' + str(type(frames)))
-    print('----------')
-    print(frames[0])
-    print('Type of Frames[0] ' + str(type(frames[0])))
-    print('----------')
-    plt.imshow(frames[0])
-    plt.show()
-    print('----------')
-    # Localise les taches de types Gaussiens d'une taille approxi. dans une image.
-    f = tp.locate(frames[0], 11, True)
-    # Returns information of the first 5 founded particles(y,x,mass,size,ecc,signal,raw_mass,ep,frame)
-    print(f.head())
-    # Mark identified features with white circles.
-    tp.annotate(f, frames[0])
+    video_utility = Video_Utility()
+    video_utility.set_path('./BW/BW-Isil-video4.avi')
+    video_utility.frames = gray(video_utility.convert_into_image_sequence())
+    frames = video_utility.frames
 
-    fig, ax = plt.subplots()
-    ax.hist(f['mass'], bins=20)
+    tracker = Tracker(5)
+    tracker.set_frames(frames)
+    tracker.set_minmass(210)
+    tracker.set_separation(6.3)
 
-    # Optionally, label the axes.
-    ax.set(xlabel='mass', ylabel='count')
-    plt.show()
+    particle_per_frame = tracker.get_particles_per_image_as_array(frames, max_particle_percentage=100)
 
-    f = tp.locate(frames[0], 11, minmass=30, invert=True)
-    tp.annotate(f, frames[0])
+    set_frames_number_in_array(frames)
+    tracker.arrange_array(frames, particle_per_frame)
 
-    # Check for subpixel accuracy
-    #tp.subpx_bias(f)
-    #plt.show()
+    set_frames_number_in_array(tracker.array)
 
-    #tp.subpx_bias(tp.locate(frames[0], 15, minmass=30, invert=True))
-    #plt.show()
+    tracker.set_particle_value_in_array(frames)
 
-    # f = tp.batch(frames[:2], 11, minmass=30, invert=True)
-    f = tp.batch(frames[:2], 11, minmass=30, invert=True)
-    print("Batch function returns a: " + str(type(f)))
-    tt = pd.DataFrame(f)
-    #print(tt)
-    #for line in f
-    df = pd.DataFrame({'c1': [10, 11, 12], 'c2': [100, 110, 120]})
-    print(df)
-    increase = []
-    decrease = []
-    for index, row in tt.iterrows():
-        if index == 0:
-            continue
-        print("Idx: ")
-        print(index, row['mass'])
+    # print_2d(tracker.array)
+
+    tracker.arrange_panda(tracker.array)
+
+    xx, yy, labels = [], [], []
+
+    locatedImages = [f"./static/locatedImages/{f}" for f in
+                     listdir('./static/locatedImages/')
+                     if isfile(join('./static/locatedImages/', f))]
+    sorted(locatedImages, key=lambda i: i[0][-7:-4])
+
+    def plot_row(series):
+        if len(xx) > 0 or len(yy) > 0 or len(labels) > 0:
+            xx.clear()
+            yy.clear()
+            labels.clear()
+        for e in series:
+            if is_a_dictionary(e):
+                xx.append(e['x'])
+                yy.append(e['y'])
+            else:
+                continue
+
+        plt.plot(xx, yy, 'bo')
+        plt.gca().invert_yaxis()
+        plt.figure(figsize=(14, 10))
+        # plt.gca().set_aspect("equal")
+        plt.show()
+        return xx, yy
 
 
-    # plt.figure(figsize=(14, 10))
-    plt.figure(figsize=(9, 5))
-    tp.annotate(f, frames[0])
-    plt.show()
+    def plot_column_points(series):
+        if len(xx) > 0 or len(yy) > 0 or len(labels) > 0:
+            xx.clear()
+            yy.clear()
+            labels.clear()
+        for e in series:
+            if is_a_dictionary(e):
+                xx.append(e['x'])
+                yy.append(e['y'])
+                labels.append(e["i"])
+            else:
+                continue
+        colors = random_color_generator(len(xx))
+
+        plt.scatter(xx, yy, c=colors)
+        plt.gca().invert_yaxis()
+        plt.figure(figsize=(14, 10))
+        plt.show()
+        return xx, yy, labels, colors
+
+
+    def random_color_generator(no_of_colors):
+        import random
+        colors = ["#" + ''.join([random.choice('0123456789ABCDEF') for i in range(6)]) for j in range(no_of_colors)]
+        return colors
+
+
+    def show_rows_particle(number):
+        plot_row(tracker.dataframe.iloc[number])
+
+
+    def show_frames_particle(number):
+        plot_column_points(tracker.dataframe["F" + str(number)])
+
+
+    def show_tracked_particle(f_no):
+        min = particle_per_frame[f_no]["minmass"]
+        f4 = tp_locate(frames, f_no, tracker.get_diameter(), minmass=min)
+        plt.figure(figsize=(14, 10))
+        fig = tp.annotate(f4, frames[f_no])
+        plt.show()
+        return fig
+
+
+    def non_nan_len(series):
+        res = 0
+        for e in series:
+            if is_a_dictionary(e):
+                res += 1
+        return res
+
+
+    def save_all_frame():
+        i = 0
+        for i in range(0, len(particle_per_frame)):
+            if i < 10:
+                name = "./static/locatedImages/frame_00" + str(i) + ".png"
+            elif 10 >= i < 100:
+                name = "./static/locatedImages/frame_0" + str(i) + ".png"
+            else:
+                name = "./static/locatedImages/frame_" + str(i) + ".png"
+            r = show_tracked_particle(i)
+            r.get_figure().savefig(name)
+            i += 1
+
+    def generate_output():
+        for_csv = pd.DataFrame()
+        length = [x["len"] for x in particle_per_frame]
+        minmass = [x["minmass"] for x in particle_per_frame]
+        mod = [x["Mod"] for x in particle_per_frame]
+        for_csv.drop(['Images', 'Length', 'Minmass'], inplace=True, axis=1)
+        i = 0
+        h = ["Images", "Length", "Minmass", "Mod"]
+        hh = [locatedImages, length, minmass, mod]
+        for i in range(0, 4):
+            for_csv.insert(i, h.pop(0), hh.pop(0))
+            i += 1
+        for_csv.to_csv('./static/output.csv', columns=["Images", "Length", "Minmass", "Mod"])
+
+    plot_column_points(tracker.dataframe["F66"])
+    plot_row(tracker.dataframe.iloc[0])
+    show_tracked_particle(66)
+    print(f"Array len of F66 before: {particle_per_frame[66]['len']}")
+    print(f"Dataframe len of F66 before: {non_nan_len(tracker.dataframe['F66'])}")
+    # tracker.updated_frame(frames, 66, minmass=170)
+    # print(f"Array len of F66 after: {particle_per_frame[66]['len']}")
+    # print(f"Dataframe len of F66 after: {non_nan_len(tracker.dataframe['F66'])}")
+    # show_tracked_particle(66)
 
 
 
-    t = tp.link_df(f, search_range=5, memory=20)
-    tp.plot_traj(t, label=False, superimpose=None)
-    print('Bye PyCharm')
-{'i': 4, 'x': 112.11347, 'y': 4.26299}
+
+
+
+
+
+
+
+
+from bokeh.io import curdoc
+from bokeh.plotting import figure, show, output_file
+from bokeh.layouts import layout
+from bokeh.models import (Button, SingleIntervalTicker, ColumnDataSource, Slider, Label, CustomJS)
+from os import listdir
+from os.path import isfile, join
+from PIL import Image
+import pandas as pd
+
+    # im = Image.open('./locatedImages/frame_8.png')
+    # im.show()
+
+try:
+    locatedImages = [f"ParticleTrackingSystem/static/locatedImages/{f}" for f in listdir('ParticleTrackingSystem/static/locatedImages/')
+                     if isfile(join('ParticleTrackingSystem/static/locatedImages/', f))]
+    sorted(locatedImages, key=lambda i: i[0][-7:-4])
+
+
+    df = pd.read_csv('ParticleTrackingSystem/static/output.csv')
+    df['Images'] = locatedImages
+
+
+
+    # Create ColumnDataSource from data frame
+    source = ColumnDataSource(df)
+
+    #lists of differents values
+    images = source.data['Images'].tolist()
+    minmass = source.data['Minmass'].tolist()
+    length = source.data['Length'].tolist()
+    mod = source.data['Mod'].tolist()
+
+    # Add plot
+    p = figure(
+            x_range=(0, 4),
+            y_range=(0, 4),
+            x_axis_label='x-coordinate',
+            y_axis_label='y-coordinate',
+            plot_width=950,
+            plot_height=850,
+            title='Evolution of tracked particles over time'
+        )
+
+    # Render glyph
+    p.image_url(url=[images[0]], x=-0.76, y=4, w=5, h=4.6)
+
+
+    # Show results
+    label = Label(x=0.2, y=3.6, text=f"Minmass: {str(minmass[0])}, Length: {str(length[0])},\nMod: {str(mod[0])}", text_font_size='17px', text_color='#0521f7')
+    p.add_layout(label)
+
+    def animate_update():
+        frame = slider.value + 1
+        if frame > images.index(images[-1]):
+            frame = images.index(images[0])
+        slider.value = frame
+        p.image_url(url=[images[frame]], x=-0.76, y=4, w=5, h=4.6)
+
+
+
+    def slider_update(attrname, old, new):
+        frame = slider.value
+        label.text = f"Minmass: {str(minmass[frame])}, Length: {str(length[frame])},\nMod: {str(mod[frame])}"
+        p.image_url(url=[images[frame]], x=-0.76, y=4, w=5, h=4.6)
+        pass
+
+    def slider_update_2(attrname, old, new):
+            pass
+
+
+    slider = Slider(start=0, end=100, value=0, step=1, title="Frames")
+    slider.on_change('value', slider_update)
+
+    slider_2 = Slider(start=1, end=5, value=1, step=1, title="Speed (frames/second)", width=60)
+    slider_2.on_change('value', slider_update_2)
+
+    callback_id = None
+
+
+    def animate():
+        global callback_id
+        if button.label == '► Play':
+            button.label = '❚❚ Pause'
+            callback_id = curdoc().add_periodic_callback(animate_update, 200)
+        else:
+            button.label = '► Play'
+            curdoc().remove_periodic_callback(callback_id)
+
+
+    button = Button(label='► Play', width=60)
+    button.on_event('button_click', animate)
+
+    layout = layout([
+            [p],
+            [slider, button, slider_2],
+        ])
+
+    curdoc().add_root(layout)
+    curdoc().title = "Particle visualisation"
+except FileNotFoundError:
+    pass
