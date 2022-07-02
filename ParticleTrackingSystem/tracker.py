@@ -24,9 +24,11 @@ except:
 
 def set_frames_number_in_array(p_array):
     """
+    Sets the length of the given array.
+    Will be generally use set Tracker._frames
 
-    :param p_array:
-    :return:
+    :param p_array: The given array
+    :return: Nothing
     """
     i = 0
     for n in p_array:
@@ -39,21 +41,53 @@ def tp_locate(frames, image, diameter, minmass=None,
               smoothing_size=None, threshold=None, topn=None, preprocess=True,
               max_iterations=10, characterize=True, engine='python'):
     """
+    Calls the trackpy's function locate.
+    By using only specific parameters of the initial function, which are no longer deprecated.
+    And also those who seems to procure any changes
 
-    :param frames:
+    :param frames: array
+        Processed image used for centroid-finding and most particle
+        measurements.
     :param image:
-    :param diameter:
-    :param minmass:
-    :param separation:
-    :param maxsize:
-    :param noise_size:
-    :param smoothing_size:
-    :param threshold:
-    :param topn:
-    :param preprocess:
-    :param max_iterations:
-    :param characterize:
-    :param engine:
+    :param diameter: odd integer or tuple of odd integers
+        This may be a single number or a tuple giving the feature's
+        extent in each dimension, useful when the dimensions do not have
+        equal resolution (e.g. confocal microscopy). The tuple order is the
+        same as the image shape, conventionally (z, y, x) or (y, x). The
+        number(s) must be odd integers. When in doubt, round up.
+    :param minmass:float
+        The minimum integrated brightness. This is a crucial parameter for
+        eliminating spurious features.
+        Recommended minimum values are 100 for integer images and 1 for float
+        images. Defaults to 0 (no filtering).
+        .. warning:: The mass value is changed since v0.3.0
+        .. warning:: The default behaviour of minmass has changed since v0.4.0
+    :param separation:float or tuple
+        Minimum separation between features.
+        Default is diameter + 1. May be a tuple, see diameter for details.
+    :param maxsize:float
+        maximum radius-of-gyration of brightness, default None
+    :param noise_size:float or tuple
+        Width of Gaussian blurring kernel, in pixels
+        Default is 1. May be a tuple, see diameter for details.
+    :param smoothing_size: float or tuple
+        The size of the sides of the square kernel used in boxcar (rolling
+        average) smoothing, in pixels
+        Default is diameter. May be a tuple, making the kernel rectangular.
+    :param threshold: float
+        Clip bandpass result below this value. Thresholding is done on the
+        already background-subtracted image.
+        By default, 1 for integer images and 1/255 for float images.
+    :param topn: integer
+        Return only the N brightest features above minmass.
+        If None (default), return all features above minmass.
+    :param preprocess: boolean
+        Set to False to turn off bandpass preprocessing.
+    :param max_iterations: integer
+        max number of loops to refine the center of mass, default 10
+    :param characterize:boolean
+        Compute "extras": eccentricity, signal, ep. True by default.
+    :param engine:{'auto', 'python', 'numba'}. Default is 'python'
     :return:
     DataFrame([x, y, mass, size, ecc, signal, raw_mass])
         where "x, y" are appropriate to the dimensionality of the image,
@@ -82,7 +116,13 @@ def tp_locate(frames, image, diameter, minmass=None,
                      engine=engine)
 
 
-def print_2d(array_to_print):
+def print_2d(array_to_print: list):
+    """
+    Prints the 2D-Array in a readable manner for human eye
+    :param array_to_print:  Array
+        The array to print
+    :return:  Nothing
+    """
     for r in array_to_print:
         for c in r:
             print(c, end=" ")
@@ -90,28 +130,43 @@ def print_2d(array_to_print):
 
 
 def elt_decimal(number, decimal_number):
-    """
+    """Rounds up a given number to a specific (decimal_number) amount of number after the comma
 
-    :param number:
-    :param decimal_number:
-    :return:
+    :param number: float
+        Number to round up
+    :param decimal_number: int
+        Amount of number after the comma
+
+    :return: float
+        The rounded 'number'
     """
-    # % 1 ensures that integer part disappears
-    # return round(number % 1, decimal_number)
     return round(number, decimal_number)
 
 
 def is_a_dictionary(element):
+    """
+        Checks if a given parameter 'element' is of type 'dict'.
+    :param element: Any
+        the given parameter
+    :return:
+        True if  :var elment is a 'dict' otherwise returns False
+    """
     return True if isinstance(element, dict) else False
 
 
 def range_with_floats(start, stop, step):
     """
+        Return an object that produces a sequence of integers from start (inclusive) to stop (exclusive) by step.
+        Whereby 'step' is adjustable
 
-    :param start:
-    :param stop:
-    :param step:
+    :param start: float
+        The beginning of the range(included)
+    :param stop: float
+        The end of the range (excluded)
+    :param step: float
+        The step of each skip
     :return:
+        An object that produces a sequence of floats from start (inclusive) to stop (exclusive) by step.
     """
     while stop > start:
         yield start
@@ -120,9 +175,20 @@ def range_with_floats(start, stop, step):
 
 def set_empty_panda(arr: list):
     """
+        Sets an empty Panda.Dataframe with the data from the given 'arr'
+        Whereby the columns of the Panda.Dataframe will be set to the length of the 'arr'
+            (e.g. length of 'arr'=100, Panda.Dataframe' columns => F0, F1,...,F99)
+        And the is a special column named 'Part_index', which could be use to store index of particle.
 
-    :param arr:
-    :return:
+    Parameters
+    ----------
+    arr: Array
+        the given array
+
+    :return: 'dict'
+        A dictionary of a
+        {An arranged  Panda.Dataframe(df),
+        An array of indexes(indexes)}
     """
     df = pd.DataFrame()
     df.insert(0, "Part_index", pd.NA)
@@ -323,7 +389,8 @@ class Tracker:
         if topn is None:
             topn = self.get_topn()
         ppf = self.get_particle_per_frame()
-        f = tp_locate(frames, f_no, self.get_diameter(), minmass=minmass, separation=separation, maxsize=maxsize, topn=topn, engine=engine)
+        f = tp_locate(frames, f_no, self.get_diameter(), minmass=minmass, separation=separation, maxsize=maxsize,
+                      topn=topn, engine=engine)
         ppf[f_no] = {"len": len(f), "minmass": minmass}
         self.set_particle_per_frame(ppf)
 
@@ -352,7 +419,8 @@ class Tracker:
         new_minmass = self.minmass
         mod = 0
         for i in frames:
-            f = tp_locate(frames, cnt, self.diameter, minmass=self.minmass, separation=self.separation, maxsize=self.maxsize, topn=self.topn, engine=self.engine)
+            f = tp_locate(frames, cnt, self.diameter, minmass=self.minmass, separation=self.separation,
+                          maxsize=self.maxsize, topn=self.topn, engine=self.engine)
             if cnt == 0:
                 max_size = len(f)
             print(f"((len(f) / max_size) * 100)= {((len(f) / max_size) * 100)}")
@@ -361,7 +429,8 @@ class Tracker:
                 while i_percent <= min_particle_percentage:
                     mod += 1
                     if new_minmass > 0:
-                        f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass, separation=self.separation, maxsize=self.maxsize, topn=self.topn, engine=self.engine)
+                        f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass, separation=self.separation,
+                                      maxsize=self.maxsize, topn=self.topn, engine=self.engine)
                         i_percent = ((len(f) / max_size) * 100)
                         if min_particle_percentage < i_percent < max_particle_percentage:
                             break
@@ -369,7 +438,8 @@ class Tracker:
                             while i_percent >= max_particle_percentage:
                                 mod += 1
                                 new_minmass += 5
-                                f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass, separation=self.separation,
+                                f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass,
+                                              separation=self.separation,
                                               maxsize=self.maxsize, topn=self.topn, engine=self.engine)
                                 i_percent = ((len(f) / max_size) * 100)
                                 if min_particle_percentage < i_percent < max_particle_percentage:
@@ -384,7 +454,8 @@ class Tracker:
                 while i_percent >= max_particle_percentage:
                     mod += 1
                     if new_minmass > 0:
-                        f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass, separation=self.separation, maxsize=self.maxsize, topn=self.topn, engine=self.engine)
+                        f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass, separation=self.separation,
+                                      maxsize=self.maxsize, topn=self.topn, engine=self.engine)
                         i_percent = ((len(f) / max_size) * 100)
                         if min_particle_percentage < i_percent < max_particle_percentage:
                             break
@@ -392,7 +463,8 @@ class Tracker:
                             while i_percent >= max_particle_percentage:
                                 mod += 1
                                 new_minmass -= 5
-                                f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass, separation=self.separation,
+                                f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass,
+                                              separation=self.separation,
                                               maxsize=self.maxsize, topn=self.topn, engine=self.engine)
                                 i_percent = ((len(f) / max_size) * 100)
                                 if min_particle_percentage < i_percent < max_particle_percentage:
