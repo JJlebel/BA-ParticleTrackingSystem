@@ -222,7 +222,7 @@ try:
     )
 
     # Render glyph
-    p.image_url(url=[images[0]], x=-0.76, y=4, w=5, h=4.6)
+    p.image_url(url=[images[0]], x=-0.76, y=4.11, w=5, h=4.6)
 
     # Show results
     label = Label(x=0.2, y=3.6, text=f"Minmass: {str(minmass[0])}, Length: {str(length[0])},\nMod: {str(mod[0])}",
@@ -234,12 +234,12 @@ try:
         if frame > images.index(images[-1]):
             frame = images.index(images[0])
         slider.value = frame
-        p.image_url(url=[images[frame]], x=-0.76, y=4, w=5, h=4.6)
+        p.image_url(url=[images[frame]], x=-0.76, y=4.11, w=5, h=4.6)
 
-    def slider_update():
+    def slider_update(attr, old, new):
         frame = slider.value
         label.text = f"Minmass: {str(minmass[frame])}, Length: {str(length[frame])},\nMod: {str(mod[frame])}"
-        p.image_url(url=[images[frame]], x=-0.76, y=4, w=5, h=4.6)
+        p.image_url(url=[images[frame]], x=-0.76, y=4.11, w=5, h=4.6)
         pass
 
     slider = Slider(start=0, end=100, value=0, step=1, title="Frames")
