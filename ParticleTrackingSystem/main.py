@@ -63,6 +63,19 @@ if __name__ == '__main__':
 
 
     def plot_row(series):
+        """
+            Plots the position of a specific particle over time.
+            From frame F0 ... Fn
+            With the given series.
+
+        Parameters
+        ----------
+        series:  pandas.core.series.Series
+            the given series to with xy-coordinates to plot
+        Returns
+        -------
+            A dict of array with all x- and y- position
+        """
         if len(xx) > 0 or len(yy) > 0 or len(labels) > 0:
             xx.clear()
             yy.clear()
@@ -83,6 +96,19 @@ if __name__ == '__main__':
 
 
     def plot_column_points(series):
+        """
+            Plots the position of all particles in one frame.
+            With the given series.
+
+        Parameters
+        ----------
+        series:  pandas.core.series.Series
+            the given series to with xy-coordinates to plot
+        Returns
+        -------
+            A dict of array with
+            all x- and y- positions, labels and colors
+        """
         if len(xx) > 0 or len(yy) > 0 or len(labels) > 0:
             xx.clear()
             yy.clear()
@@ -104,20 +130,64 @@ if __name__ == '__main__':
 
 
     def random_color_generator(no_of_colors):
+        """
+            Generates random x colors.
+
+        Parameters
+        ----------
+        no_of_colors:  int
+            the given number of colors to generate
+        Returns
+        -------
+            An array with x colors
+        """
         import random
         colors = ["#" + ''.join([random.choice('0123456789ABCDEF') for i in range(6)]) for j in range(no_of_colors)]
         return colors
 
 
     def show_rows_particle(number):
+        """
+            Plots the row number from the given number.
+
+        Parameters
+        ----------
+        number:  int
+            the row number to generate the plot from
+        Returns
+        -------
+            Nothing
+        """
         plot_row(tracker.dataframe.iloc[number])
 
 
     def show_frames_particle(number):
+        """
+            Plots the row number from the given number.
+
+        Parameters
+        ----------
+        number:  int
+            the frame number to generate the plot from
+        Returns
+        -------
+        Nothing
+        """
         plot_column_points(tracker.dataframe["F" + str(number)])
 
 
     def show_tracked_particle(f_no):
+        """
+            Shows the figure of all the tracked particle from the given frame number.
+
+        Parameters
+        ----------
+        f_no:  int
+            the frame number to show the figure from
+        Returns
+        -------
+            figure
+        """
         min = particle_per_frame[f_no]["minmass"]
         f4 = tp_locate(frames, f_no, tracker.get_diameter(), minmass=min)
         plt.figure(figsize=(14, 10))
@@ -127,6 +197,18 @@ if __name__ == '__main__':
 
 
     def non_nan_len(series):
+        """
+            Gives number of element in the given series without
+            counting the NAN values
+
+        Parameters
+        ----------
+        series:  pandas.core.series.Series
+            the given series to count the element from
+        Returns
+        -------
+            number of element in the series
+        """
         res = 0
         for e in series:
             if is_a_dictionary(e):
@@ -135,6 +217,14 @@ if __name__ == '__main__':
 
 
     def save_all_frame():
+        """
+           Save all tracked images in a folder.
+           It firstly, clean up the folder.
+
+        Returns
+        -------
+        Nothing
+        """
         if len(listdir("./static/locatedImages/")) > 0:
             for e in listdir('./static/locatedImages/'):
                 remove(f"./static/locatedImages/{e}")
@@ -152,7 +242,15 @@ if __name__ == '__main__':
 
 
     def generate_output():
+        """
+            Generates a csv-file with several data.
+            Such as path to get tracked image of each frame,
+            length of each frame, as well as Minmass  and Mod
+        Returns
+        -------
+        """
         if 'output.csv' in listdir('./static/'):
+            print("remove(output.csv)")
             remove("./static/output.csv")
         for_csv = pd.DataFrame()
         locatedImages = [f"./static/locatedImages/{f}" for f in
