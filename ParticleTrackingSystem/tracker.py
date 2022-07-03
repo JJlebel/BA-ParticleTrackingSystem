@@ -417,13 +417,28 @@ class Tracker:
     # Stores the number of particles per image in array
     def get_particles_per_image_as_array(self, frames, min_particle_percentage=85.0, max_particle_percentage=110.0):
         """
+            Stores several attributes used to obtain the detection made on an image.
+            These parameters are:
+                len: Number of detected particles
+                minmass:  The minimum integrated brightness
+                mod: Number of times that parameter has been changed to stay within the desired range.
+            Whereby the len will always stay in the range of
+            (min_min_particle_percentage < len > max_particle_percentage).
+            Due to an algorithm that modifies the values of the parameters
+             until the len is in the previously given range.
 
         Parameters
         ----------
-        frames:
-        min_particle_percentage:
-        max_particle_percentage:
-        :return:
+        frames: Array
+            the sequence of image of the video
+        min_particle_percentage: float
+            the minimum percentage of particle that should be detected
+        max_particle_percentage: float
+            the maximum  percentage of particle that should be detected.
+            100% is equal to the amount of particle found on the first frame
+        Returns
+        -------
+        An array of dict.
         """
         # particle_pre_frame = []
         self.particle_per_frame.clear()
@@ -499,29 +514,46 @@ class Tracker:
             cnt += 1
         return self.particle_per_frame
 
-    def arrange_array(self, frames, particle_pre_frame):
+    def arrange_array(self, frames, particle_per_frame):
         """
-
-        :param frames:
-        :param particle_pre_frame:
-        :return:
+            Sets up the self.array.
+            For each element in particle_per_frame creates an index
+            And fills it with as many zeros as particle_per_frame has len at that particular index.
+        Parameters
+        ----------
+        frames: Array
+            the sequence of image of the video
+        particle_per_frame: Array
+            several attributes used to obtain the detection made on an image
+        Returns
+        -------
+        Nothing
         """
         self.array = []
         ite = 0
         for i in range(len(frames)):
             col = []
-            ppf = particle_pre_frame[ite]["len"]
+            ppf = particle_per_frame[ite]["len"]
             for j in range(ppf):
                 col.append(0)
             self.array.append(col)
-            if ite < len(particle_pre_frame) - 1:
+            if ite < len(particle_per_frame) - 1:
                 ite += 1
 
     def set_particle_value_in_array(self, frames):
         """
+            Fills the self.array with a dict of
+            {'i': index,
+            'x': x-position of particle,
+            'y': y-position of particle}
 
-        :param frames:
-        :return:
+        Parameters
+        ----------
+        frames: Array
+            the sequence of image of the video
+        Returns
+        -------
+        Nothing
         """
         if self.get_array() is not None and is_a_dictionary(self.get_array()[0][1]):
             self.array.clear()
@@ -557,9 +589,15 @@ class Tracker:
 
     def arrange_panda(self, p_array: list):
         """
+        Fills the self.dataframe with the data of he given p_p_array.
 
-        :param p_array:
-        :return:
+        Parameters
+        ----------
+        p_array: Array
+            The given array. Should be self.array
+        Return
+        ------
+        Nothing
         """
 
         te = set_empty_panda(p_array)
