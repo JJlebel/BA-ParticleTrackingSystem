@@ -90,7 +90,6 @@ if __name__ == '__main__':
         plt.plot(xx, yy, 'bo')
         plt.gca().invert_yaxis()
         plt.figure(figsize=(14, 10))
-        # plt.gca().set_aspect("equal")
         plt.show()
         return xx, yy
 
