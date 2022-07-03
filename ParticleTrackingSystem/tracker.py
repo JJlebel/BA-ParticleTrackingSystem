@@ -408,7 +408,9 @@ class Tracker:
         ppf = self.get_particle_per_frame()
         f = tp_locate(frames, f_no, self.get_diameter(), minmass=minmass, separation=separation, maxsize=maxsize,
                       topn=topn, engine=engine)
-        ppf[f_no] = {"len": len(f), "minmass": minmass}
+        ppf[f_no] = {"Len": len(f), "Minmass": minmass, "Mod": 0,
+                     "Separation": separation, "Maxsize": maxsize,
+                     "Topn": topn, "Engine": engine}
         self.set_particle_per_frame(ppf)
 
         self.set_particle_value_in_array(frames)
@@ -456,7 +458,6 @@ class Tracker:
                           maxsize=self.maxsize, topn=self.topn, engine=self.engine)
             if cnt == 0:
                 max_size = len(f)
-            print(f"((len(f) / max_size) * 100)= {((len(f) / max_size) * 100)}")
             if cnt > 0 and ((len(f) / max_size) * 100) <= min_particle_percentage:
                 i_percent = ((len(f) / max_size) * 100)
                 while i_percent <= min_particle_percentage:
@@ -479,7 +480,9 @@ class Tracker:
                                     break
                         new_minmass -= 5
                         # len(f)
-                self.particle_per_frame.append({"len": len(f), "minmass": new_minmass, "Mod": mod})
+                self.particle_per_frame.append({"Len": len(f), "Minmass": new_minmass, "Mod": mod,
+                                                "Separation": self.separation, "Maxsize": self.maxsize,
+                                                "Topn": self.topn, "Engine": self.engine})
                 mod = 0
 
             elif cnt > 0 and ((len(f) / max_size) * 100) >= max_particle_percentage:
@@ -504,11 +507,15 @@ class Tracker:
                                     break
                         new_minmass += 5
                         # len(f)
-                self.particle_per_frame.append({"len": len(f), "minmass": new_minmass, "Mod": mod})
+                self.particle_per_frame.append({"Len": len(f), "Minmass": new_minmass, "Mod": mod,
+                                                "Separation": self.separation, "Maxsize": self.maxsize,
+                                                "Topn": self.topn, "Engine": self.engine})
                 mod = 0
 
             else:
-                self.particle_per_frame.append({"len": len(f), "minmass": self.minmass, "Mod": mod})
+                self.particle_per_frame.append({"Len": len(f), "Minmass": new_minmass, "Mod": mod,
+                                                "Separation": self.separation, "Maxsize": self.maxsize,
+                                                "Topn": self.topn, "Engine": self.engine})
 
             print("Number of particle frame[" + str(cnt) + "]: " + str(len(f)))
             cnt += 1
@@ -533,7 +540,7 @@ class Tracker:
         ite = 0
         for i in range(len(frames)):
             col = []
-            ppf = particle_per_frame[ite]["len"]
+            ppf = particle_per_frame[ite]["Len"]
             for j in range(ppf):
                 col.append(0)
             self.array.append(col)
@@ -565,17 +572,23 @@ class Tracker:
         for r in self.array:
             re = int(len(r))
             if frame_index in range(0, len(frames)):
-                f = tp_locate(frames, frame_index, 5, minmass=self.particle_per_frame[frame_index]["minmass"],
-                              separation=self.separation)
+                f = tp_locate(frames, frame_index, self.diameter, minmass=self.particle_per_frame[frame_index]["Minmass"],
+                              separation=self.particle_per_frame[frame_index]["Separation"],
+                              maxsize=self.particle_per_frame[frame_index]["Maxsize"],
+                              topn=self.particle_per_frame[frame_index]["Topn"],
+                              engine=self.particle_per_frame[frame_index]["Engine"])
                 index = f.index
                 # print(index)
                 for c in r:
-                    jj = index[particle_index - 1]
-                    self.array[frame_index][particle_index] = {'i': index[particle_index - 1],
-                                                               'x': elt_decimal(f.at[index[particle_index - 1], 'x'],
-                                                                                5),
-                                                               'y': elt_decimal(f.at[index[particle_index - 1], 'y'],
-                                                                                5)}
+                    try:
+                        jj = index[particle_index - 1]
+                        self.array[frame_index][particle_index] = {'i': index[particle_index - 1],
+                                                                   'x': elt_decimal(f.at[index[particle_index - 1], 'x'],
+                                                                                    5),
+                                                                   'y': elt_decimal(f.at[index[particle_index - 1], 'y'],
+                                                                                    5)}
+                    except IndexError:
+                        continue
                     re = int(len(r))
                     re = int(len(r)) - particle_index
                     if int(len(r)) - particle_index != 1:
@@ -612,10 +625,13 @@ class Tracker:
                 # print(f"Type of c in data: {type(c)}")
                 if not is_a_dictionary(c) and not isinstance(c, int):
                     try:
-                        # takes the index of the particle within the dictionary in the initial 2D-array
-                        pi_array = p_array[col_ind][cell]["i"]
-                        # takes the index of the particle in the 'Part_index'-column of the dataframe
-                        pi_dataframe = self.dataframe.loc[r_ind, 'Part_index']
+                        try:
+                            # takes the index of the particle within the dictionary in the initial 2D-array
+                            pi_array = p_array[col_ind][cell]["i"]
+                            # takes the index of the particle in the 'Part_index'-column of the dataframe
+                            pi_dataframe = self.dataframe.loc[r_ind, 'Part_index']
+                        except TypeError:
+                            continue
 
                         if pi_array != pi_dataframe:
                             r_ind += 1
