@@ -9,7 +9,8 @@ import numpy as np
 import pandas as pd
 # from Cython.Utility.MemoryView import memoryview
 from pandas import DataFrame, Series  # for convenience
-
+from os import listdir, remove
+from os.path import isfile, join
 import pims
 import trackpy as tp
 import inspect
@@ -415,6 +416,92 @@ class Tracker:
 
         self.set_particle_value_in_array(frames)
         self.arrange_panda(self.array)
+        self.save_all_frame(frames)
+        self.generate_output()
+
+    def show_tracked_particle(self, f_no, frames=None):
+        """
+            Shows the figure of all the tracked particle from the given frame number.
+
+        Parameters
+        ----------
+        f_no:  int
+            the frame number to show the figure from
+        frames:
+        Returns
+        -------
+            figure
+        """
+        if frames is None:
+            frames = self.get_frames()
+
+        particle_per_frame = self.get_particle_per_frame()
+        # min = particle_per_frame[f_no]["Minmass"]
+        f4 = tp_locate(frames, f_no, self.get_diameter(), minmass=particle_per_frame[f_no]["Minmass"],
+                       separation=particle_per_frame[f_no]["Separation"],
+                       maxsize=particle_per_frame[f_no]["Maxsize"], topn=particle_per_frame[f_no]["Topn"],
+                       engine=particle_per_frame[f_no]["Engine"])
+        plt.figure(figsize=(14, 10))
+        fig = tp.annotate(f4, frames[f_no])
+        plt.show()
+        return fig
+
+    def save_all_frame(self, frames=None):
+        """
+           Save all tracked images in a folder.
+           It firstly, clean up the folder.
+
+        Returns
+        -------
+        Nothing
+        """
+        if len(listdir("./static/locatedImages/")) > 0:
+            for e in listdir('./static/locatedImages/'):
+                remove(f"./static/locatedImages/{e}")
+        i = 0
+        for i in range(0, len(self.particle_per_frame)):
+            if i < 10:
+                name = "./static/locatedImages/frame_00" + str(i) + ".png"
+            elif 10 >= i < 100:
+                name = "./static/locatedImages/frame_0" + str(i) + ".png"
+            else:
+                name = "./static/locatedImages/frame_" + str(i) + ".png"
+            r = self.show_tracked_particle(i, frames)
+            r.get_figure().savefig(name)
+            i += 1
+
+    def generate_output(self):
+        """
+            Generates a csv-file with several data.
+            Such as path to get tracked image of each frame,
+            length of each frame, as well as Minmass  and Mod
+        Returns
+        -------
+        """
+        if 'output.csv' in listdir('./static/'):
+            print("remove(output.csv)")
+            remove("./static/output.csv")
+        for_csv = pd.DataFrame()
+        particle_per_frame = self.get_particle_per_frame()
+        locatedImages = [f"./static/locatedImages/{f}" for f in
+                         listdir('./static/locatedImages/')
+                         if isfile(join('./static/locatedImages/', f))]
+        sorted(locatedImages, key=lambda i: i[0][-7:-4])
+        length = [x["Len"] for x in particle_per_frame]
+        minmass = [x["Minmass"] for x in particle_per_frame]
+        mod = [x["Mod"] for x in particle_per_frame]
+        sep = [x["Separation"] for x in particle_per_frame]
+        maxsize = [x["Maxsize"] for x in particle_per_frame]
+        topn = [x["Topn"] for x in particle_per_frame]
+        engine = [x["Engine"] for x in particle_per_frame]
+        i = 0
+        h = ["Images", "Length", "Minmass", "Mod", "Separation", "Maxsize", "Topn", "Engine"]
+        hh = [locatedImages, length, minmass, mod, sep, maxsize, topn, engine]
+        for i in range(0, 8):
+            for_csv.insert(i, h.pop(0), hh.pop(0))
+            i += 1
+        for_csv.to_csv('./static/output.csv',
+                       columns=["Images", "Length", "Minmass", "Mod", "Separation", "Maxsize", "Topn", "Engine"])
 
     # Stores the number of particles per image in array
     def get_particles_per_image_as_array(self, frames, min_particle_percentage=85.0, max_particle_percentage=110.0):
@@ -572,7 +659,8 @@ class Tracker:
         for r in self.array:
             re = int(len(r))
             if frame_index in range(0, len(frames)):
-                f = tp_locate(frames, frame_index, self.diameter, minmass=self.particle_per_frame[frame_index]["Minmass"],
+                f = tp_locate(frames, frame_index, self.diameter,
+                              minmass=self.particle_per_frame[frame_index]["Minmass"],
                               separation=self.particle_per_frame[frame_index]["Separation"],
                               maxsize=self.particle_per_frame[frame_index]["Maxsize"],
                               topn=self.particle_per_frame[frame_index]["Topn"],
@@ -583,10 +671,12 @@ class Tracker:
                     try:
                         jj = index[particle_index - 1]
                         self.array[frame_index][particle_index] = {'i': index[particle_index - 1],
-                                                                   'x': elt_decimal(f.at[index[particle_index - 1], 'x'],
-                                                                                    5),
-                                                                   'y': elt_decimal(f.at[index[particle_index - 1], 'y'],
-                                                                                    5)}
+                                                                   'x': elt_decimal(
+                                                                       f.at[index[particle_index - 1], 'x'],
+                                                                       5),
+                                                                   'y': elt_decimal(
+                                                                       f.at[index[particle_index - 1], 'y'],
+                                                                       5)}
                     except IndexError:
                         continue
                     re = int(len(r))
