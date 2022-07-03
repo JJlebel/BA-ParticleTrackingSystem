@@ -328,6 +328,13 @@ try:
     p.add_layout(label)
 
     def animate_update():
+        """
+            Plays what should be do when the state of the button is ► Play
+
+        Returns
+        -------
+        Nothing
+        """
         frame = slider.value + slider_2.value
         if frame > images.index(images[-1]):
             frame = images.index(images[0])
@@ -335,6 +342,13 @@ try:
         p.image_url(url=[images[frame]], x=-0.76, y=4.11, w=5, h=4.6)
 
     def slider_update(attr, old, new):
+        """
+            Updates the value of the slider when it is moved manually.
+
+        Returns
+        -------
+        Nothing
+        """
         frame = slider.value
         label.text = f"Minmass: {str(minmass[frame])}, Length: {str(length[frame])},\nMod: {str(mod[frame])}"
         p.image_url(url=[images[frame]], x=-0.76, y=4.11, w=5, h=4.6)
@@ -348,6 +362,13 @@ try:
     callback_id = None
 
     def animate():
+        """
+            Animates the button when it is clicked.
+            And calls the appropriate function linked to the state of the button
+        Returns
+        -------
+        Nothing
+        """
         global callback_id
         if button.label == '► Play':
             button.label = '❚❚ Pause'
