@@ -13,16 +13,16 @@ In diesem  Abschnitt werden einige Möglichkeiten zur Erkennung von Partikeln in
 In diesem Sinne widmet sich die Arbeit in der Folgezeit dem Vergleich möglicher Werkzeugen, die zur Erreichung der eigentlichen Ziele nutzen können. Hierbei werden aus der Vielzahl der Instrumente nur vier bis fünf herausgegriffen. Diese werden zunächst einer tabellarischen Grobanalyse der Merkmale und dann einer textuellen Analyse der Unterschiede unter ihnen unterzogen.\\
 
 \todo{ ToDo: Zwei weitere Partikel-Tracking-Bibliotheken finden.}
-\todo{ ToDo: Eigenschaften jeglicher Tool im Vergleich Anderer zu herausfinden}
+\todo{ ToDo: Eigenschaften jeglicher Tool im Vergleich Anderer herauszufinden}
 
 \begin{tabular}{|c||c|c|l|}
-\hline
-Werkzeug & Schwerpunkt & Zugänglichkeit & Parameteranzahl \\
-\hline
-\hline
+ \hline
+ Werkzeug & Schwerpunkt & Zugänglichkeit & Parameteranzahl \\
+ \hline
+ \hline
  ParticleTracker & & & \\
  \hline
- PyPIV   & & & \\
+ MyPTV   & & & \\
  \hline
  OpenPTV & & & \\
  \hline
@@ -96,104 +96,100 @@ Dies ist leider nicht der Fall. Daher erfordert die Benutzung der Software ein g
 
 \newpage
 	
-\section{PyPTV}
-\textbf{PyPTV} ist ...
-
-	\paragraph{Vorteile}
-		\begin{enumerate}
-    			\item raw\_image: array \\
-
-    			\item diameter: odd integer \\
-
-    			\item minmass: float \\
-    			
-    			\item separation: float\\
- 			
-    			\item max\_iterations: interger\\
-    			
-		\end{enumerate}
-		
-	\paragraph{Nachteile}
-		\begin{enumerate}
-    			\item raw\_image: array \\
-
-    			\item diameter: odd integer \\
-
-    			\item minmass: float \\
-    			
-    			\item separation: float\\
- 			
-    			\item max\_iterations: interger\\
-    			
-		\end{enumerate}
-		
-	\paragraph{Beispiel}
-
-\section{OpenPTV}
-\textbf{OpenPTV} ist ... 
-
-	\paragraph{Vorteile}
-		\begin{enumerate}
-    			\item raw\_image: array \\
-
-    			\item diameter: odd integer \\
-
-    			\item minmass: float \\
-    			
-    			\item separation: float\\
- 			
-    			\item max\_iterations: interger\\
-    			
-		\end{enumerate}
-		
-	\paragraph{Nachteile}
-		\begin{enumerate}
-    			\item raw\_image: array \\
-
-    			\item diameter: odd integer \\
-
-    			\item minmass: float \\
-    			
-    			\item separation: float\\
- 			
-    			\item max\_iterations: interger\\
-    			
-		\end{enumerate}
-		
-	\paragraph{Beispiel}
-
 \section{STracking}
-\textbf{STracking} ist ... 
+\textbf{STracking} ist ein zu 100\% in Python entwickeltes Framework, dessen Ziel es ist, die Pipeline für die Partikelverfolgung zu entwickeln.
+Obwohl es für jede Anwendung zur Verfolgung von Punkten in 2D+t- und 3D+t-Bildern verwendet werden kann, ist seine Hauptidee die Verfolgung intrazellulärer Objekte in Mikroskopiebildern. Sowohl in 2D+t als auch in 3D+t \cite{prigent_2020}.\\
+In Kombination mit dem Plugin \textbf{napari}\cite{prigent_2021_napari} bietet es die Möglichkeit, den Tracking-Prozess über eine grafische Benutzeroberfläche zu verwalten.
 
 	\paragraph{Vorteile}
 		\begin{enumerate}
-    			\item raw\_image: array \\
+    			\item \textbf{Leicht installierbar}:\\
+				Mit den in der Dokumentation beschriebenen Schritten ist es relativ einfach, die Bibliothek zu installieren. Die Dokumentation erwähnt Wege, wie die Installation durchgeführt werden könnte, nämlich über \textit{PyPI} und/oder über die \textit{Quelle}. 
+Jeder Weg hat natürlich seinen eigenen Anwendungsbereich, der für den jeweiligen Benutzer geeignet ist.
 
-    			\item diameter: odd integer \\
+    			\item \textbf{GUI bedienbar}:\\
+				Wie erwähnt ist es möglich, das Programm über eine grafische Benutzeroberfläche zu verwenden. Dies geschieht nach der Installation des napari-Plugins.
+Hier müssen die ersten Schritte jedoch per Code gemacht werden. 
+Das Plugin kann also sowohl zur Manipulation als auch zur Visualisierung der Ergebnisentwicklung verwendet werden. 
 
-    			\item minmass: float \\
+		\end{enumerate}
+		
+	\paragraph{Nachteile}
+		\begin{enumerate}
+    			\item \textbf{Lückenhafte Dokumentation}:\\
+				In der Tat ist die Dokumentationin Bezug auf die Installation der Bibliothek nicht vollstandig. Zum Beispiel wird nirgends erwähnt, dass pyQt installiert werden muss.  Obwohl dieses Modul nur benötigt wird, wenn man die grafische Benutzeroberfläche verwenden will.
+				
+    			\item \textbf{Unerwartete Reaktion der grafischen Benutzeroberfläche}:\\
+				Im Gegensatz zu dem, was in der Dokumentation unter "Example 1: Stracking workflow" beschrieben ist, schließt sich das Fenster, das die visuelle Darstellung der Tracking-Aktionen anzeigen soll, automatisch, sobald es geöffnet wird.  Dies ermöglicht natürlich weder das Betrachten noch das Manipulieren der grafischen Darstellung.Es ist wichtig zu erwähnen, dass pyqt5 in der gleichen virtuellen Umgebung installiert werden muss, um das oben erwähnte Problem zu beheben.
     			
-    			\item separation: float\\
- 			
-    			\item max\_iterations: interger\\
+		\end{enumerate}
+		
+	\paragraph{Beispiel}
+
+\newpage	
+	
+\section{MyPTV}
+\textbf{MyPTV} \cite{ron_shnapp_MyPTV} ist eine Software, die vorrangig dazu entwickelt wurde, die 3D-Partikel\-geschwindigkeit aufzuspüren. Es handelt sich um eine Open-Source-Software.
+Die Funktionsweise von MyPTV stützt sich stark auf den bewährten mathematischen Rahmen, der im Rahmen des OpenPTV-Projekts(https://www.openptv.net/) entwickelt wurde. Auch die Prinzipien der Photogrammetrie, die in beiden Programmen verwendet werden, sind identisch. Die Software unterscheidet sich jedoch stark durch die Tatsache, dass sie in Python programmiert wurde, das Open Source ist und der wissenschaftlichen Gemeinschaft und nicht-professionellen Computerprogrammierern zugänglich ist.
+
+	\paragraph{Vorteile}
+		\begin{enumerate}
+    			\item \textbf{Python als Programmiersprache}:\\
+    			Die verwendete Programmiersprache ist Python, wodurch die Software für alle, die sie nutzen wollen, leicht zugänglich ist. Sie bietet ein Computer-Ökosystem, das in der Lage ist, den wissenschaftlichen Anforderungen und Herausforderungen gerecht zu werden \cite{5582063_Python_Ecosystem_Scientific_Computing} .
+Daher ist es interessant, zu erwähnen, dass ein großer Teil der wissenschaftlichen Gemeinschaft aus den oben genannten Gründen Python verwendet. Dies macht Python zur bevorzugten Sprache für Wissenschaftler und Ingenieure \cite{5725235_Python_Scientists_and_Engineers}. 
+
+    			\item \textbf{Breites Spektrum an Möglichkeiten}:\\
+				Die Ressourcen werden so organisiert, dass es für jeden Anwendungsbereich ein spezielles Modul gibt, das alle Funktionen enthält, die in diesem Bereich benötigt werden könnten. So gibt es sechs Module, von der Bildgebung über die Kalibrierung, die Segmentierung, den Partikelvergleich und die 3D-Verfolgung bis hin zum Modul zur Glättung der Pfadlinie.
+    			
     			
 		\end{enumerate}
 		
 	\paragraph{Nachteile}
 		\begin{enumerate}
-    			\item raw\_image: array \\
-
-    			\item diameter: odd integer \\
-
-    			\item minmass: float \\
+    			\item \textbf{Zielgruppe}:\\
+				Als Software, die speziell für den wissenschaftlichen und engenieurwissenschaftlichen Gebrauch konzipiert wurde, ist sie aufgrund ihrer Komplexität für Laien nicht geeignet.
+				
+    			\item \textbf{Schwer bedienbar}:\\
+				Trotz der vorhandenen Dokumentation ist die Nutzung der Software recht schwierig. Nicht nur, weil sie, wie im vorherigen Abschnitt beschrieben, auf eine bestimmte Gruppe zugeschnitten ist, sondern auch, weil es an einer Anleitung fehlt, die anhand eines trivialen Beispiels Schritt für Schritt die Verwendung der Software zeigt.
+Das macht sie natürlich ziemlich undurchsichtig.
     			
-    			\item separation: float\\
+		\end{enumerate}
+		
+
+\newpage
+
+\section{SPT: Single particle tracking analysis}
+\textbf{SPT}\cite{spt_stehr_stein_2020} ist Dies ist ein Python\-Paket, das einen vollständigen Arbeitsablauf für die Analyse der Verfolgung einzelner Partikel bietet. Dabei stützt es sich im Wesentlichen auf andere Pakete wie: \textbf{picasso\_addon}\cite{picasso_addon_schwille-paint_2020} und \textbf{picasso} \cite{picasso_jungmannlab_2019} für die Lokalisierung von Rohfilmen und die Analyse von immobilisierten Partikeln und \textbf{trackpy}\cite{trackpy_allan_daniel_b_2021_4682814} für die Verknüpfung von Lokalisierungen oder die Erstellung von Trajektorien.
+
+	\paragraph{Vorteile}
+		\begin{enumerate}
+    			\item raw\_image:\\
+
+    			\item diameter:\\
+
+    			\item minmass:\\
+    			
+    			\item separation:\\
  			
-    			\item max\_iterations: interger\\
+    			\item max\_iterations:\\
+    			
+		\end{enumerate}
+		
+	\paragraph{Nachteile}
+		\begin{enumerate}
+    			\item \textbf{Schlecht dokumentiert}:\\
+				Die Dokumentation des gesamten Handbuchs ist in der Tat sehr unterschiedlich. Sie variiert von sehr wenig Dokumentation für die Installation bis hin zu gar keiner Dokumentation für die Nutzung.  Das macht die Installation und Nutzung natürlich schwierig. Da Sie immer zu den Paketen navigieren müssen, die SPT verwendet (nämlich \textit{picasso}, \textit{picasso\_addon} und \textit{trackpy}), um die notwendigen Informationen für die Installation und gegebenenfalls auch für die Verwendung zu erhalten.
+				
+    			\item \textbf{Fehlender Benutzerleitfaden}:\\
+				Das Fehlen eines Benutzerhandbuchs in einem Paket wie SPT, das sich auf andere Pakete stützt, um Ergebnisse zu liefern, schränkt sowohl die Einarbeitung in die Umgebung als auch deren Beherrschung stark ein. Der Benutzer muss die Funktionen oder Werkzeuge, die er benötigt, selbst aus den Dokumentationen der verschiedenen Pakete lernen und dann zu SPT zurückkehren, um sie anzuwenden.
+				
     			
 		\end{enumerate}
 		
 	\paragraph{Beispiel}
+
+\newpage
+
 
 %\addcontentsline{toc}{section}{Kapitel-1}
 %\section{Werkzeugbasierte Erkennung}
