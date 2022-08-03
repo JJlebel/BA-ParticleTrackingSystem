@@ -12,33 +12,30 @@ In diesem  Abschnitt werden einige Möglichkeiten zur Erkennung von Partikeln in
 
 In diesem Sinne widmet sich die Arbeit in der Folgezeit dem Vergleich möglicher Werkzeugen, die zur Erreichung der eigentlichen Ziele nutzen können. Hierbei werden aus der Vielzahl der Instrumente nur vier bis fünf herausgegriffen. Diese werden zunächst einer tabellarischen Grobanalyse der Merkmale und dann einer textuellen Analyse der Unterschiede unter ihnen unterzogen.\\
 
-\todo{ ToDo: Zwei weitere Partikel-Tracking-Bibliotheken finden.}
-\todo{ ToDo: Eigenschaften jeglicher Tool im Vergleich Anderer herauszufinden}
+\todo{ Completer le tableau}
 
-\begin{tabular}{|c||c|c|l|}
+\begin{tabular}{|c||c|c|c|l|}
  \hline
- Werkzeug & Schwerpunkt & Zugänglichkeit & Parameteranzahl \\
+ Werkzeug & Tutorials & Zugänglichkeit & Parametrisierbarkeit & Dokumentation \\
  \hline
  \hline
- ParticleTracker & & & \\
+ ParticleTracker & +++ & ++ & ++ & +++\\
  \hline
- MyPTV   & & & \\
+ STracking & ++ & + & + & ++\\
  \hline
- OpenPTV & & & \\
+ MyPTV  & -- & + & ++ & ++\\
  \hline
- STracking  & & & \\
+ STP  & -- & - & + & --\\
  \hline
- PySTACHIO  & & & \\
- \hline
- TrackPy  & & & \\
+ TrackPy  & ++++ & ++ & + & ++++\\
  \hline
 \end{tabular}
 \\
 
-\todo{\href{file:///C:/Users/leb/Downloads/10.21105.joss.04398.pdf}{MyPTV}, \\ \href{https://www.sciencedirect.com/science/article/pii/S2001037021002944}{PySTACHIO},\\ \href{https://spt.readthedocs.io/en/latest/}{SPT}
-\\ \href{https://www.google.com/search?q=Python+package+for+particle+tracking&rlz=1C1CHBF_deDE987DE987&sxsrf=ALiCzsYl2NtGnlFYYupES17uNyNLp8zhIQ:1653590912505&ei=gMuPYoKwHsyMxc8Phquk2AM&start=10&sa=N&ved=2ahUKEwiC8MWX6v33AhVMRvEDHYYVCTsQ8NMDegQIARBQ&biw=1920&bih=969}{Python package for particle tracking}}
+%\todo{\href{file:///C:/Users/leb/Downloads/10.21105.joss.04398.pdf}{MyPTV}, \\ \href{https://www.sciencedirect.com/science/article/pii/S2001037021002944}{PySTACHIO},\\ \href{https://spt.readthedocs.io/en/latest/}{SPT}
+%\\ \href{https://www.google.com/search?q=Python+package+for+particle+tracking&rlz=1C1CHBF_deDE987DE987&sxsrf=ALiCzsYl2NtGnlFYYupES17uNyNLp8zhIQ:1653590912505&ei=gMuPYoKwHsyMxc8Phquk2AM&start=10&sa=N&ved=2ahUKEwiC8MWX6v33AhVMRvEDHYYVCTsQ8NMDegQIARBQ&biw=1920&bih=969}{Python package for particle tracking}}
 
-\section{ParticleTracker}
+\section{ParticleTracker \label{kap1_ParticleTracker}}
 \textbf{ParticleTracker} ist eine vollständig grafisch bedienbare Software, die es erlaubt, Partikel aus einem Video guter oder niedriger Auflösung zu verfolgen. Diese verwendet mehrere verschiedene Verfolgungsalgorithmen mit einer Standardschnittstelle, um die Einrichtung verschiedener Partikelverfolgungsprojekte schnell und einfach zu gestalten \cite{Smith2021}.
 Es werden 3 Methoden des "Tracking" verwendet, nämlich:
 \textit{Opencv Hough Circles}: zum Auffinden von Kreisen in einem Bild.
@@ -158,20 +155,22 @@ Das macht sie natürlich ziemlich undurchsichtig.
 
 \newpage
 
-\section{SPT: Single particle tracking analysis}
+\section{SPT: Single particle tracking analysis \label{kap1_STP}}
 \textbf{SPT}\cite{spt_stehr_stein_2020} ist Dies ist ein Python\-Paket, das einen vollständigen Arbeitsablauf für die Analyse der Verfolgung einzelner Partikel bietet. Dabei stützt es sich im Wesentlichen auf andere Pakete wie: \textbf{picasso\_addon}\cite{picasso_addon_schwille-paint_2020} und \textbf{picasso} \cite{picasso_jungmannlab_2019} für die Lokalisierung von Rohfilmen und die Analyse von immobilisierten Partikeln und \textbf{trackpy}\cite{trackpy_allan_daniel_b_2021_4682814} für die Verknüpfung von Lokalisierungen oder die Erstellung von Trajektorien.
 
 	\paragraph{Vorteile}
 		\begin{enumerate}
-    			\item raw\_image:\\
-
-    			\item diameter:\\
-
-    			\item minmass:\\
-    			
-    			\item separation:\\
- 			
-    			\item max\_iterations:\\
+    			\item \textbf{Zielgerichtet}:\\
+				Wie in seiner Beschreibung angekündigt, stellt er alle Werkzeuge zur Verfügung, die für die Erreichung dieses Ziels notwendig sind, obwohl er sich auch auf andere Ressourcen stützen kann. Zu Illustrationszwecken verwendet er folgende Tools.
+				
+				\begin{enumerate}
+					\item \textit{picasso}:\\
+				 		Für die Lokalisierung und Auswertung von Bildern in verschiedenen Auflösungen.
+					\item \textit{picasso\_addon}:\\
+						Für alle anderen Funktionen, die neben der Bindung von lokalisierten Partikeln genutzt werden 								können.
+					\item \textit{trackpy}:\\
+						Für alles, was mit der Verbindung von zuvor lokalisierten Partikeln zu tun hat
+				\end{enumerate}
     			
 		\end{enumerate}
 		
@@ -185,10 +184,7 @@ Das macht sie natürlich ziemlich undurchsichtig.
 				
     			
 		\end{enumerate}
-		
-	\paragraph{Beispiel}
 
-\newpage
 
 
 %\addcontentsline{toc}{section}{Kapitel-1}
@@ -199,35 +195,41 @@ Dieser verfügt über eine reihe von Parametern, anhand derer die Qualität der 
 
 	\paragraph{Vorteile}
 		\begin{enumerate}
-    			\item raw\_image: array \\
-
-    			\item diameter: odd integer \\
-
-    			\item minmass: float \\
+    			\item \textbf{Gründlich dokumentiert}:\\
+    			Eine ausführliche Dokumentation fast aller Funktionen der Software ist sicherlich ein großer Vorteil der Software. In der Tat trägt sie sehr dazu bei, dass sich der Benutzer schnell eingewöhnt und schnell Vertrauen fasst. Letzteres ist zweifellos eines der Hauptkriterien, auf das die Nutzer achten, wenn es um die Umsetzung geht \textit{siehe}\cite{garousi2013evaluating}.
     			
-    			\item separation: float\\
- 			
-    			\item max\_iterations: interger\\
+    			\item \textbf{Benutzerleitfaden}:\\
+				Im Einklang mit einer gründlichen Dokumentation gibt es auf der Website des Pakets eine Reihe von Tutorials (Anleitungen) mit reproduzierbaren praktischen Beispielen, die praktisch alle möglichen Anwendungsbereiche des Pakets abdecken. Auf diese Weise wird der neue und ungeübte Benutzer fast nie allein gelassen. Auf diese Weise wird sowohl ein schneller und allgemeiner Überblick über die Funktionen als auch die sogenannten fortgeschrittenen Funktionen abgedeckt.
+				
+    			\item \textbf{Breites Spektrum an Möglichkeiten}\label{kap1_trackpy_BSM}:\\
+    			Die Lokalisierung von Elementen in einem Bild, die Verfeinerung der Koordinaten von Merkmalen auf eine Genauigkeit von weniger als einem Pixel und die Identifizierung von Merkmalen über die Zeit ebenso wie ihre Verknüpfung zu Trajektorien sind nur die Spitze des Eisbergs. In der Tat bietet "trackpy" weitaus mehr Funktionen, die je nach den Bedürfnissen des Nutzers von großer Bedeutung sein können. Dazu gehören unter anderem Module zur statistischen Datenanalyse, zur Bewegungsanalyse, zu Tracking-Tools und sogar zur Bewegungsvorhersage.
+All dies verleiht der Software also ein breites Spektrum an Möglichkeiten.
+
+    			\item \textbf{Hohe Parametrisierbarkeit}\label{kap1_trackpy_HP}\\
+    			Die hohe Parametrisierbarkeit beruht hier auf der großen Anzahl an Möglichkeiten, die angeboten werden, um das Ergebnis der Funktionen zu verfeinern. In diesem Sinne bietet die Funktion \textit{locate}\citep{Tp} bis zu 18 nutzbare Parameter, die zur Verfeinerung der Suche und des Ergebnisses verwendet werden können. Obwohl einige von ihnen aus dem einen oder anderen Grund überflüssig oder unwirksam sind.
+    			
+    			\item \textbf{Beliebtheit in diesem Bereich}
+    			Aus all den in den vorangegangenen Punkten genannten Gründen und insbesondere dank der \ref{kap1_trackpy_BSM} und \ref{kap1_trackpy_HP} wird sie vielfach bei der Entwicklung anderer Software verwendet, die in ihren Anwendungsbereich fällt. Dies hat dazu geführt, dass wir verschiedene Softwareprodukte finden, die seine Funktionen nutzen, wie z.B. \ref{kap1_STP}, \ref{kap1_ParticleTracker} und viele andere, die im Rahmen dieser Arbeit nicht behandelt wurden.
     			
 		\end{enumerate}
 		
 	\paragraph{Nachteile}
 		\begin{enumerate}
-    			\item raw\_image: array \\
-
-    			\item diameter: odd integer \\
-
-    			\item minmass: float \\
-    			
-    			\item separation: float\\
- 			
-    			\item max\_iterations: interger\\
-    			
+				\item \textbf{Fehlerhaftigkeit einiger Beschreibungen}:\\				
+				Trotz seiner gut etablierten Dokumentation muss man feststellen, dass es dennoch einige Fälle gibt, in denen die Dokumentation nicht immer korrekt war. Insbesondere hat sich die Anwendung von Prämissen aus der Dokumentation als unpraktikabel erwiesen. Auf diese Fälle wird im weiteren Verlauf dieser Arbeit eingegangen.\todo{Faire une reference au chap parlant de cela}
+				    			
+    			\item \textbf{Fehlen einer grafischen Benutzeroberfläche}:\\
+    			Das Vorhandensein einer gut durchdachten und strukturierten grafischen Benutzeroberfläche, die nicht nur bei der Nutzung der Fülle der angebotenen Funktionen, sondern auch bei der Visualisierung der erzielten Ergebnisse helfen kann, wäre für die Nutzer natürlich noch interessanter und verführerischer gewesen.
 		\end{enumerate}
 		
-	\paragraph{Beispiel}
-
-\todo{kapitel1: Which  Library to use(avaible/)
-kap2: Choosing good parameters for trackpy
-kap3(Main Challenge):The Challenge of keeping particle count constant over frames.}
+	\paragraph{Beispiel:}
+	Wir zeigen hier ein Beispiel für die Erkennung von Partikeln auf einem bestimmten Bild.\\
+	\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate(f0, diameter=3).png}
+    \caption{Example of particle detection using Trackpy}
+    \label{fig:bild_label}
+\end{figure}
+	
+In Anbetracht der Gesamtheit der Merkmale, die im Zusammenhang mit der Erwägung von Bibliotheken (Software), die zur Erreichung des oben genannten Ziels beitragen könnten, genannt wurden, ist \textbf{trackpy} der am besten geeignete Kandidat für unsere Arbeit. 
 
