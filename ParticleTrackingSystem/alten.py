@@ -57,9 +57,10 @@ if __name__ == '__main__':
     print('Type of f ' + str(type(f)))
 
     print("Second print")
-    f = tp.locate(frames[1], 11, minmass=2400.0, maxsize=3.3, separation=3, noise_size=1,
-                  smoothing_size=None, threshold=None, invert=False, topn=400, preprocess=True,
-                  max_iterations=10, filter_before=None, filter_after=True, characterize=True, engine='python')
+    # f = tp.locate(frames[1], 11, minmass=2400.0, maxsize=3.3, separation=3, noise_size=1,
+    #               smoothing_size=None, threshold=None, invert=False, topn=400, preprocess=True,
+    #               max_iterations=10, filter_before=None, filter_after=True, characterize=True, engine='python')
+    f = tp.locate(frames[0], 5, minmass=210.0, separation=6.3, engine='python')
     plt.figure(figsize=(14, 10))
     tp.annotate(f, frames[0])
     t = tp.subpx_bias(f)

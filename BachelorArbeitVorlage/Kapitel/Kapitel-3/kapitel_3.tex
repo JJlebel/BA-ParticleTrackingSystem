@@ -32,8 +32,8 @@ Dieser verfügt über eine reihe von Parametern, anhand derer die Qualität der 
     			
 		\end{enumerate}
 		
-Ein \textsc{Panda.Dataframe} mit den Daten \textit{y\-koordinaten, x\-koordinaten, mass, size, ecc, signal, raw\_mass, ep, frame} wird als Rückgabewert geworfen. Dies gilt für jedes der gefundenen Partikel.(Siehe )
-Ausführlichere Informationen zu  weiteren Parametern sowie zu den Obengennanten ist auf zu ist.%~ \citep{Tp}% zu sehen. 
+Ein \textsc{Panda.Dataframe} mit den Daten \textit{y-koordinaten, x-koordinaten, mass, size, ecc, signal, raw\_mass, ep, frame} wird als Rückgabewert geworfen. Dies gilt für jedes der gefundenen Partikel (Siehe \ref{fig:kap3_initDataframe}).
+Ausführlichere Informationen zu  weiteren Parametern sowie zu den Obengennanten ist auf \cite{Tp} zu sehen.%~ \citep{Tp}% zu sehen. 
 An dieser Stelle kann folgende Frage aufgeworfen werden: Was sind die besten Parameter? \\
 Beachte, dass einfachheitshalber, während der gesamten Parametereinstellung nur das erste Bild unseres Videos betrachtet wird.
 
@@ -119,7 +119,7 @@ Dies würde dazu führen, dass unsere dunkelsten Partikel am Ende der Liste (Tab
     \centering
     \includegraphics[scale=0.45]{Grafiken/trackpyBilder/df_initial.png}
     \caption{Ein Teil des initialen Dataframes}
-    %\label{fig:bild_label}
+    \label{fig:kap3_initDataframe}
 \end{figure}
 
 \begin{figure}[H]
@@ -264,8 +264,24 @@ Die Sicherstellung, dass diese Art von Partikeln, die zwischen den Bildern gefun
 
 \section{Automatische Parameter-Optimierung}
 Zur Lösung des oben genannten Problems haben wir im Rahmen dieser Arbeit eine Methode namens \textbf{get\_particles\_per\_image\_as\_array} implementiert, die auf alle Bilder des Videos angewendet wird (ein Bild nach dem anderen) und die nach der Bestimmung eines Intervalls sicherstellt, dass die Anzahl der detektierten Partikel in diesem Intervall verbleibt.\\
-Das Intervall sollte in Prozent angegeben werden, wobei der Standardwert \textit{80\%} für den unteren Grenzwert und\textit{ 110\%} für den oberen Grenzwert ist. Die 100\% werden durch die Anzahl der im allerersten Bild erkannten Partikel bestimmt. 
-Es wird natürlich davon ausgegangen, dass ein erster Schritt, die manuelle und systematische Suche nach geeigneten Parametern für dieses erste Bild, bereits durchgeführt wurde (siehe \ref{kap3_OP}).
+
+Das folgende Struktogramm zeigt, wie die Methode sicherstellt, dass die Anzahl der gefundenen Partikel immer innerhalb des zuvor definierten Intervalls bleibt.
+
+An dieser Stelle sei erwähnt, dass das Ergebnis und die Parameter, die zu diesem Ergebnis geführt haben, in einer Variablen mit dem Namen \textbf{particle\_per\_frame} gespeichert werden.  Diese Variable wird auch der Rückgabewert der Funktion sein. 
+
+Außerdem ist der einzige Parameter, der bei der automatischen Optimierung des Ergebnisses berücksichtigt und geändert wird, der "minmass"\-Parameter. Dieser wird verwendet, weil wir im Laufe unserer Versuche festgestellt haben, dass ein Großteil der Ergebnisse nur mit diesem Wert erzielt werden kann.
+
+Es ist jedoch möglich, verschiedene Werte für bestimmte Parameter zu testen, und zwar für ein bestimmtes Bild mit Hilfe einer anderen Funktion \textbf{update\_frame}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{Grafiken/pts/structogram.png}
+  %\includesvg{Grafiken/pts/structogram.svg}
+  \caption{Structogram of the method}
+\end{figure}
+
+Das Intervall sollte in Prozent angegeben werden, wobei der Standardwert \textit{80\%} für den unteren Grenzwert und \textit{110\%} für den oberen Grenzwert ist. Die 100\% werden durch die Anzahl der im allerersten Bild erkannten Partikel bestimmt. 
+Es wird natürlich davon ausgegangen, dass ein erster Schritt, die manuelle und systematische Suche nach geeigneten Parametern für dieses erste Bild, bereits durchgeführt wurde (\textit{siehe} \ref{kap3_OP}).
 
 \subsection{Herausforderungen \& Probleme}
 
