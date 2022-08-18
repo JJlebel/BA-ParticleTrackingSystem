@@ -121,9 +121,8 @@ Das Plugin kann also sowohl zur Manipulation als auch zur Visualisierung der Erg
     			
 		\end{enumerate}
 		
-	\paragraph{Beispiel}
 
-\newpage	
+%\newpage	
 	
 \section{MyPTV}
 \textbf{MyPTV} \cite{ron_shnapp_MyPTV} ist eine Software, die vorrangig dazu entwickelt wurde, die 3D-Partikel\-geschwindigkeit aufzuspüren. Es handelt sich um eine Open-Source-Software.
@@ -153,7 +152,7 @@ Das macht sie natürlich ziemlich undurchsichtig.
 		\end{enumerate}
 		
 
-\newpage
+%\newpage
 
 \section{SPT: Single particle tracking analysis \label{kap1_STP}}
 \textbf{SPT}\cite{spt_stehr_stein_2020} ist Dies ist ein Python\-Paket, das einen vollständigen Arbeitsablauf für die Analyse der Verfolgung einzelner Partikel bietet. Dabei stützt es sich im Wesentlichen auf andere Pakete wie: \textbf{picasso\_addon}\cite{picasso_addon_schwille-paint_2020} und \textbf{picasso} \cite{picasso_jungmannlab_2019} für die Lokalisierung von Rohfilmen und die Analyse von immobilisierten Partikeln und \textbf{trackpy}\cite{trackpy_allan_daniel_b_2021_4682814} für die Verknüpfung von Lokalisierungen oder die Erstellung von Trajektorien.
@@ -189,16 +188,16 @@ Das macht sie natürlich ziemlich undurchsichtig.
 
 %\addcontentsline{toc}{section}{Kapitel-1}
 %\section{Werkzeugbasierte Erkennung}
-\section{Trackpy}
+\section{Trackpy \label{kap1_trackpy}}
 Trackpy ist ein Python-Paket, das es ermöglicht aus einem Video bzw. einer Imagesequenz Partikel in unterschiedlichen Dimensionen (2D und 3D) zu erkennen und zu verfolgen. Hier wird es natürlich die Zweidimensionalität anvisiert. Die Erkennung der Partikel erfolgt über eine der Funktionen des Paketes, nämlich die \textit{locate-}Funktion.
 Dieser verfügt über eine reihe von Parametern, anhand derer die Qualität der Anerkennung ausgebessert werden kann.
 
 	\paragraph{Vorteile}
 		\begin{enumerate}
-    			\item \textbf{Gründlich dokumentiert}:\\
+    			\item \textbf{Gründlich dokumentiert}:\label{kap1_trackpy_dokumentation}\\
     			Eine ausführliche Dokumentation fast aller Funktionen der Software ist sicherlich ein großer Vorteil der Software. In der Tat trägt sie sehr dazu bei, dass sich der Benutzer schnell eingewöhnt und schnell Vertrauen fasst. Letzteres ist zweifellos eines der Hauptkriterien, auf das die Nutzer achten, wenn es um die Umsetzung geht \textit{siehe}\cite{garousi2013evaluating}.
     			
-    			\item \textbf{Benutzerleitfaden}:\\
+    			\item \textbf{Benutzerleitfaden}: \label{kap1_trackpy_benutzerleitfaden}\\
 				Im Einklang mit einer gründlichen Dokumentation gibt es auf der Website des Pakets eine Reihe von Tutorials (Anleitungen) mit reproduzierbaren praktischen Beispielen, die praktisch alle möglichen Anwendungsbereiche des Pakets abdecken. Auf diese Weise wird der neue und ungeübte Benutzer fast nie allein gelassen. Auf diese Weise wird sowohl ein schneller und allgemeiner Überblick über die Funktionen als auch die sogenannten fortgeschrittenen Funktionen abgedeckt.
 				
     			\item \textbf{Breites Spektrum an Möglichkeiten}\label{kap1_trackpy_BSM}:\\
@@ -208,7 +207,7 @@ All dies verleiht der Software also ein breites Spektrum an Möglichkeiten.
     			\item \textbf{Hohe Parametrisierbarkeit}\label{kap1_trackpy_HP}\\
     			Die hohe Parametrisierbarkeit beruht hier auf der großen Anzahl an Möglichkeiten, die angeboten werden, um das Ergebnis der Funktionen zu verfeinern. In diesem Sinne bietet die Funktion \textit{locate}\citep{Tp} bis zu 18 nutzbare Parameter, die zur Verfeinerung der Suche und des Ergebnisses verwendet werden können. Obwohl einige von ihnen aus dem einen oder anderen Grund überflüssig oder unwirksam sind.
     			
-    			\item \textbf{Beliebtheit in diesem Bereich}
+    			\item \textbf{Beliebtheit in diesem Bereich}\\
     			Aus all den in den vorangegangenen Punkten genannten Gründen und insbesondere dank der \ref{kap1_trackpy_BSM} und \ref{kap1_trackpy_HP} wird sie vielfach bei der Entwicklung anderer Software verwendet, die in ihren Anwendungsbereich fällt. Dies hat dazu geführt, dass wir verschiedene Softwareprodukte finden, die seine Funktionen nutzen, wie z.B. \ref{kap1_STP}, \ref{kap1_ParticleTracker} und viele andere, die im Rahmen dieser Arbeit nicht behandelt wurden.
     			
 		\end{enumerate}

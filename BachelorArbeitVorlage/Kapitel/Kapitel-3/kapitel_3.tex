@@ -6,7 +6,7 @@
 Trackpy ist ein Python-Paket, das es ermöglicht aus einem Video bzw. einer Imagesequenz Partikel in unterschiedlichen Dimensionen (2D und 3D) zu erkennen und zu verfolgen. Hier wird es natürlich die Zweidimensionalität anvisiert. Die Erkennung der Partikel erfolgt über eine der Funktionen des Paketes, nämlich die \textit{locate-}Funktion.
 Dieser verfügt über eine reihe von Parametern, anhand derer die Qualität der Anerkennung ausgebessert werden kann.
 
-	\subsubsection{Parameter der locate-Funktion}
+	\subsection{Parameter der locate-Funktion}
 		Folgende Parameter werden im Laufe dieser Arbeit angewandt:
 
 		\begin{enumerate}
@@ -16,8 +16,8 @@ Dieser verfügt über eine reihe von Parametern, anhand derer die Qualität der 
     			Entspricht der geschätzten Größe der Partikeln (in Pixel).
     			\item minmass: float \\
     			Minimale eingebaute Helligkeit. Dies ist ein Schlüsselparameter, um störende 				Merkmale zu entfernen. Der Standardwert ist es 'None'.
-%    			\item maxsize: float\\
-%    			Maximaler Gyrationsradius der Helligkeit.
+    			\item maxsize: float\\
+    			Maximaler Gyrationsradius der Helligkeit.
     			\item separation: float\\
     			Minimaler Abstand zwischen den Partikeln. Der Standardwert ist \textit{diameter + 1}   			
     			\item noise\_size: float or tuple\\
@@ -26,7 +26,7 @@ Dieser verfügt über eine reihe von Parametern, anhand derer die Qualität der 
     			Gibt lediglich die N hellsten Merkmale über minmass zurück. Wenn 							'None' (Voreinstellung), werden sämtliche Eigenschaften oberhalb von minmass 				zurückgegeben.
 %    			\item preprocess: boolean\\
 %    			Vorverarbeitung der Bandpass .
-    			\item max\_iterations: interger\\
+    			\item max\_iterations: integer\\
     			Maximale Anzahl der Schleifen zur Verfeinerung des Massenschwerpunkts, 					Standardwert 10.
 %    			\item filter\_after: boolean\\
     			
@@ -37,7 +37,7 @@ Ausführlichere Informationen zu  weiteren Parametern sowie zu den Obengennanten
 An dieser Stelle kann folgende Frage aufgeworfen werden: Was sind die besten Parameter? \\
 Beachte, dass einfachheitshalber, während der gesamten Parametereinstellung nur das erste Bild unseres Videos betrachtet wird.
 
-	\subsubsection{Welche sind die optimalen Parameterwerte für eine ideale Partikelerkennung? \label{kap3_OP}}
+	\subsection{Ermittlung der optimalen Parameterwerte \label{kap3_OP}}
 	Hier wird es ein Antwortversuch auf die zuletzt gestellte Frage eingegangen. Zur Erreichung dieses Zieles wird mit der Erkennung begonnen, indem nur die geforderten Parameter(raw\_image und diameter) verwendet werden und nach und nach weitere hinzugefügt werden, um die Suche zu verfeinern. 
 	
 	\begin{enumerate}
@@ -271,28 +271,52 @@ An dieser Stelle sei erwähnt, dass das Ergebnis und die Parameter, die zu diese
 
 Außerdem ist der einzige Parameter, der bei der automatischen Optimierung des Ergebnisses berücksichtigt und geändert wird, der "minmass"\-Parameter. Dieser wird verwendet, weil wir im Laufe unserer Versuche festgestellt haben, dass ein Großteil der Ergebnisse nur mit diesem Wert erzielt werden kann.
 
-Es ist jedoch möglich, verschiedene Werte für bestimmte Parameter zu testen, und zwar für ein bestimmtes Bild mit Hilfe einer anderen Funktion \textbf{update\_frame}.
+%Es ist jedoch möglich, verschiedene Werte für bestimmte Parameter zu testen, und zwar für ein bestimmtes Bild mit Hilfe einer anderen Funktion \textbf{update\_frame}.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=1\textwidth]{Grafiken/pts/structogram.png}
   %\includesvg{Grafiken/pts/structogram.svg}
-  \caption{Structogram of the method}
+  \caption{Structogram of the method: get\_particles\_per\_image\_as\_array()}
 \end{figure}
 
 Das Intervall sollte in Prozent angegeben werden, wobei der Standardwert \textit{80\%} für den unteren Grenzwert und \textit{110\%} für den oberen Grenzwert ist. Die 100\% werden durch die Anzahl der im allerersten Bild erkannten Partikel bestimmt. 
-Es wird natürlich davon ausgegangen, dass ein erster Schritt, die manuelle und systematische Suche nach geeigneten Parametern für dieses erste Bild, bereits durchgeführt wurde (\textit{siehe} \ref{kap3_OP}).
+Es wird natürlich davon ausgegangen, dass ein erster Schritt, die manuelle und systematische Suche nach geeigneten Parametern für dieses erste Bild, bereits durchgeführt wurde (\textit{siehe} \ref{kap3_OP}).\\
 
-\subsection{Herausforderungen \& Probleme}
+Nach der Ausführung der Methode mit den Standardprozentwerten für die untere und obere Grenze des Intervalls erhalten wir schließlich das folgende Ergebnis. Dieses Ergebnis wird mit demselben Bild verdeutlicht, bei dem keine automatische Optimierung der Paremeters durchgeführt wurde.
 
-\subsection{Lösungsansatz \& Umsetzung}
-
-Glossareintrag \gls{vr}
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.35]{Grafiken/beispielGrafiken/bild_1.PNG}
-    \includegraphics[scale=0.35]{Grafiken/beispielGrafiken/bild_2.PNG}
-    \caption{Caption Bilder; Quelle: \cite{trajektorienDemonstration}}
-    \label{fig:bild_label}
+    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/comparison_62alt_Vs_62new.png}
+    \caption{Comparison of image 62 without and using the automatic optimisation of the paremeters.}
+    %\label{fig:bild_label}
 \end{figure}
+Es ist jedoch möglich, verschiedene Werte für bestimmte Parameter zu testen, und zwar für ein bestimmtes Bild mit Hilfe einer anderen Funktion \textbf{update\_frame}.
+
+\section{Bearbeitung eines einzelnen Bildes}
+Die automatische Optimierung hilft zwar dabei, eine gewisse Anzahl von Partikeln in den Ergebnissen zu behalten, aber es kann vorkommen, dass man bei einem bestimmten Bild andere Werte für die Parameter anwenden möchte, ohne die Gesamtheit der enthaltenen Bilder zu verändern. 
+Wir haben daher eine Methode namens \textit{\textbf{update\_frame}} entwickelt, mit der wir die gewünschten Änderungen an einem einzelnen Bild vornehmen können.
+Sie kann insgesamt 7 Parameter aufnehmen, von denen 2 erforderlich und die anderen 5 optional sind. Die obligatorischen Parameter sind: \textit{frames} und \textit{f\_no}(Die Nummer des zu bearbeitenden Bildes)
+Die optionalen sind \textit{minmass}, \textit{separation}, \textit{maxsize}, \textit{topn} und \textit{engine}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{Grafiken/pts/update_frame.png}
+  %\includesvg{Grafiken/pts/structogram.svg}
+  \caption{Structogram of the method: update\_frame()}
+\end{figure}
+
+Das obige Structogram zeigt, welche Schritte in welcher Reihenfolge ausgeführt werden müssen, um eine Änderung an einem einzelnen Frame vorzunehmen.
+
+So führt die Ausführung des folgenden Codes:\\
+\textbf{update\_frame(frames, 66, minmass=170, maxsize=100, topn=150)}\\
+Dies bewirkt, dass zuerst die minimale eingebaute Helligkeit auf 170 gesetzt wird, dann der maximale Radius der Helligkeit auf 100 gesetzt wird (so dass keiner der gefundenen Partikel über diesem Wert liegt) und schließlich nur die 150 hellsten Partikel angezeigt werden, die die vorgenannten Bedingungen erfüllen und dies ausschließlich in Frame 66 unseres Videos.
+
+
+%\subsection{Herausforderungen \& Probleme}
+
+%\subsection{Lösungsansatz \& Umsetzung}
+
+%Glossareintrag \gls{vr}
+
 
