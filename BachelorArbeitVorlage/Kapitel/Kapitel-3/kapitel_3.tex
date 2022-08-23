@@ -1,12 +1,12 @@
 %\addcontentsline{toc}{chapter}{Kapitel 3}
-\chapter{Partikel-Tracking-System}
+\chapter{Partikel-Tracking-System \label{kap3}}
 
 %\addcontentsline{toc}{section}{Kapitel 3}
 \section{Partikel-Tracking-System}
 Trackpy ist ein Python-Paket, das es ermöglicht aus einem Video bzw. einer Imagesequenz Partikel in unterschiedlichen Dimensionen (2D und 3D) zu erkennen und zu verfolgen. Hier wird es natürlich die Zweidimensionalität anvisiert. Die Erkennung der Partikel erfolgt über eine der Funktionen des Paketes, nämlich die \textit{locate-}Funktion.
 Dieser verfügt über eine reihe von Parametern, anhand derer die Qualität der Anerkennung ausgebessert werden kann.
 
-	\subsection{Parameter der locate-Funktion}
+	\subsection{Parameter der locate-Funktion \label{kap3_param_loacate}}
 		Folgende Parameter werden im Laufe dieser Arbeit angewandt:
 
 		\begin{enumerate}
@@ -293,7 +293,7 @@ Nach der Ausführung der Methode mit den Standardprozentwerten für die untere u
 \end{figure}
 Es ist jedoch möglich, verschiedene Werte für bestimmte Parameter zu testen, und zwar für ein bestimmtes Bild mit Hilfe einer anderen Funktion \textbf{update\_frame}.
 
-\section{Bearbeitung eines einzelnen Bildes}
+\section{Bearbeitung eines einzelnen Bildes \label{kap3_bearb_einz_bild}}
 Die automatische Optimierung hilft zwar dabei, eine gewisse Anzahl von Partikeln in den Ergebnissen zu behalten, aber es kann vorkommen, dass man bei einem bestimmten Bild andere Werte für die Parameter anwenden möchte, ohne die Gesamtheit der enthaltenen Bilder zu verändern. 
 Wir haben daher eine Methode namens \textit{\textbf{update\_frame}} entwickelt, mit der wir die gewünschten Änderungen an einem einzelnen Bild vornehmen können.
 Sie kann insgesamt 7 Parameter aufnehmen, von denen 2 erforderlich und die anderen 5 optional sind. Die obligatorischen Parameter sind: \textit{frames} und \textit{f\_no}(Die Nummer des zu bearbeitenden Bildes)
