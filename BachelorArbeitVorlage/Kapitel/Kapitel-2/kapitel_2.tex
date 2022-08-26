@@ -27,3 +27,21 @@ Dies ermöglichte uns einen leichten Einstieg und eine schnelle Nutzung der ben�
 \subsection{In Bezug auf die Geschwindigkeit \label{kap2.2.c_geschwindigkeit}}
 Was die Ausführungsgeschwindigkeit betrifft, finden wir, dass sie für die Informationen, die sie über die vorhandenen Partikel liefert, recht schnell ist.  Wir sprechen hier in den meisten Fällen von wenigen Sekunden. \\
 Bei zusätzlichem Bedarf an Leistung (Geschwindigkeit) gibt es auf ihrer Website auch eine Anleitung, wie man Trackpy noch schneller machen kann, als es ohnehin schon ist.
+
+\newpage
+
+\subsection{In Bezug auf Verwendung bestimmter Parameter der Funktion locate. \label{kap2.2.d_verwendung_locate_param}}
+Tatsächlich gibt es zwar eine Dokumentation von fast allen Anwendungsfällen von Trackpy. Insbesondere hier bei den Parametern der Funktion "locate" gibt es eine Reihe von Parametern, die nicht so funktionieren, wie in der Dokumentation beschrieben. 
+Die meisten von ihnen sind in diesem Abschnitt "\ref{non_working_param}" zu finden. 
+Aber um uns hier abzustützen, nehmen wir einige dieser nicht funktionierenden Parameter, nämlich:
+
+\begin{itemize} 
+	\item \textbf{max\_iterations}: soll das Ergebnis der Erkennung in jeder Schleife verfeinern. Sein Standardwert ist 10, egal welcher Wert ihm zugewiesen wird, größer als 0, es gibt keinen sichtbaren Unterschied (siehe \ref{fig:comparison max-iterations}). 
+	\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/comparison max_iterations.png}
+    \caption{comparison between max\_iterations=1 and max\_iterations=1000 on the same Frame.}
+    \label{fig:comparison max-iterations}
+\end{figure} 
+	
+\end{itemize}

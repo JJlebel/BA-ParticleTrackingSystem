@@ -49,7 +49,6 @@ pd.set_option('display.max_rows', None)
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     print('Hi PyCharm')
-    tgfg = pims.PyAVReaderIndexed("./BW/BW-Isil-video4.avi")
     frames = gray(convert_into_image_sequence('./BW/BW-Isil-video4.avi'))
     # Localise les taches de types Gaussiens d'une taille approxi. dans une image.
     # Ici dans l'image 0
@@ -61,9 +60,9 @@ if __name__ == '__main__':
     # f = tp.locate(frames[1], 11, minmass=2400.0, maxsize=3.3, separation=3, noise_size=1,
     #               smoothing_size=None, threshold=None, invert=False, topn=400, preprocess=True,
     #               max_iterations=10, filter_before=None, filter_after=True, characterize=True, engine='python')
-    f = tp.locate(frames[62], 5, minmass=210.0, separation=6.3, engine='python')
+    f = tp.locate(frames[0], 5, minmass=210.0, separation=6.3, engine='python', percentile=99)
     plt.figure(figsize=(14, 10))
-    tp.annotate(f, frames[62])
+    tp.annotate(f, frames[0])
     t = tp.subpx_bias(f)
     print(len(f))
     print(t)
