@@ -1,7 +1,7 @@
 %\addcontentsline{toc}{chapter}{Kapitel-1}
 \chapter{Bibliotheken/Software \label{kap1}}
 
-In diesem  Abschnitt werden einige Möglichkeiten zur Erkennung von Partikeln in einem Video niedriger Auflösungsqualität verglichen und hervorgehoben. Es wäre natürlich ideal einen Vergleich zwischen manuellen und werkzeugbasierten Erkennung zu ziehen. Aber leider wird die manuelle Erkennung hier nicht vollzogen aufgrund der viel zu schwierig bzw. langwierige Arbeit, die es bereitet. Es geht hier nämlich um mehrere hunderte von Partikeln pro Bild.\\
+In diesem  Abschnitt werden einige Möglichkeiten zur Erkennung von Partikeln in einem Video niedriger Auflösungsqualität verglichen. Es wäre natürlich ideal einen Vergleich zwischen manuellen und werkzeugbasierten Erkennung zu ziehen. Aber leider wird die manuelle Erkennung hier nicht vollzogen aufgrund der viel zu schwierig bzw. langwierige Arbeit, die sie bereitet. Es geht hier nämlich um mehrere hunderte von Partikeln pro Bild.\\
  
 \begin{figure}[H]
     \centering
@@ -12,7 +12,7 @@ In diesem  Abschnitt werden einige Möglichkeiten zur Erkennung von Partikeln in
 
 In diesem Sinne widmet sich die Arbeit in der Folgezeit dem Vergleich möglicher Werkzeugen, die zur Erreichung der eigentlichen Ziele benutzt werden können. Hierbei werden aus der Vielzahl der Tools nur vier bis fünf herausgegriffen. Diese werden zunächst einer tabellarischen Grobanalyse der Merkmale und dann einer textuellen Analyse der Unterschiede unter ihnen unterzogen.\\
 
-\todo{ Completer le tableau}
+%\todo{ Completer le tableau}
 
 \begin{tabular}{|c||c|c|c|l|}
  \hline
@@ -37,19 +37,42 @@ In diesem Sinne widmet sich die Arbeit in der Folgezeit dem Vergleich möglicher
 
 \section{ParticleTracker \label{kap1_ParticleTracker}}
 \textbf{ParticleTracker} ist eine vollständig grafisch bedienbare Software, die es erlaubt, Partikel aus einem Video guter oder niedriger Auflösung zu verfolgen. Diese verwendet mehrere verschiedene Verfolgungsalgorithmen mit einer Standardschnittstelle, um die Einrichtung verschiedener Partikelverfolgungsprojekte schnell und einfach zu gestalten \cite{Smith2021}.
-Es werden 3 Methoden des "Tracking" verwendet, nämlich:
-\textit{Opencv Hough Circles}: zum Auffinden von Kreisen in einem Bild.
-\textit{Trackpy}: Eine bestehende Partikelverfolgungsbibliothek zur Verfolgung von Partikel 
-\textit{Opencv Contour finding}: Zum Finden von Konturen in einem Binärbild.
-Das erste und das letzte werden von OpenCV \cite{opencv_library} bereitgestellt.
+Es verwendet drei verschiedene Methoden/Funktionen zur Erkennung von Partikeln in einem Video. Alle diese Methoden haben ihre eigenen Besonderheiten bei der Verwendung, nämlich:
+\begin{itemize}
+   \item \textit{Opencv Hough Circles}:\\ Es ist eine Methode, die von OpenCV\cite{opencv_library} entwickelt und zur Verfügung gestellt wurde. Diese Option wurde hauptsächlich für die Erkennung von Objekten entwickelt, die kreisförmig aussehen oder eine kreisförmige Form haben. Dies ist in unserem Fall nicht sehr interessant, da die in unserem Video gezeigten Partikel verschiedene Formen haben können (kreisförmig, quadratisch, längs und ...). Allerdings verwendet sie nicht die klassische \textbf{Hough Transform}\footnote{Es ist eine von vielen Methoden, um einen Kreis in einem Bild zu erkennen.}, die in ``THE STANDARD HT'' \cite{comparative_hough_transform} und ziemlich zeitaufwendig und speicherkostend ist, da sie die Suche nach drei Unbekannten/Parametern erfordert, wie die mathematische Darstellung des Kreises unten zeigt:\\
+\begin{center}
+ $ (x- x_{center})^{2} + (y - y_{center})^{2} = r^{2}$ \\
+\end{center}
+Wobei $(x_{center},y_{center})$ ist der Mittelpunkt des Kreises.\\
+      $r$ ist der Radius des Kreises.\\
+      
+
+Stattdessen wird der \textbf{Hough Gradient} (im Wesentlichen beschrieben in `21HT'' \cite{comparative_hough_transform}) verwendet,der die Informationen des Gradienten\footnote{``The gradient is the generalization of the derivative to multivariate functions. It captures the local slope of the function, allowing to predict the effect of taking a small step from a point in any direction.'' — Page 21, Algorithms for Optimization, 2019 \cite{algo_optimi_2019}.} berücksichtigt.
+      
+   \item \textit{Trackpy}:\\ Diese Methode ist nach der Bibliothek benannt, die sie entwickelt und zur Verfügung gestellt hat, nämlich: trackpy.  Trackpy ist eine Bibliothek zur Verfolgung von Partikeln in 2D, 3D und höheren Dimensionen. Weitere Informationen zu dieser Bibliothek liefern wir in einem gesonderten Abschnitt dieser Arbeit.
+   
+   \item \textit{Opencv Contour finding}:\\ Ist auch, wie der Name schon sagt, eine OpenCV-Methode mit dem Ziel, Konturen\footnote{Eine Kontur kann einfach als eine Kurve interpretiert werden, die alle aufeinanderfolgenden Punkte (entlang des Grenzbereichs) mit derselben Farbe oder Intensität verbindet. Konturen sind nützliche Werkzeuge zur Analyse von Formen und zum Erkennen und Identifizieren von Objekten.} in einem Binärbild\footnote{Ein binäres Bild ist ein Bild, dessen Pixel nur zwei mögliche Intensitätswerte haben. Numerisch sind diese beiden Werte meist 0 für Schwarz, 1 oder 255 für Weiß.} zu finden.Die Funktion ruft die Konturen des Binärbildes ab, indem sie den Algorithmus \cite{topological_contour_finding} verwendet. Konturen sind ein nützliches Werkzeug für die Musteranalyse und das Erkennen und Erfassen von Objekten.
+\end{itemize}
+
+    \paragraph{Ein-/Ausgabe}
+Als Eingabe akzeptiert ParticleTracker Videos in fast allen gängigen Formaten wie avi, mp4, MOV etc... .\\
+
+Jedoch gibt es bis zu drei Möglichkeiten für die Ausgabe. Diese sind wie folgt:
+\begin{itemize}
+\item \textit{DataFrame}\footnote{Ein DataFrame ist eine Datenstruktur in Python, die Daten in einer 2-dimensionalen Tabelle mit Zeilen und Spalten organisiert, ähnlich wie eine Tabellenkalkulation.}: Dieser Datenrahmen enthält die Werte aller im Video vorhandenen Partikel im Laufe der Zeit. Er enthält in der Reihenfolge Frame (Frame-Nummer), x(Position auf der x-Achse), y(Position auf der y-Achse), mass(Helligkeit), size, ecc, raw\_mass, ep, particle, user\_rad
+\item \textit{CSV}: Liefert ebenfalls die gleichen Ergebnisse wie beim DataFrame, allerdings im csv-Format
+\item \textit{Video}: Hier handelt es sich um ein neues Video, das aus den Bildern des Videos erstellt wurde, das für die Entdeckungen verwendet wurde. Nur hier bleiben alle erkannten Partikel, die eingekreist und/oder nummeriert wurden, im gesamten (neuen) Video so eingekreist/nummeriert.
+\end{itemize}
+
+
 
 	\paragraph{Vorteile}
 		\begin{enumerate}
     			\item \textbf{GUI bedienbar}: \\
-				Die Benutzeroberfläche ist eine der beliebtesten Arbeitsmethoden für Benutzer, insbesondere für Neulinge(Siehe \cite{hertzum1996browsing}). Dies ist sicherlich eine hervorragende Möglichkeit, in diesen Bereich einzusteigen, ohne sich mit zu vielen Codezeilen auseinandersetzen zu müssen oder Programmierkenntnisse zu besitzen.
+				Die Benutzeroberfläche ist eine angenehme Arbeitsmethode  für Benutzer, insbesondere für Neulinge (Siehe \cite{hertzum1996browsing}). Dies ist sicherlich eine hervorragende Möglichkeit, in diesen Bereich einzusteigen, ohne sich mit zu vielen Codezeilen auseinandersetzen zu müssen oder Programmierkenntnisse zu besitzen.
 				
     			\item \textbf{Anfängerfreundlich}:\\
-				Die Anfängerfreundlichkeit ist stark auf den vorherigen Punkt zurückzuführen, nämlich die GUI-Bedienbarkeit. Zudem ist es sonderlich umstandslos, mit Hilfe einiger Klicks, sich Informationen generieren zulassen, die relevant sind.    
+				Die Anfängerfreundlichkeit ist stark auf den vorherigen Punkt zurückzuführen, nämlich die GUI-Bedienbarkeit. Zudem ist es sonderlich umstandslos, mit Hilfe einiger Klicks, sich Informationen(x(Position auf der x-Achse), y(Position auf der y-Achse), mass(Helligkeit), size, ...) über jedes Partikel in jedem Bild generieren zu lassen, die relevant sind.    
 				
     			\item \textbf{Datenvisualisierung}:\\
     			Ein großer Vorteil ist Datenvisualisierung. Dies liegt an der schrittweisen und automatischen Aktualisierung des Renderings in Abhängigkeit von den vorgenommenen Einstellungen. Allerdings ist es notwendig, zunächst das Kästchen "Annotate" zu aktivieren, um die Live-Ansicht zu aktivieren.
