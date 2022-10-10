@@ -10,42 +10,39 @@ In diesem  Abschnitt werden einige Möglichkeiten zur Erkennung von Partikeln in
     \label{fig:kap1_rohbild}
 \end{figure}
 
-In diesem Sinne widmet sich die Arbeit in der Folgezeit dem Vergleich möglicher Tools, die zur Erreichung der eigentlichen Ziele benutzt werden können. Hierbei werden aus der Vielzahl der Tools nur fünf herausgegriffen. Diese werden zunächst einer tabellarischen Grobanalyse der Merkmale und dann einer textuellen Analyse der Unterschiede unter ihnen unterzogen.\\
+In diesem Sinne widmet sich die Arbeit in der Folgezeit dem Vergleich möglicher Tools, die zur Erreichung der eigentlichen Ziele benutzt werden können. Hierbei werden aus der Vielzahl der Tools nur vier herausgegriffen. Diese werden dann einer textuellen Analyse der Unterschiede unter ihnen unterzogen.\\
 
 Es ist jedoch unerlässlich, hier zum besseren Verständnis der Arbeit zu erwähnen, dass die meisten der im Folgenden betrachteten Bibliotheken Bibliotheken sind, die es ermöglichen, Partikel durch ein Video hindurch zu verfolgen. Da das Verfolgen von Partikeln ein Schritt nach der Erkennung ist, haben wir uns dafür entschieden, mit Bibliotheken zu arbeiten, die das Verfolgen von Partikeln ermöglichen. Wir haben uns auf die Verfolgung von Partikeln konzentriert, da es gewusst ist, dass die Verfolgung erst nach der Erkennung erfolgt. Genauer gesagt, weil das Tracking das Produkt einer Reihe von Erkennungsvorgängen im Verlauf eines Videos ist.
 Auf diese Weise möchten wir Missverständnisse ausräumen, die durch die Verwendung des Begriffs `\textbf{Tracking/Verfolgung}' und nicht `\textbf{Erkennung}' entstehen könnten.  
 
 %\todo{ Completer le tableau}
-
-\begin{tabular}{|c||c|c|c|l|}
- \hline
- Werkzeug & Tutorials & Zugänglichkeit & Parametrisierbarkeit & Dokumentation \\
- \hline
- \hline
- ParticleTracker & +++ & ++ & ++ & +++\\
- \hline
- STracking & ++ & + & + & ++\\
- \hline
- MyPTV  & -- & + & ++ & ++\\
- \hline
- STP  & -- & - & + & --\\
- \hline
- TrackPy  & ++++ & ++ & + & ++++\\
- \hline
-\end{tabular}
-\\
+%
+%\begin{tabular}{|c||c|c|c|c|}
+% \hline
+% Werkzeug & Tutorials & Zugänglichkeit & Parametrisierbarkeit & Dokumentation \\
+% \hline
+% \hline
+% ParticleTracker & +++ & ++ & ++ & +++\\
+% \hline
+% STracking & ++ & + & + & ++\\
+% \hline
+% STP  & -- & - & + & --\\
+% \hline
+% TrackPy  & ++++ & ++ & + & ++++\\
+% \hline
+%\end{tabular}
+%\\
 
 %\todo{\href{file:///C:/Users/leb/Downloads/10.21105.joss.04398.pdf}{MyPTV}, \\ \href{https://www.sciencedirect.com/science/article/pii/S2001037021002944}{PySTACHIO},\\ \href{https://spt.readthedocs.io/en/latest/}{SPT}
 %\\ \href{https://www.google.com/search?q=Python+package+for+particle+tracking&rlz=1C1CHBF_deDE987DE987&sxsrf=ALiCzsYl2NtGnlFYYupES17uNyNLp8zhIQ:1653590912505&ei=gMuPYoKwHsyMxc8Phquk2AM&start=10&sa=N&ved=2ahUKEwiC8MWX6v33AhVMRvEDHYYVCTsQ8NMDegQIARBQ&biw=1920&bih=969}{Python package for particle tracking}}
 
 \section{ParticleTracker \label{kap1_ParticleTracker}}
-\todo{In grundlagen niedrige und höhe Auflösung erklären.}
 \textbf{ParticleTracker} ist eine vollständig grafisch bedienbare Software, die es erlaubt, Partikel aus einem Video guter oder niedriger Auflösung zu verfolgen. Diese verwendet mehrere verschiedene Verfolgungsalgorithmen mit einer Standardschnittstelle, um die Einrichtung verschiedener Partikelverfolgungsprojekte schnell und einfach zu gestalten \cite{Smith2021}.
 Es verwendet drei verschiedene Methoden/Funktionen zur Erkennung von Partikeln in einem Video. Alle diese Methoden haben ihre eigenen Besonderheiten bei der Verwendung, nämlich:
 \begin{itemize}
    \item \textit{Opencv Hough Circles}:\\ Es ist eine Methode, die von OpenCV\cite{opencv_library} entwickelt und zur Verfügung gestellt wurde. Diese Option wurde hauptsächlich für die Erkennung von Objekten entwickelt, die kreisförmig aussehen oder eine kreisförmige Form haben. Dies ist in unserem Fall nicht sehr interessant, da die in unserem Video gezeigten Partikel verschiedene Formen haben können (kreisförmig, quadratisch, längs und ...). Allerdings verwendet sie nicht die klassische \textbf{Hough Transform}\footnote{Es ist eine von vielen Methoden, um einen Kreis in einem Bild zu erkennen.}, die in ``THE STANDARD HT'' \cite{comparative_hough_transform} und ziemlich zeitaufwendig und speicherkostend ist, da sie die Suche nach drei Unbekannten/Parametern erfordert, wie die mathematische Darstellung des Kreises unten zeigt:\\
 \begin{center}
- $ (x- x_{center})^{2} + (y - y_{center})^{2} = r^{2}$ \\
+ $(x- x_{center})^{2} + (y - y_{center})^{2} = r^{2}$ \\
 \end{center}
 Wobei $(x_{center},y_{center})$ ist der Mittelpunkt des Kreises.\\
       $r$ ist der Radius des Kreises.\\
@@ -119,7 +116,19 @@ Dies ist leider nicht der Fall. Daher erfordert die Benutzung der Software ein g
     \caption{Beispiel einer Partikelerkennung mit der Trackpy-Methode von ParticleTracker.}
     \label{fig:kap1_PT_Beispiel}
 \end{figure}
-\todo{Bild muss beschrieben werden, weil viel zu klein}
+
+\begin{tabular}{|l|p{12cm}|}
+\hline
+\texttt{1.} & Hier geht es um alles, was mit der Eingabe und Ausgabe von Daten zu tun hat. \\ \hline
+\texttt{2.} & Es geht hier um die Optionen, die angewendet/aktiviert werden müssen, um im Rendering-Bereich (Bereich direkt unter 1.) angezeigt zu werden. \\ \hline
+\texttt{3.} & Hier können die Werte der Parameter für die Lokalisierung geändert werden. \\ \hline
+\texttt{4.} & Es zeigt das Bild, auf dem man sich gerade befindet. \\ \hline
+\hline
+\end{tabular}
+
+Auf diesem Bild sehen wir eine Menge kleiner grüner Kreise, die kleine weiße Partikel umschließen. 
+Es ist zu erkennen, dass die meisten dieser weißen Partikel eingekreist sind. Das bedeutet in diesem Fall, dass sie entdeckt wurden. Daher scheint die Erkennung hier ziemlich gut zu sein. Obwohl sie einige Partikel redundant zu erfassen scheint.
+
 
 \newpage
 	
@@ -184,39 +193,51 @@ Das Plugin kann also sowohl zur Manipulation als auch zur Visualisierung der Erg
 
 %\newpage	
 	
-\section{MyPTV}
-\textbf{MyPTV} \cite{ron_shnapp_MyPTV} ist eine Software, die vorrangig dazu entwickelt wurde, die 3D-Partikel\-geschwindigkeit aufzuspüren. Es handelt sich um eine Open-Source-Software.
-Die Funktionsweise von MyPTV stützt sich stark auf den bewährten mathematischen Rahmen, der im Rahmen des OpenPTV-Projekts (https://www.openptv.net/) entwickelt wurde. Auch die Prinzipien der Photogrammetrie, die in beiden Programmen verwendet werden, sind identisch. Die Software unterscheidet sich jedoch stark durch die Tatsache, dass sie in Python programmiert wurde, das Open Source ist und der wissenschaftlichen Gemeinschaft und nicht-professionellen Computerprogrammierern zugänglich ist.
+%\section{MyPTV}
+%\textbf{MyPTV} \cite{ron_shnapp_MyPTV} ist eine Software, die vorrangig dazu entwickelt wurde, die 3D-Partikel\-geschwindigkeit aufzuspüren. Es handelt sich um eine Open-Source-Software.
+%Die Funktionsweise von MyPTV stützt sich stark auf den bewährten mathematischen Rahmen, der im Rahmen des OpenPTV-Projekts (https://www.openptv.net/) entwickelt wurde. Auch die Prinzipien der Photogrammetrie, die in beiden Programmen verwendet werden, sind identisch. Die Software unterscheidet sich jedoch stark durch die Tatsache, dass sie in Python programmiert wurde, das Open Source ist und der wissenschaftlichen Gemeinschaft und nicht-professionellen Computerprogrammierern zugänglich ist.
 
-	\paragraph{Vorteile}
-		\begin{enumerate}
-    			\item \textbf{Python als Programmiersprache}:\\
-    			Die verwendete Programmiersprache ist Python, wodurch die Software für alle, die sie nutzen wollen, leicht zugänglich ist. Sie bietet ein Computer-Ökosystem, das in der Lage ist, den wissenschaftlichen Anforderungen und Herausforderungen gerecht zu werden \cite{5582063_Python_Ecosystem_Scientific_Computing} .
-Daher ist es interessant, zu erwähnen, dass ein großer Teil der wissenschaftlichen Gemeinschaft aus den oben genannten Gründen Python verwendet. Dies macht Python zur bevorzugten Sprache für Wissenschaftler und Ingenieure \cite{5725235_Python_Scientists_and_Engineers}. 
-
-    			\item \textbf{Breites Spektrum an Möglichkeiten}:\\
-				Die Ressourcen werden so organisiert, dass es für jeden Anwendungsbereich ein spezielles Modul gibt, das alle Funktionen enthält, die in diesem Bereich benötigt werden könnten. So gibt es sechs Module, von der Bildgebung über die Kalibrierung, die Segmentierung, den Partikelvergleich und die 3D-Verfolgung bis hin zum Modul zur Glättung der Pfadlinie.
-    			
-    			
-		\end{enumerate}
-		
-	\paragraph{Nachteile}
-		\begin{enumerate}
-    			\item \textbf{Zielgruppe}:\\
-				Als Software, die speziell für den wissenschaftlichen und engenieurwissenschaftlichen Gebrauch konzipiert wurde, ist sie aufgrund ihrer Komplexität für Laien nicht geeignet.
-				
-    			\item \textbf{Schwer bedienbar}:\\
-				Trotz der vorhandenen Dokumentation ist die Nutzung der Software recht schwierig. Nicht nur, weil sie, wie im vorherigen Abschnitt beschrieben, auf eine bestimmte Gruppe zugeschnitten ist, sondern auch, weil es an einer Anleitung fehlt, die anhand eines trivialen Beispiels Schritt für Schritt die Verwendung der Software zeigt.
-Das macht sie natürlich ziemlich undurchsichtig.
-    			
-		\end{enumerate}
-		
-
+%	\paragraph{Vorteile}
+%		\begin{enumerate}
+%    			\item \textbf{Python als Programmiersprache}:\\
+%    			Die verwendete Programmiersprache ist Python, wodurch die Software für alle, die sie nutzen wollen, leicht zugänglich ist. Sie bietet ein Computer-Ökosystem, das in der Lage ist, den wissenschaftlichen Anforderungen und Herausforderungen gerecht zu werden \cite{5582063_Python_Ecosystem_Scientific_Computing} .
+%Daher ist es interessant, zu erwähnen, dass ein großer Teil der wissenschaftlichen Gemeinschaft aus den oben genannten Gründen Python verwendet. Dies macht Python zur bevorzugten Sprache für Wissenschaftler und Ingenieure \cite{5725235_Python_Scientists_and_Engineers}. 
+%
+%    			\item \textbf{Breites Spektrum an Möglichkeiten}:\\
+%				Die Ressourcen werden so organisiert, dass es für jeden Anwendungsbereich ein spezielles Modul gibt, das alle Funktionen enthält, die in diesem Bereich benötigt werden könnten. So gibt es sechs Module, von der Bildgebung über die Kalibrierung, die Segmentierung, den Partikelvergleich und die 3D-Verfolgung bis hin zum Modul zur Glättung der Pfadlinie.
+%    			
+%    			
+%		\end{enumerate}
+%		
+%	\paragraph{Nachteile}
+%		\begin{enumerate}
+%    			\item \textbf{Zielgruppe}:\\
+%				Als Software, die speziell für den wissenschaftlichen und engenieurwissenschaftlichen Gebrauch konzipiert wurde, ist sie aufgrund ihrer Komplexität für Laien nicht geeignet.
+%				
+%    			\item \textbf{Schwer bedienbar}:\\
+%				Trotz der vorhandenen Dokumentation ist die Nutzung der Software recht schwierig. Nicht nur, weil sie, wie im vorherigen Abschnitt beschrieben, auf eine bestimmte Gruppe zugeschnitten ist, sondern auch, weil es an einer Anleitung fehlt, die anhand eines trivialen Beispiels Schritt für Schritt die Verwendung der Software zeigt.
+%Das macht sie natürlich ziemlich undurchsichtig.
+%    			
+%		\end{enumerate}
 %\newpage
 
 \section{SPT: Single particle tracking analysis \label{kap1_STP}}
-\textbf{SPT} \cite{spt_stehr_stein_2020} ist ein Python\-Paket, das einen vollständigen Arbeitsablauf für die Analyse der Verfolgung einzelner Partikel bietet. Dabei stützt es sich im Wesentlichen auf andere Pakete wie: \textbf{picasso\_addon} \cite{picasso_addon_schwille-paint_2020} und \textbf{picasso} \cite{picasso_jungmannlab_2019} für die Lokalisierung/Erkennung von Partikeln aus Video und die Analyse von immobilisierten\footnote{Das sind Partikel, die sich während des gesamten Videos überhaupt nicht bewegen.} Partikeln und \textbf{trackpy} \cite{trackpy_allan_daniel_b_2021_4682814} für die Verknüpfung von Lokalisierungen oder die Erstellung von Trajektorien.
+\textbf{SPT} \cite{spt_stehr_stein_2020} ist ein Python-Paket, das einen vollständigen Arbeitsablauf für die Analyse der Verfolgung einzelner Partikel bietet. Dabei stützt es sich im Wesentlichen auf andere Pakete wie: \textbf{picasso\_addon} \cite{picasso_addon_schwille-paint_2020} und \textbf{picasso} \cite{picasso_jungmannlab_2019} für die Lokalisierung/Erkennung von Partikeln aus Video und die Analyse von immobilisierten\footnote{Das sind Partikel, die sich während des gesamten Videos überhaupt nicht bewegen.} Partikeln und \textbf{trackpy} \cite{trackpy_allan_daniel_b_2021_4682814} für die Verknüpfung von Lokalisierungen oder die Erstellung von Trajektorien.\\
+Die Lokalisierung, die hier die des \textit{Picasso}-Pakets verwendet, konzentriert sich auf einen \textit{gradientenbasierten Ansatz} \cite{soboleva2021raindrops}. Der Gradient oder bzw. die Gradientenkarte wird üblicherweise in der Bildverarbeitung verwendet, um die Kanten von Objekten in einem Bild hervorzuheben.\\ Dabei haben homogene Bereiche eines Bildes meist einen niedrigen Gradienten, der niedriger ist als der Gradient der Objektkanten in demselben Bild. 
 
+\paragraph{Ein-/Ausgabe \\} 
+    SPT erlaubt es nur eine einzige Eingabemöglichkeiten,  nämlich Video-Datei. Dabei werden nur zwei Arten akzeptiert: TIFF und binäre Rohdaten (Dateierweiterung ''.raw").\\
+    Bei der Datenausgabe bietet SPT eine Reihe von Möglichkeiten, was den Export von Daten angeht: 
+    \begin{itemize}
+    \item \textit{csv}
+    \item \textit{hdf5}
+    \item \textit{txt}
+    \item \textit{xyz}
+    \item \textit{3d}
+    \item \textit{roi}
+    \end{itemize}
+    
+    
 	\paragraph{Vorteile}
 		\begin{enumerate}
     			\item \textbf{Zielgerichtet}:\\
@@ -250,7 +271,17 @@ Das macht sie natürlich ziemlich undurchsichtig.
 %\section{Werkzeugbasierte Erkennung}
 \section{Trackpy \label{kap1_trackpy}}
 Trackpy ist ein Python-Paket, das es ermöglicht aus einem Video bzw. einer Imagesequenz Partikel in unterschiedlichen Dimensionen (2D und 3D) zu erkennen und zu verfolgen. Hier wird natürlich die Zweidimensionalität anvisiert. Die Erkennung der Partikel erfolgt über eine der Funktionen des Paketes, nämlich die \textit{locate-}Funktion.
-Diese verfügt über eine Reihe von Parametern, anhand derer die Qualität der Anerkennung angepasst werden kann.
+Diese verfügt über eine Reihe von Parametern, anhand derer die Qualität der Anerkennung angepasst werden kann.\\
+
+\paragraph{Ein-/Ausgabe \\} 
+Trackpy verwendet als Eingabedaten Bilder oder Sequenzen von Bildern. Es kann auch aus Video bestimmter Formate (AVI, MOV, ...) Bildsequenz erstellten und damit arbeiten.\\
+In Bezug auf die Ausgabe bietet es die Möglichkeit, die Ergebnisse in verschiedene Formate zu exportieren, nämlich:
+\begin{itemize}
+\item \textit{csv}  
+\item \textit{HDF5}
+\item \textit{SQL database}
+\item \textit{Excel}
+\end{itemize}
 
 	\paragraph{Vorteile}
 		\begin{enumerate}
@@ -268,7 +299,7 @@ All dies verleiht der Software also ein breites Spektrum an Möglichkeiten.
     			Die hohe Parametrisierbarkeit beruht hier auf der großen Anzahl an Möglichkeiten, die angeboten werden, um das Ergebnis der Funktionen zu verfeinern. In diesem Sinne bietet die Funktion \textit{locate}\citep{Tp} bis zu 18 nutzbare Parameter, die zur Verfeinerung der Suche und des Ergebnisses verwendet werden können. Obwohl einige von ihnen aus dem einen oder anderen Grund überflüssig oder unwirksam sind.
     			
     			\item \textbf{Beliebtheit in diesem Bereich}\\
-    			Aus all den in den vorangegangenen Punkten genannten Gründen und insbesondere dank der \ref{kap1_trackpy_BSM} und \ref{kap1_trackpy_HP} wird sie vielfach bei der Entwicklung anderer Software verwendet, die in ihren Anwendungsbereich fällt. Dies hat dazu geführt, dass wir verschiedene Softwareprodukte finden, die seine Funktionen nutzen, wie z.B. \ref{kap1_STP}, \ref{kap1_ParticleTracker} und viele andere, die im Rahmen dieser Arbeit nicht behandelt wurden.
+    			Aus all den in den vorangegangenen Punkten genannten Gründen und insbesondere dank der \ref{kap1_trackpy_BSM} und \ref{kap1_trackpy_HP} wird sie vielfach bei der Entwicklung anderer Software verwendet, die in ihren Anwendungsbereich fällt. Dies hat dazu geführt, dass wir verschiedene Softwareprodukte finden, die seine Funktionen nutzen, wie z.B. \textit{SPT} \ref{kap1_STP},  \textit{ParticleTracker} \ref{kap1_ParticleTracker} und viele andere, die im Rahmen dieser Arbeit nicht behandelt wurden.
     			
 		\end{enumerate}
 		
