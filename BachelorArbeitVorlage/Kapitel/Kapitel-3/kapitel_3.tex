@@ -1,29 +1,29 @@
 %\addcontentsline{toc}{chapter}{Kapitel 3}
-\chapter{Partikel-Erkenung-System \label{kap3}}
+\chapter{Partikel-Erkennungssystem \label{kap3}}
 
 %\addcontentsline{toc}{section}{Kapitel 3}
-\section{Partikel-Erkenung-System}
-PES (Partikel-Erkenung-System)  ist eine Software, die wir im Rahmen dieser Arbeit entwickelt haben und die es ermöglichen soll, die in einem Bild vorhandenen Partikel zu lokalisieren und auch die Ergebnisse zu bewerten, indem die den Parametern zugewiesenen Werte verglichen werden. 
-Um die Partikel zu lokalisieren, verwendet das PES ausschließlich die Bibliothek trackpy, die es ihm mit ihrer Funktion "locate" ermöglicht, die Partikel zu erkennen.\\
-Im Folgenden werden wir die verschiedenen Parameter dieser Funktion vorstellen, die nach unserer Einschätzung der Effektivität und Wichtigkeit in zwei Gruppen eingeteilt sind.
+\section{Partikel-Erkennungssystem}
+PES (Partikel-Erkennungssystem)  ist eine Software, die wir im Rahmen dieser Arbeit entwickelt haben und die es ermöglichen soll, die in einem Bild vorhandenen Partikel zu lokalisieren und auch die Ergebnisse zu bewerten, indem die den Parametern zugewiesenen Werte verglichen werden. 
+Um die Partikel zu lokalisieren, verwendet das PES ausschließlich die Bibliothek \textit{trackpy}, die es ihm mit ihrer Funktion "\textit{\textbf{locate()}}''  ermöglicht, die Partikel zu erkennen.\\
+Im Folgenden werden wir die verschiedenen Parameter dieser Funktion vorstellen, die unserer Einschätzung der Effektivität und Wichtigkeit nach in zwei Gruppen eingeteilt sind.
 	\subsection{Parameter der locate-Funktion \label{kap3_param_loacate}}
 		Folgende Parameter werden im Laufe dieser Arbeit angewandt:
 
 		\begin{enumerate}
-    			\item raw\_image: array of images \\
-    			Wird für die endgültige Charakterisierung verwendet.
+    			\item \textbf{raw\_image: array of images} \\
+    			Wird für die endgültige Charakterisierung der zu erkennenden Partikel verwendet.
     			
-    			\item diameter: odd integer \\
+    			\item \textbf{diameter: odd integer} \\
     			Entspricht der geschätzten Größe der Partikeln (in Pixel). Es wurde leider kein Grund für die Verwendung einer ungeraden Zahl angegeben.
-    			\item minmass: float \\
-    			Minimale eingebaute Helligkeit. Dies ist ein Schlüsselparameter, um störende 				Merkmale zu entfernen. Der Standardwert ist es 'None'.\\
-    			\label{none}None ist ein Typ in Python, der es ermöglicht, einer Variablen keinen festen Wert zuzuweisen. Da minmass optional ist, würde None gewählt, damit der Wert nicht direkt mit der Partikelerkennung interferiert. Und None ist eine gute Möglichkeit, dies in Python zu tun.
+    			\item \textbf{minmass: float} \\
+    			Minimale eingebaute Helligkeit. Dies ist ein Schlüsselparameter, um störende 				Merkmale zu entfernen. Der Standardwert ist '\textit{None}'.\\
+    			\label{none}None ist ein Typ in Python, der es ermöglicht, einer Variablen keinen festen Wert zuzuweisen. Da \textit{minmass} optional ist, wurde None gewählt, damit der Wert nicht direkt mit der Partikelerkennung interferiert. Und None ist eine gute Möglichkeit, dies in Python zu tun.
     			
-    			\item maxsize: float\\
+    			\item \textbf{maxsize: float}\\
     			Maximaler Gyrationsradius der Helligkeit.\\
-    			Wobei der Gyrationsradius \cite{raduis_of_gyration} definiert den Abstand von der Rotationsachse zu dem Punkt, an dem die gesamte Masse eines Körpers konzentriert sein soll, der das gleiche Trägheitsmoment wie die ursprüngliche Form aufweisen soll.    			
+    			Der Gyrationsradius \cite{raduis_of_gyration} definiert den Abstand von der Rotationsachse zu dem Punkt, an dem die gesamte Masse eines Körpers konzentriert sein soll, der das gleiche Trägheitsmoment wie die ursprüngliche Form aufweist.    			
     			
-    			\item separation: float\\
+    			\item \textbf{separation: float}\\
     			Minimaler Abstand zwischen den Partikeln. Der Standardwert ist \textit{diameter + 1}.\\
     			Natürlich können auch negative Werte angegeben werden, aber das würde das Ergebnis nur verfälschen. Wie in dem Punkt, in dem es um die richtige Wahl für die Separation geht, erwähnt, führt jeder Wert unterhalb des Diameters nur zu einer Vervielfachung der Anzahl der erkannten Partikel, obwohl es sich um dieselben Partikel handelt, die sich an denselben Positionen befinden.			
     			
@@ -87,7 +87,7 @@ Beachte, dass einfachheitshalber, während der gesamten Parametereinstellung nur
 	\begin{enumerate}
     			\item {\large \textbf{Ermittlung von diameter}}\\
     			\textbf{locate(f, d): \textit{Wobei f = raw\_image und d = diameter}} \\ \\
-    			 Während frames[0] entspricht in diesem Fall dem ersten Bild der Videoaufnahme bzw. der Imagesequenz. \texttt{frames} hingegen bilden die Gesamtheit der Bilder des Videos im Laufe der Zeit und damit die Sequenz der Bilder.  Diese Angabe, die vom Typ Array ist, stellt eine Voraussetzung für die Ausführung von Funktionen dar. \\
+    			 Während frames[0] dem ersten Bild der Videoaufnahme bzw. der Imagesequenz entspricht, \texttt{Frames} bilden der Gesamtheit der Bilder des Videos im Laufe der Zeit.  Diese Angabe, die vom Typ Array ist, stellt eine Voraussetzung für die Ausführung von Funktionen dar. \\
     			 Für den Durchmesser wird zunächst willkürlich eine ziemlich kleine ungerade Zahl genommen, um die Ergebnisse zu sehen und eine Annäherung an den Wert, den wir verwenden sollen, zu erhalten. Zunächst nehmen wir also einen Durchmesser von drei (d=3).  
     			 
 \begin{figure}[H]
@@ -97,9 +97,9 @@ Beachte, dass einfachheitshalber, während der gesamten Parametereinstellung nur
     \label{fig:kap3_d=3}
 \end{figure} 
 
-Das Bild zeigt eine Lokalisierung der Partikel. Es wurde dabei fast alle Elemente des Bildes erkannt, wobei offensichtlich eine deutlich große Menge \textit{\gls{false positive}} ist.\\
+Das Bild zeigt eine Lokalisierung der Partikel. Es wurde dabei fast alle Elemente des Bildes erkannt, wobei offensichtlich eine große Menge an \textit{\gls{false positive}} erkannt wird.\\
 In grüner Farbe haben wir auf dem Bild einige Beispiele für \textit{false Positive} Ergebnisse markiert. 
-Hier liegt ein \textit{false Positive} Befund vor, wenn ein Partikel entdeckt wird, das nicht hätte entdeckt werden dürfen. Denn entweder sind sie zu klein, zu dunkel oder sogar zu viele Detektionskreise um das gleiche Partikel.  
+Ein \textit{false Positive} Befund liegt vor, wenn ein Partikel entdeckt wird, das nicht hätte entdeckt werden dürfen. Denn entweder sind sie zu klein, zu dunkel oder sogar zu viele Detektionskreise um das gleiche Partikel.  
 \\
 Eine Verfeinerung der Lokalisierung würde somit einen größeren Durchmesser erfordern. Dies erfolgt in der Folge durch die Verwendung einer immer noch ungeraden Zahl, die jedoch einen größeren Wert hat. In diesem Fall ist es neun, da es so viele \textit{False Positives} gibt. 
 \texttt{locate(frames[0], 9)}
@@ -129,37 +129,26 @@ Aus diesem Grund wurde nacheinander der Durchmesser von sieben und dann von fün
 	
 	\begin{minipage}{.5\textwidth}
      	\centering
-  	  	\includegraphics[scale=0.3]{Grafiken/trackpyBilder/locate(frames[0], 5).png}
+  	  	\includegraphics[scale=0.3]{Grafiken/trackpyBilder/locate(frames[0], 5)_1.png}
  	 	\captionof{figure}{locate()-Funktion auf 0. Frame mit diameter=5}
  		 \label{fig:kap3_d=5}
     \end{minipage}
 \end{figure}
 
-In Anbetracht des Ziels, einen Durchmesser zu finden, der die Erkennung möglichst vieler Partikel ermöglicht und gleichzeitig möglichst wenig unerwünschte Partikel enthält, ist es besser, mit dem Durchmesser 5 fortzufahren. Denn aus den zuvor verwendeten Durchmessern geht hervor, dass bei diesem Bild die Anzahl der nicht-lokalisierten Teilchen umso größer ist, je höher der Durchmesser ist. 
-Dies ist nicht als Allgemeingültigkeit zu verstehen, da verschiedene Videos unterschiedliche Arten von Partikeln mit variierenden Größen und Dicken aufweisen. Es wäre ratsam, die Parameter bei jedem neuen Video zu testen.
-Tatsächlich lassen sich insgesamt 475 Partikeln finden, von denen ca. 121 unerwünscht waren und kaum fehlten. Dies entspricht einer ungefähren Rate von 25.47\%.
+In Anbetracht des Ziels, einen Durchmesser zu finden, der die Erkennung möglichst vieler Partikel ermöglicht und gleichzeitig möglichst wenig unerwünschte Partikel enthält, ist es besser, mit dem Durchmesser 5 fortzufahren. Denn aus den zuvor verwendeten Durchmessern geht hervor, dass bei diesem Bild die Anzahl der nicht-lokalisierten Teilchen umso größer ist, je höher der Durchmesser ist.\\ 
+Dies ist nicht als Allgemeingültigkeit zu verstehen, da verschiedene Videos unterschiedliche Arten von Partikeln mit variierenden Größen und Dicken aufweisen. Es wäre ratsam, die Parameter bei jedem neuen Video zu testen.\\
+Tatsächlich lassen sich insgesamt 475 Partikel finden, von denen ca. 121 unerwünscht waren und kaum fehlten (in grün markiert). Dies entspricht einer ungefähren Rate von 25.47\%.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate(frames[0], 5).png}
+    \includegraphics[scale=0.45]{Grafiken/trackpyBilder/locate(frames[0], 5).png}
     \caption{locate()-Funktion auf 0. Frame mit diameter=5}
     \label{fig:kap3_d=5}
 \end{figure} 
-%    			 In diesem Sinne sieht das Ergebnis der Lokalisierung ohne weitere Parameter wie folgt aus:
-%\begin{figure}[H]
-%    \centering
-%    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_required_parameter.png}
-%    \caption{locate with needed Parameters}
-%    \label{fig:bild_label}
-%\end{figure}
-%    			Wie auf dem \ref{fig:bild_label} zu sehen ist, wurde eine Menge an Partikel 
-%    			nicht erkannt, während andere unerwünschten erkannt wurden. 
-%    			Insgesamt lassen sich 207 Partikeln finden, von denen 22 unerwünscht waren  und 91 fehlten. Dies entspricht einer ungefähren Rate von 10,628\% für die unerwünschten und einer Rate von 43,9617\% für die nicht gefundenen.
 
     			
     			\item  {\large \textbf{Ermittlung von \textbf{minmass}}} \\
     			\textbf{locate(f, d, minmass)}:\\ \\
-%    			Da ca. nur 10\% der letzten Suche unerwünschte Elemente waren, wird den Durchschnitt der \textit{minmass} aller Teilchen berechnet und als \textit{minmass} verwendet. Aus der vorherigen \textsc{Panda.Dataframe} genügt es den Mittelwert aus den Werten der \textit{mass}-Spalte zu berechnen, um auf \textit{minmass} von ca. 2490.21 zu gelangen. Das Resultat wird dann wie folgt aussehen:
 Wie bereits erwähnt, spiegelt \textit{minmass} die inhärente und eingebaute minimale Helligkeit jedes lokalisierten Partikels wider. Das Ziel ist es nun, die zuvor ermittelten, zu dunklen Partikel herauszufiltern. Daher ist es notwendig, methodisch mit dem Parameter \textit{minmass} zu spielen, um dieses Ziel zu erreichen. Es gibt natürlich mehrere Möglichkeiten, den optimalen Wert für die gesuchte Parameter zu finden. Allerdings wird hier die folgende Logik verfolgt:\\
 
 Aus dem DataFrame der letzten Suche (locate(frames[0], 5)) wurde ja 475 Partikel gefunden. Davon sind ca. 25.47\%, also 121 unerwünscht. Diese Zahl entspricht so fast allen gefundenen zu dunklen Partikel. In anderen Worten, stellt sie die Elemente dar, deren \textit{minmass} zu niedrig ist.
@@ -168,28 +157,27 @@ Dies würde dazu führen, dass unsere dunkelsten Partikel am Ende der Liste (Tab
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.45]{Grafiken/trackpyBilder/df_initial.png}
+    \includegraphics[scale=0.9]{Grafiken/trackpyBilder/df_initial.png}
     \caption{Ein Teil des initialen Dataframes}
     \label{fig:kap3_initDataframe}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.45]{Grafiken/trackpyBilder/df_sorted.png}
+    \includegraphics[scale=0.9]{Grafiken/trackpyBilder/df_sorted.png}
     \caption{Ein Teil des sortierten Dataframes}
     \label{fig:kap3_halbsortDataframes}
 \end{figure}
 
-Jetzt wird es auf dem sortierten Dataframe eine weitere Funktion aufgerufen, um lediglich nur die 354 (also 475-121)gewünschte Partikel bwz. hellsten zu behalten. Eine solche Funktion \textit{head()} wird auch von Panda-Dataframe bereitgestellt. Aus diesem Ergebnis reicht es aus, die von Python angebotene Funktion \textit{min()} auszuführen, um den kleinsten Wert in der Spalte \textit{mass} zu erhalten. 
+Jetzt wird es auf dem sortierten Dataframe eine weitere Funktion aufgerufen, um lediglich nur die 354 (also 475 -- 121) gewünschte Partikel bwz. hellsten zu behalten. Eine solche Funktion \textit{head()} wird auch von Panda-Dataframe bereitgestellt. Aus diesem Ergebnis reicht es aus, die von Python angebotene Funktion \textit{min()} auszuführen, um den kleinsten Wert in der Spalte \textit{mass} zu erhalten. 
 Die Aufrufe sähen dann wie folgt aus:\\
 \texttt{dataframe.head(354)} \\
 \texttt{min(dataframe['mass'])}\\
 
-\textbf{189.72805} ist hier das Ergebnis der vorherigen Vorgänge und damit auch den minimalen Wert von \textit{mass}, den ein Partikel haben muss. Es sei der \textit{minmass} Parameter der Funktion \textit{locate()}.
+\textbf{189.72805} ist hier das Ergebnis der vorherigen Vorgänge und damit auch der minimale Wert von \textit{mass}, den ein Partikel haben muss. Es sei der \textit{minmass} Parameter der Funktion \textit{locate()}.
 
 
 
-%Es wurde zwar fast alle \textit{False Positive} beseitigt, aber dafür wurde eine viel zu hohe Anzahl an \textit{True Negative} nicht gefunden. Die Lösung für dieses Problem besteht darin, den Wert von "minmass"  schrittweise zu verringern, bis ein zufriedenstellendes Ergebnis erzielt wird.
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_minmass_01.png}
@@ -202,15 +190,15 @@ Zum Festlegen des Wertes, der in jedem Schritt verwendet werden soll, schauen Si
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.55]{Grafiken/trackpyBilder/df\_steps.png}
+    \includegraphics[scale=0.9]{Grafiken/trackpyBilder/df\_steps.png}
     \caption{Sortierte Tabelle}
     \label{fig:kap3_sortDataframes}
 \end{figure}
 
 So werden nach und nach die Werte 197,1016 (d. h. 197), 197,6688 (d. h. 198) und so weiter verwendet.\\
-Die Verwendung der Funktion \texttt{locate(frames[0], 5, \textbf{minmass=197})} ergibt so gut wie keine Änderung der Lokalisierung. Da insgesamt immer noch 353 Partikel  erkannt wurde. Daher wird sich der nächste Versuch mit dem folgenden Wert beschäftigen. Genauer gesagt "minmass = 198". \\
+Die Verwendung der Funktion \texttt{locate(frames[0], 5, \textbf{minmass=197})} ergibt so gut wie keine Änderung der Lokalisierung. Da insgesamt immer noch 353 Partikel  erkannt wurde. Daher wird sich der nächste Versuch mit dem folgenden Wert beschäftigen. Genauer gesagt \texttt{minmass = 198}. \\
 Auch hier wurden nur zwei Teilchen weniger gefunden. Das sind insgesamt 351 Partikel. Obwohl es fast unmöglich ist, diese beiden Teilchen auf dem Bild zu erkennen. 
-Es wäre klug, den nächsten Wert unserer Tabelle zu nehmen, der derzeit bei 203,6244 (also 204) liegt, und erneut zu versuchen, eine Lokalisierung durchzuführen. (Siehe )
+Es wäre klug, den nächsten Wert unserer Tabelle zu nehmen, der derzeit bei 203,6244 (also 204) liegt, und erneut zu versuchen, eine Lokalisierung durchzuführen. (Siehe Bild \ref{fig:kap3_m=204})
 
 \begin{figure}[H]
     \centering
@@ -227,7 +215,7 @@ Es wäre klug, den nächsten Wert unserer Tabelle zu nehmen, der derzeit bei 203
     \label{fig:kap3_m=204}
 \end{figure}
 
-Bei der Verfolgung dieser Logik kommt es hier schnell auf einen \textit{minmass} Wert von \textbf{210}.\\
+Bei der Verfolgung dieser Logik kommen wir schnell auf einen \textit{minmass} Wert von \textbf{210}.\\
 Wo es deutlich zu erkennen ist, dass weitere unerwünschte Partikel nicht mit erkannt wurde. Es wurde insgesamt hier \textbf{345} Partikel gefunden. Jedoch muss es festgestellt werden, dass ab \textbf{211} nach oben, werden zwar weniger unerwünschte Partikel gefangen, aber auch erwünschte. 
 Wie es die Veranschaulichung auf Bild (Bild 212)zeigt. 
 Deswegen wird es dem weiteren  den Parameter  \textbf{Separation} gewidmet, um weitere unerwünschte zu eliminieren.
@@ -250,7 +238,7 @@ Deswegen wird es dem weiteren  den Parameter  \textbf{Separation} gewidmet, um w
 
 		\item {\large \textbf{Ermittlung von \textbf{separation}}} \\
 		\textbf{locate(f, d, minmass, separation)} \\ \\
-    			Hier wird es einfach Werte bei \texttt{separation} ausprobiert, um auf die bessere Resultate zu kommen. 
+    			Hier werden wir Werte für \texttt{separation} ausprobiert, um auf bessere Resultate zu kommen. 
     			Es wäre interessant zu erwähnen, dass es sich dabei um den minimalen Abstand zwischen zwei Teilchen handelt. Der Standardwert ist \textit{Durchmesser + 1}. In diesem Fall ist es 6. 
 Mit diesem neuen Parameter werden wir versuchen, all jene Partikel zu eliminieren, die doppelt erkannt werden. Ohne die Qualität der bisherigen Erkennung zu beeinträchtigen.  
 
@@ -284,18 +272,10 @@ Wobei fast lediglich nur Verbesserungen zu notieren sind.
 \end{figure}
 
 
-%\item locate(frames[0], 11, minmass=1000.0, separation=2, noise\_size=1.5, topn=250):    \\ \\ 
-%		Nachdem alle vorherige Parameter eingesetzt worden sind, wenn der Dataframe immer noch sanierungsbedürftig ist, wird auch \textit{topn} zum Einsatz gebracht. Dazu wird die Anzahl an bestehende unerwünschte Elemente geschätzt und von der gesamten Anzahl an gefundenen Elemente abgezogen. Somit wird \textit{topn} in dem Fall hier auf \textit{250} geschätzt. (siehe Bild)
-%\begin{figure}[H]
-%    \centering
-%    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_topn.png}
-%    \caption{locate with 'topn=250'}
-%    %\label{fig:bild_label}
-%\end{figure}
 \end{enumerate}
 
 
-Es scheint hier wichtig zu erwähnen, dass es kein Parameter gibt, dessen Wert adäquat für alle Arten von Bildern oder Partikeln. So sollte es immer Parametrisierung als erster Schritt durchgeführt werden.
+Es scheint hier wichtig zu erwähnen, dass es kein Parameter gibt, dessen Wert adäquat für alle Arten von Bildern oder Partikeln funktioniert. So sollte immer eine Parametrisierung als erster Schritt durchgeführt werden.
 Allerdings scheint im konkreten Fall dieses Bildes (nulltes Frames) die Parameterwerte, die am besten geeignet erscheinen, wie folgt: \\
 \begin{center}
 {\large \textit{locate(frames[0], 5, minmass=210, separation=6.3})}
@@ -324,14 +304,86 @@ An dieser Stelle sei erwähnt, dass das Ergebnis und die Parameter, die zu diese
 Außerdem ist der einzige Parameter, der bei der automatischen Optimierung des Ergebnisses berücksichtigt und geändert wird, der "minmass"\-Parameter. Dieser wird verwendet, weil wir im Laufe unserer Versuche festgestellt haben, dass ein Großteil der Ergebnisse nur mit diesem Wert erzielt werden kann.
 
 %Es ist jedoch möglich, verschiedene Werte für bestimmte Parameter zu testen, und zwar für ein bestimmtes Bild mit Hilfe einer anderen Funktion \textbf{update\_frame}.
+%
+%\begin{figure}\centering
+%\begin{tikzpicture}[zoomboxarray,
+%	zoomboxes below,
+%    zoomboxarray columns=3,
+%    zoomboxarray rows=1,
+%    connect zoomboxes,
+%    zoombox paths/.append style={ultra thick, red}]
+%    \node [image node] { \includegraphics[width=1\textwidth]{Grafiken/pts/structogram.png} };
+%    \zoombox[magnification=4]{0.5,0.9}
+%    \zoombox[magnification=2]{0.7,0.6}
+%%    \zoombox{0.15,0.3}
+%%    \zoombox[magnification=10]{0.86,0.35}
+%\end{tikzpicture}
+%\caption{The National Gallery of Canada}
+%\end{figure}
+
+\newpage
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=1\textwidth]{Grafiken/pts/structogram.png}
-  %\includesvg{Grafiken/pts/structogram.svg}
+  \makebox[0pt]{%
+  \includegraphics[width=1\paperwidth]{Grafiken/pts/structogram.png}}
   \caption{Struktogramm der Methode.: get\_particles\_per\_image\_as\_array()}
   \label{fig:kap3_strukto_part_per_array}
 \end{figure}
+
+\begin{figure}[H]
+  \centering
+  \makebox[0pt]{%
+  \includegraphics[width=1.1\textwidth]{Grafiken/pts/structogram_t1.png}}
+  \begin{center}
+  	\textcolor{red}{\textbf{{\large a.}}}
+  \end{center}
+  \label{fig:kap3_strukto_part_per_array_t1}
+\end{figure}
+
+%\newpage
+
+\begin{figure}[H]
+  \centering
+  \makebox[0pt]{%
+  \includegraphics[height=0.3\paperheight, width=1\paperwidth]{Grafiken/pts/structogram_t2.png}}
+  \begin{center}
+  	\textcolor{red}{\textbf{{\large b.}}}
+  \end{center}
+  \label{fig:kap3_strukto_part_per_array_t2}
+\end{figure}
+
+
+\begin{figure}[H]
+  \centering
+  \makebox[0pt]{%
+  \includegraphics[width=1.3\textwidth]{Grafiken/pts/structogram_t3.png}}
+  \begin{center}
+  	\textcolor{red}{\textbf{{\large c.}}}
+  \end{center}
+  \label{fig:kap3_strukto_part_per_array_t3}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \makebox[0pt]{%
+  \includegraphics[width=1.3\textwidth]{Grafiken/pts/structogram_t4.png}}
+  \begin{center}
+  	\textcolor{red}{\textbf{{\large d.}}}
+  \end{center}
+  \label{fig:kap3_strukto_part_per_array_t4}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \makebox[0pt]{%
+  \includegraphics[width=1.3\textwidth]{Grafiken/pts/structogram_t5.png}}
+  \begin{center}
+  	\textcolor{red}{\textbf{{\large e.}}}
+  \end{center}
+  \label{fig:kap3_strukto_part_per_array_t5}
+\end{figure}
+
 
 Das Intervall sollte in Prozent angegeben werden, wobei der Standardwert \textit{80\%} für den unteren Grenzwert und \textit{110\%} für den oberen Grenzwert ist. Die 100\% werden durch die Anzahl der im allerersten Bild erkannten Partikel bestimmt. 
 Es wird natürlich davon ausgegangen, dass ein erster Schritt, der manuelle und systematische Suche nach geeigneten Parametern für dieses erste Bild, bereits durchgeführt wurde (\textit{siehe Abschnitt} \ref{kap3_OP}).\\
@@ -340,7 +392,8 @@ Nach der Ausführung der Methode mit den Standardprozentwerten für die untere u
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/comparison_62alt_Vs_62new.png}
+    \makebox[0pt]{ 
+    \includegraphics[height=0.3\paperheight, width=1\paperwidth]{Grafiken/trackpyBilder/comparison_62alt_Vs_62new.png}}
     \caption{Vergleich von Bild 62 ohne und mit automatischer Optimierung der Parameter.}
     \label{fig:kap3_vergleich_Bild_62_mit_ohne}
 \end{figure}
@@ -354,7 +407,8 @@ Die optionalen sind \textit{minmass}, \textit{separation}, \textit{maxsize}, \te
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=1\textwidth]{Grafiken/pts/update_frame.png}
+  \makebox[0pt]{%
+  \includegraphics[width=0.9\paperwidth]{Grafiken/pts/update_frame.png}}
   %\includesvg{Grafiken/pts/structogram.svg}
   \caption{Struktogramm der Methode: update\_frame()}
   \label{fig:kap3_strukto_update_frame}
