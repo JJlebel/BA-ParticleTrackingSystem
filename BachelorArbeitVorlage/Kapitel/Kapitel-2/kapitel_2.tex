@@ -1,288 +1,47 @@
 %\addcontentsline{toc}{chapter}{Kapitel-2}
-\chapter{Kapitel-2}
+\chapter{Trackpy \label{kap2}}
 
-Text.
+Dieser Arbeitsteil  wird sich hauptsächlich mit einer Einführung in die Software beschäftigen. Des Weiteren wird es um ihre Installation und die Erfahrungen des Nutzers mit der Software gehen.
 
 %\addcontentsline{toc}{section}{Kapitel-2}
-\section{Kapitel-2}
+\section{Einleitung und Installation \label{Kap2.1_Einleitung_Installation}}
+Trackpy ist ein Python-Paket, das, wie im Abschnitt \ref{kap1_trackpy} beschrieben, nicht nur Informationen über die Partikel in einem Video (sowohl in hoher als auch in niedriger Auflösung) liefert, sondern auch mit ihnen interagieren (wie zum Beispiel einen Trajektorie der XY-Koordinaten zu zeichnen, die ein Partikel während der Aufnahmen erreicht hat.) kann, und zwar sowohl in 2D als auch in 3D. Das Programm verfügt über eine gut durchdachte Dokumentation, die die Installation und das Eintauchen in das Programm erleichtert.
+Aus diesem Grund werden wir uns bei der Installation nur auf die auf der Website \cite{tp_installation} angegebenen Schritte stützen und eventuell weitere Schritte erwähnen, die nicht angegeben wurden.\\
+Nachdem alle Schritte befolgt wurden, sollte die Installation ohne Probleme abgeschlossen werden können. Die Nutzung der Bibliothek verläuft jedoch noch nicht ganz so, wie im Benutzerhandbuch beschrieben. Daher werden die Unterschiede in der Nutzung im Abschnitt \ref{kap2.2_benutzererfahrung} behandelt.
 
-Trackpy ist ein Python-Paket, das es ermöglicht aus einem Video bzw. einer Imagesequenz Partikel in unterschiedlichen Dimensionen (2D und 3D) zu erkennen und zu verfolgen. Hier wird es natürlich die Zweidimensionalität anvisiert. Die Erkennung der Partikel erfolgt über eine der Funktionen des Paketes, nämlich die \textit{locate-}Funktion.
-Dieser verfügt über eine reihe von Parametern, anhand derer die Qualität der Anerkennung ausgebessert werden kann.
 
-	\subsubsection{Parameter der locate-Funktion}
-		Folgende Parameter werden im Laufe dieser Arbeit angewandt:
+\section{Benutzererfahrung \label{kap2.2_benutzererfahrung}}
 
-		\begin{enumerate}
-    			\item raw\_image: array \\
-    			Wird für die endgültige Charakterisierung verwendet.
-    			\item diameter: odd integer \\
-    			Entspricht der geschätzten Größe der Partikeln (in Pixel).
-    			\item minmass: float \\
-    			Minimale eingebaute Helligkeit. Dies ist ein Schlüsselparameter, um störende 				Merkmale zu entfernen. Der Standardwert ist es 'None'.
-%    			\item maxsize: float\\
-%    			Maximaler Gyrationsradius der Helligkeit.
-    			\item separation: float\\
-    			Minimaler Abstand zwischen den Partikeln. Der Standardwert ist \textit{diameter + 1}   			
-    			\item noise\_size: float or tuple\\
-    			Breite des Gaußschen Unschärfekerns, in Pixeln. Der Standardwert ist 1.
-    			\item topn: interger\\
-    			Gibt lediglich die N hellsten Merkmale über minmass zurück. Wenn 							'None' (Voreinstellung), werden sämtliche Eigenschaften oberhalb von minmass 				zurückgegeben.
-%    			\item preprocess: boolean\\
-%    			Vorverarbeitung der Bandpass .
-    			\item max\_iterations: interger\\
-    			Maximale Anzahl der Schleifen zur Verfeinerung des Massenschwerpunkts, 					Standardwert 10.
-%    			\item filter\_after: boolean\\
-    			
-		\end{enumerate}
-		
-Ein \textsc{Panda.Dataframe} mit den Daten \textit{y\-koordinaten, x\-koordinaten, mass, size, ecc, signal, raw\_mass, ep, frame} wird als Rückgabewert geworfen. Dies gilt für jedes der gefundenen Partikel.(Siehe )
-Ausführlichere Informationen zu  weiteren Parametern sowie zu den Obengennanten ist auf zu ist.%~ \citep{Tp}% zu sehen. 
-An dieser Stelle kann folgende Frage aufgeworfen werden: Was sind die besten Parameter? \\
-Beachte, dass einfachheitshalber, während der gesamten Parametereinstellung nur das erste Bild unseres Videos betrachtet wird.
+\subsection{In Bezug auf das Lesen des Videos \label{kap2.2.a_lesen_video}}
+Die Bibliothek verspricht eine problemlose Ablesung verschiedener Videoformate wie \textit{AVI}, \textit{h.264}, \textit{Tiff-Stacks} und viele andere, indem man einfach die Funktion \textit{open()} oder \textit{video()} aus der \textbf{PIMS}-Bibliothek \cite{pims} verwendet. Leider erfordert das Abspielen von Videos hier die Installation einer beliebigen Bibliothek, die das Abspielen von Videos ermöglicht. In unserem Fall haben wir also \textbf{ffmpeg} und \textbf{scikit-image} verwendet.\\
+Um dies zu tun, müssen diese beiden ebenfalls installiert werden. Wenn Pycharm wie empfohlen als IDE verwendet wird, muss die Installation folgendermaßen durchgeführt werden:  \textbf{STRG$+$ALT$+$S} drücken, dann \textit{Interperter} in die Suchleiste eingeben und  auf \textit{Python Interpreter} klicken. 
+Auf der rechten Seite des Fensters erscheint dann eine Liste der installierten Pakete. Jetzt muss man auf die Schaltfläche $+$ klicken, um die zu installierenden Pakete zu finden, und dann auf \textit{Installieren} klicken.\\
+Sicherheitshalber sollten Sie auch darauf achten, dass \textit{trackpy}, \textit{bokeh}, \textit{ffmpeg} und \textit{scikit-image} in der Liste der bereits installierten Pakete enthalten sind. 
 
-	\subsubsection{Welche sind die optimalen Parameterwerte für eine ideale Partikelerkennung?}
-	Hier wird es ein Antwortversuch auf die zuletzt gestellte Frage eingegangen. Zur Erreichung dieses Zieles wird mit der Erkennung begonnen, indem nur die geforderten Parameter(raw\_image und diameter) verwendet werden und nach und nach weitere hinzugefügt werden, um die Suche zu verfeinern. 
-	
-	\begin{enumerate}
-    			\item \textbf{locate(f, d): Wobei f = raw\_image und d = diameter.} \\ \\
-    			 Während frames[0] entspricht in diesem Fall dem ersten Bild der Videoaufnahme bzw. der Imagesequenz. \texttt{frames} hingegen bilden die Gesamtheit der Bilder des Videos im Laufe der Zeit und damit die Sequenz der Bilder.  Diese Angabe, die vom Typ Array ist, stellt eine Voraussetzung für die Ausführung von Funktionen dar. \\
-    			 Für den Durchmesser wird zunächst willkürlich eine ziemlich kleine ungerade Zahl genommen, um die Ergebnisse zu sehen und eine Annäherung an den Wert, den wir verwenden sollen, zu erhalten. Zunächst nehmen wir also einen Durchmesser von drei (d=3).  
-    			 
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate(f0, diameter=3).png}
-    \caption{locate(frames[0], 3)}
-    \label{fig:bild_label}
-\end{figure} 
+\subsection{In Bezug auf die Einarbeitung in die Bibliothek \label{kap2.2.b_einarbeitung}}
 
-Das Bild zeigt eine potente Lokalisierung der Partikel. Es wurde dabei fast alle Elemente des Bildes erkannt, wobei offensichtlich eine deutlich große Menge \textit{false Positive} ist. \\
-Eine Verfeinerung der Lokalisierung würde somit einen größeren Durchmesser erfordern. Dies erfolgt in der Folge durch die Verwendung einer immer noch ungeraden Zahl, die jedoch einen größeren Wert hat. In diesem Fall ist es neun, da es so viele "False Positives" gibt. 
-\texttt{locate(frames[0], 9)}
+Das Eintauchen und Einarbeiten in diese Bibliothek wird durch die Präsenz eines "\textbf{Walkthrough}''  auf der Website sehr erleichtert.  In diesem \textit{Walkthrough} geht es vor allem um die grundlegende Nutzung fast aller wichtigsten Funktionen dieser Bibliothek anhand eines praktischen Beispiels, das Schritt für Schritt zeigt, wie man zu den Ergebnissen gelangt, die mit Bildern illustriert sind.\\
+Dies ermöglichte uns einen leichten Einstieg und eine schnelle Nutzung der benötigten Funktionen. Abgesehen von der Wiedergabe von Videos, wie sie im Abschnitt  \ref{kap2.2.a_lesen_video} beschrieben ist.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate(frames[0], 9).png}
-    \caption{locate(frames[0], 9)}
-    \label{fig:bild_label}
-\end{figure} 
 
-Diesmal gibt es zwar viel weniger ungewollte Teilchen. Allerdings hat sich eine große Anzahl von "False Negatives" gebildet. \\
-Aus diesem Grund wurde nacheinander der Durchmesser von sieben und dann von fünf ausprobiert.\\
-\texttt{locate(frames[0], 7)}   gefolgt  \texttt{locate(frames[0], 5)}
+\subsection{In Bezug auf die Geschwindigkeit \label{kap2.2.c_geschwindigkeit}}
+Was die Ausführungsgeschwindigkeit betrifft, finden wir, dass sie für die Informationen, die sie über die vorhandenen Partikel liefert, recht schnell ist.  Wir sprechen hier in den meisten Fällen von wenigen Sekunden. \\
+Bei zusätzlichem Bedarf an Leistung (Geschwindigkeit) gibt es auf ihrer Website auch eine Anleitung, wie man Trackpy noch schneller machen kann.
+
 \newpage
 
-\begin{figure}[H]
-    \centering
-    \begin{minipage}{.5\textwidth}
-     	\centering
-  	  	\includegraphics[scale=0.3]{Grafiken/trackpyBilder/locate(frames[0], 7).png}
- 	 	\captionof{figure}{locate(frames[0], 7)}
- 		\label{fig:test1}
-    \end{minipage}
-	
-	\begin{minipage}{.5\textwidth}
-     	\centering
-  	  	\includegraphics[scale=0.3]{Grafiken/trackpyBilder/locate(frames[0], 5).png}
- 	 	\captionof{figure}{locate(frames[0],5)}
- 		 \label{fig:test2}
-    \end{minipage}
-\end{figure}
+\subsection{In Bezug auf Verwendung bestimmter Parameter der Funktion locate. \label{kap2.2.d_verwendung_locate_param}}
+Tatsächlich gibt es zwar eine Dokumentation von fast allen Anwendungsfällen von Trackpy. Insbesondere hier bei den Parametern der Funktion "\textit{locate()}" gibt es eine Reihe von Parametern, die nicht so funktionieren, wie in der Dokumentation beschrieben. 
+Die meisten von ihnen sind in diesem Abschnitt \ref{non_working_param} zu finden. 
+Aber um unsere Aussagen hier zu verdeutlichen, nehmen wir einen dieser Parameter, die nicht funktionieren, nämlich:
 
-In Anbetracht des Ziels, einen Durchmesser zu finden, der die Erkennung möglichst vieler Partikel ermöglicht und gleichzeitig möglichst wenig unerwünschte Partikel enthält, ist es besser, mit dem Durchmesser 5 fortzufahren. Denn aus den zuvor verwendeten Durchmessern geht hervor, dass bei diesem Bild die Anzahl der nicht-lokalisierten Teilchen umso größer ist, je höher der Durchmesser ist. 
-Dies ist nicht als Allgemeingültigkeit zu verstehen, da verschiedene Videos unterschiedliche Arten von Partikeln mit variierenden Größen und Dicken aufweisen. Es wäre ratsam, die Parameter bei jedem neuen Video zu testen.
-Tatsächlich lassen sich insgesamt 475 Partikeln finden, von denen ca. 121 unerwünscht waren und kaum fehlten. Dies entspricht einer ungefähren Rate von 25.47\%.
-
-\begin{figure}[H]
+\begin{itemize} 
+	\item \textbf{max\_iterations}: soll das Ergebnis der Erkennung in jeder Schleife verfeinern. Das Standardwert ist 10, egal welcher Wert zugewiesen wird, größer als 0, es gibt keinen sichtbaren Unterschied (siehe \ref{fig:comparison max-iterations}). 
+	\begin{figure}[H]
     \centering
-    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate(frames[0], 5).png}
-    \caption{locate(frames[0], 5)}
-    \label{fig:bild_label}
+    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/comparison max_iterations.png}
+    \caption{Vergleich zwischen max\_iterations=1 und max\_iterations=1000 auf demselben Frame.}
+    \label{fig:comparison max-iterations}
 \end{figure} 
-%    			 In diesem Sinne sieht das Ergebnis der Lokalisierung ohne weitere Parameter wie folgt aus:
-%\begin{figure}[H]
-%    \centering
-%    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_required_parameter.png}
-%    \caption{locate with needed Parameters}
-%    \label{fig:bild_label}
-%\end{figure}
-%    			Wie auf dem \ref{fig:bild_label} zu sehen ist, wurde eine Menge an Partikel 
-%    			nicht erkannt, während andere unerwünschten erkannt wurden. 
-%    			Insgesamt lassen sich 207 Partikeln finden, von denen 22 unerwünscht waren  und 91 fehlten. Dies entspricht einer ungefähren Rate von 10,628\% für die unerwünschten und einer Rate von 43,9617\% für die nicht gefundenen.
-
-    			
-    			\item {\Large \textbf{locate(f, d, minmass)}}:\\ \\
-%    			Da ca. nur 10\% der letzten Suche unerwünschte Elemente waren, wird den Durchschnitt der \textit{minmass} aller Teilchen berechnet und als \textit{minmass} verwendet. Aus der vorherigen \textsc{Panda.Dataframe} genügt es den Mittelwert aus den Werten der \textit{mass}-Spalte zu berechnen, um auf \textit{minmass} von ca. 2490.21 zu gelangen. Das Resultat wird dann wie folgt aussehen:
-Wie bereits erwähnt, spiegelt \textit{minmass} die inhärente und eingebaute minimale Helligkeit jedes lokalisierten Partikels wider. Das Ziel ist es nun, die zuvor ermittelten, zu dunklen Partikel herauszufiltern. Daher ist es notwendig, methodisch mit dem Parameter \textit{minmass} zu spielen, um dieses Ziel zu erreichen. Es gibt natürlich mehrere Möglichkeiten, den optimalen Wert für die gesuchte Parameter zu finden. Allerdings wird hier die folgende Logik verfolgt:\\
-
-Aus dem DataFrame der letzten Suche (locate(frames[0], 5)) wurde ja 475 Partikel gefunden. Davon sind ca. 25.47\%, also 121 unerwünscht. Diese Zahl entspricht so fast allen gefundenen zu dunklen Partikel. In anderen Worten, stellt sie die Elemente dar, deren \textit{minmass} zu niedrig ist.
-So könnte der Dataframe verwendet werden und ihn nach der Spalte \textit{mass} absteigend sortieren. 
-Dies würde dazu führen, dass unsere dunkelsten Partikel am Ende der Liste (Tabelle) positioniert werden und die hellsten ganz oben. Dazu muss keine Funktion implementiert werden, sondern es genügt, die Funktion \textit{sort\_values()} aus der Panda. Dataframe-Bibliothek aufzurufen. Der Aufruf sowie die Tabelle sähe jeweils dann wie folgt aus:\\ \texttt{dataframe.sort\_values(by=['mass'], ascending=False)}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.45]{Grafiken/trackpyBilder/df_initial.png}
-    \caption{Ein Teil des initialen Dataframes}
-    %\label{fig:bild_label}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.45]{Grafiken/trackpyBilder/df_sorted.png}
-    \caption{Ein Teil des sortierten Dataframes}
-    %\label{fig:bild_label}
-\end{figure}
-
-Jetzt wird es auf dem sortierten Dataframe eine weitere Funktion aufgerufen, um lediglich nur die 354 (also 475-121)gewünschte Partikel bwz. hellsten zu behalten. Eine solche Funktion \textit{head()} wird auch von Panda-Dataframe bereitgestellt. Aus diesem Ergebnis reicht es aus, die von Python angebotene Funktion \textit{min()} auszuführen, um den kleinsten Wert in der Spalte \textit{mass} zu erhalten. 
-Die Aufrufe sähen dann wie folgt aus:\\
-\texttt{dataframe.head(354)} \\
-\texttt{min(dataframe['mass'])}\\
-
-\textbf{189.72805} ist hier das Ergebnis der vorherigen Vorgänge und damit auch den minimalen Wert von \textit{mass}, den ein Partikel haben muss. Es sei der \textit{minmass} Parameter der Funktion \textit{locate()}.
-
-
-
-%Es wurde zwar fast alle \textit{False Positive} beseitigt, aber dafür wurde eine viel zu hohe Anzahl an \textit{True Negative} nicht gefunden. Die Lösung für dieses Problem besteht darin, den Wert von "minmass"  schrittweise zu verringern, bis ein zufriedenstellendes Ergebnis erzielt wird.
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_minmass_01.png}
-    \caption{locate with 'mimass=189.72805'}
-    %\label{fig:bild_label}
-\end{figure}
-
-Aus diesem Bild geht hervor, dass fast alle gewünschten Partikel lokalisiert bleiben. Allerdings werden einige von ihnen doppelt gezählt, was Gegenstand der Verwendung anderer Parameter sein wird. Dennoch gibt es noch einige Partikel, die nicht lokalisiert werden sollten. Es handelt sich dabei um etwa 12 Teilchen. Es wäre daher ratsam, die \textit{minmass} schrittweise zu erhöhen, bis ein zufriedenstellendes Ergebnis erzielt wird.\\
-Zum Festlegen des Wertes, der in jedem Schritt verwendet werden soll, schauen Sie in der Tabelle (Dataframe), die mit \textit{dataframe.sort\_vaules(by=['mass'], ascending=False}) erstellt wurde, beginnend mit der 121. Zeile von unten nach oben.(121. Zeile entspricht der Anzahl der Teilchen mit geringer Helligkeit)
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.55]{Grafiken/trackpyBilder/df\_steps.png}
-    \caption{Sortierte Tabelle}
-    %\label{fig:bild_label}
-\end{figure}
-
-So werden nach und nach die Werte 197,1016 (d. h. 197), 197,6688 (d. h. 198) und so weiter verwendet.\\
-Die Verwendung der Funktion \texttt{locate(frames[0], 5, \textbf{minmass=197})} ergibt so gut wie keine Änderung der Lokalisierung. Da insgesamt immer noch 353 Partikel  erkannt wurde. Daher wird sich der nächste Versuch mit dem folgenden Wert beschäftigen. Genauer gesagt "minmass = 198". \\
-Auch hier wurden nur zwei Teilchen weniger gefunden. Das sind insgesamt 351 Partikel. Obwohl es fast unmöglich ist, diese beiden Teilchen auf dem Bild zu erkennen. 
-Es wäre klug, den nächsten Wert unserer Tabelle zu nehmen, der derzeit bei 203,6244 (also 204) liegt, und erneut zu versuchen, eine Lokalisierung durchzuführen. (Siehe )
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_minmass_02.png}
-    \caption{locate with 'mimass=197'}
-    %\label{fig:bild_label}
-\end{figure}
-
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_minmass_04(204).png}
-    \caption{locate with 'mimass=204'}
-    %\label{fig:bild_label}
-\end{figure}
-
-Bei der Verfolgung dieser Logik kommt es hier schnell auf einen \textit{minmass} Wert von \textbf{210}.\\
-Wo es deutlich zu erkennen ist, dass weitere unerwünschte Partikel nicht mit erkannt wurde. Es wurde insgesamt hier \textbf{345} Partikel gefunden. Jedoch muss es festgestellt werden, dass ab \textbf{211} nach oben, werden zwar weniger unerwünschte Partikel gefangen, aber auch erwünschte. 
-Wie es die Veranschaulichung auf Bild (Bild 212)zeigt. 
-Deswegen wird es dem weiteren  den Parameter  \textbf{Separation} gewidmet, um weitere unerwünschte zu eliminieren.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_minmass_07(210).png}
-    \caption{locate with 'mimass=210'}
-    %\label{fig:bild_label}
-\end{figure}
-
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_minmass_08(212).png}
-    \caption{locate with 'mimass=212'}
-    %\label{fig:bild_label}
-\end{figure}
-
-
-		\item {\Large \textbf{locate(f, d, minmass, sepration)}}: \\ \\
-    			Hier wird es einfach Werte bei \texttt{separtion} ausprobiert, um auf die bessere Resultate zu kommen. 
-    			Es wäre interessant zu erwähnen, dass es sich dabei um den minimalen Abstand zwischen zwei Teilchen handelt. Der Standardwert ist \textit{Durchmesser + 1}. In diesem Fall ist es 6. 
-Mit diesem neuen Parameter werden wir versuchen, all jene Partikel zu eliminieren, die doppelt erkannt werden. Ohne die Qualität der bisherigen Erkennung zu beeinträchtigen.  
-
-Denn es scheint offensichtlich, dass, wenn der Wert zu hoch ist, mehrere bisher erkannte Partikel nicht mehr erkannt werden. Weil sie zu nahe beieinander liegen.
-Bei \texttt{separation = 6} bleibt die Erkennung unverändert und ergibt auch eine Anzahl von \textbf{345}.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_separation_(6).png}
-    \caption{locate with 'sep=6.0'}
-    %\label{fig:bild_label}
-\end{figure}
-
-Es wird dann als nächstes zuerst \textbf{7} als Parameterwert ausprobieren. Trotz der relativ kleinen Anzahl an insgesamt erkannten Partikel also \textbf{312}. Was auf dem folgenden Bild sichtbar ist, wird es ungefähr \textbf{10} gewünschte Partikel verloren. Diese sind in gelb auf dem Bild markiert. Natürlich hat der Parameterwert nicht nur Verschlechterung gezogen sondern auch positive Effekte. So ist es auch leicht in grün auf dem Bild Ausbesserungen zu sehen. Es handelt sich hier nämlich um \textbf{6} Partikel, die sich mehrfach erkennen lies. 
-Allerdings, da die Anzahl an nicht mehr erkannte gewünschte Elemente größer ist als die von nicht gewünschten die eliminiert wurde, wird der Wert des Parameters dann nach unten korrigiert.
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_separation_(7).png}
-    \caption{locate with 'sep=7.0'}
-    %\label{fig:bild_label}
-\end{figure}
-
-Mit den aufeinanderfolgenden Werten \textbf{6.8, 6.7, 6.5 und 6.4} kommt es neben einigen Verbesserungen immer zu mehreren Verschlechterungen, die später mit anderen Parametern nur schwer zu korrigieren sind. 
-Genau aus diesem Grund wird hier als  \textbf{separation} der Wert \textbf{6.3} betrachtet.
-Wobei fast lediglich nur Verbesserungen zu notieren sind. 
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_separation_(6,3).png}
-    \caption{locate with 'sep=6.3'}
-    %\label{fig:bild_label}
-\end{figure}
-
-
-%\item locate(frames[0], 11, minmass=1000.0, separation=2, noise\_size=1.5, topn=250):    \\ \\ 
-%		Nachdem alle vorherige Parameter eingesetzt worden sind, wenn der Dataframe immer noch sanierungsbedürftig ist, wird auch \textit{topn} zum Einsatz gebracht. Dazu wird die Anzahl an bestehende unerwünschte Elemente geschätzt und von der gesamten Anzahl an gefundenen Elemente abgezogen. Somit wird \textit{topn} in dem Fall hier auf \textit{250} geschätzt. (siehe Bild)
-%\begin{figure}[H]
-%    \centering
-%    \includegraphics[scale=0.35]{Grafiken/trackpyBilder/locate_with_topn.png}
-%    \caption{locate with 'topn=250'}
-%    %\label{fig:bild_label}
-%\end{figure}
-\end{enumerate}
-Es scheint hier wichtig zu erwähnen, dass es kein Parameter gibt, dessen Wert adäquat für alle Arten von Bildern oder Partikeln. So sollte es immer Parametrisierung als erster Schritt
-durchgeführt werden.
-Allerdings sind im konkreten Fall dieses Videos bzw. Bildes die Parameterwerte, die am besten geeignet erscheinen, wie folgt: \\
-\begin{center}
-{\Large \textit{locate(frames[0], 5, minmass=210, separation=6.3})}
-\end{center}
-
-\subsection{Subsection Kapitel-2}
-
-Glossareintrag \gls{vr}
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque id lobortis ipsum, sed cursus ex. Sed volutpat ante mi, sit amet laoreet metus lacinia quis. Pellentesque lectus nunc, laoreet a mi in, porttitor rhoncus dui. Vivamus varius ornare magna, ut consequat eros ornare nec. Donec vel est non nibh suscipit tincidunt. Fusce felis sapien, suscipit nec dui in, scelerisque tincidunt quam. Etiam sollicitudin, magna vitae scelerisque rhoncus, sem mi faucibus arcu, a maximus ex felis at erat. Mauris sollicitudin enim vitae tortor congue, at bibendum justo malesuada. Phasellus varius feugiat ipsum sit amet commodo. Suspendisse urna ligula, rutrum sed faucibus tempor, sollicitudin ultricies metus. Praesent consequat at mi in lobortis. Donec faucibus cursus nibh a lacinia. Curabitur nulla mi, fermentum nec semper sit amet, luctus vel dui. Suspendisse rutrum, risus quis hendrerit convallis, orci augue placerat dui, ultricies aliquet sem urna ut diam. Maecenas nec maximus magna.
-
-Nam eget neque vel dolor iaculis lacinia ac at massa. Sed vitae vehicula turpis, vel ultrices libero. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In ac ipsum ut elit bibendum venenatis ac sed neque. In vitae dui ut lectus tincidunt lobortis ac ullamcorper nisi. Maecenas et turpis ut lorem facilisis vehicula sodales at sem. Aenean nec viverra orci. Aliquam aliquam nibh pharetra tortor pellentesque, non ultrices tortor faucibus. Suspendisse nec arcu mi.
-
-Nunc euismod eu lacus ac scelerisque. Donec felis sem, dapibus non velit lobortis, tempus posuere arcu. In turpis risus, vehicula a faucibus vitae, sodales vitae ligula. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed eros mauris, eleifend ut mi sed, pharetra interdum urna. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Phasellus pulvinar tempor eros, eu molestie mauris pretium tempus. Donec quis lectus velit. Phasellus quis arcu mauris. Integer vitae ultrices leo. Cras vel viverra odio. Pellentesque nec urna condimentum, porta eros ut, feugiat nisi.
-
-Sed vel dui sapien. Aenean tellus justo, scelerisque at finibus vulputate, gravida ut lectus. Nam vitae augue lorem. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris eleifend felis a nunc condimentum, eu tincidunt elit fermentum. Proin non tortor at neque cursus tincidunt vitae finibus ante. In sit amet magna elit.
-
-Sed erat erat, tincidunt luctus nibh ut, finibus mattis mauris. Cras non quam non mi mollis tincidunt id ac erat. Suspendisse dictum sollicitudin lacus ac porta. Nam pellentesque vehicula orci in hendrerit. Praesent euismod dui tortor. Pellentesque at tellus eget arcu dapibus sodales. Etiam fermentum eros vitae varius auctor. Donec eget suscipit dolor. 
-
-\subsection{Subsection 2 Kapitel-2}
-
-Text.
-
-\subsubsection{Subsubsection Kapitel-2}
-
-Quelle \cite{trajektorenVRDemo}
-
-Sed vel dui sapien. Aenean tellus justo, scelerisque at finibus vulputate, gravida ut lectus. Nam vitae augue lorem. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris eleifend felis a nunc condimentum, eu tincidunt elit fermentum. Proin non tortor at neque cursus tincidunt vitae finibus ante. In sit amet magna elit.
-
-Sed erat erat, tincidunt luctus nibh ut, finibus mattis mauris. Cras non quam non mi mollis tincidunt id ac erat. Suspendisse dictum sollicitudin lacus ac porta. Nam pellentesque vehicula orci in hendrerit. Praesent euismod dui tortor. Pellentesque at tellus eget arcu dapibus sodales. Etiam fermentum eros vitae varius auctor. Donec eget suscipit dolor (Siehe Grafik \ref{fig:bild_label}). 
-
-Beispielgrafik
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.35]{Grafiken/beispielGrafiken/bild_1.PNG}
-    \includegraphics[scale=0.35]{Grafiken/beispielGrafiken/bild_2.PNG}
-    \caption{Caption Bilder; Quelle: \cite{trajektorienDemonstration}}
-    \label{fig:bild_label}
-\end{figure}
+	
+\end{itemize}
