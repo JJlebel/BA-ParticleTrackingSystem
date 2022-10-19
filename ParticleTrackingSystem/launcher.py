@@ -7,19 +7,27 @@ import matplotlib.pyplot as plt
 from array import *
 import numpy as np
 import pandas as pd
-# from Cython.Utility.MemoryView import memoryview
 from pandas import DataFrame, Series  # for convenience
+from os import listdir, remove
+from os.path import isfile, join
 
 import pims
 import trackpy as tp
 import inspect
 
-# %matplotlib inline
 from trackpy.utils import memo
 
-from ParticleTrackingSystem.video_utility import Video_Utility, gray
-from ParticleTrackingSystem.tracker import Tracker, set_frames_number_in_array,\
-    print_2d, set_empty_panda, is_a_dictionary, tp_locate#, get_particles_per_image_as_array
+try:
+    from ParticleTrackingSystem.video_utility import Video_Utility, gray
+except ImportError:
+    from video_utility import Video_Utility, gray
+
+try:
+    from ParticleTrackingSystem.tracker import Tracker, set_frames_number_in_array, \
+        print_2d, set_empty_panda, is_a_dictionary, tp_locate  # , get_particles_per_image_as_array
+except ImportError:
+    from tracker import Tracker, set_frames_number_in_array, \
+        print_2d, set_empty_panda, is_a_dictionary, tp_locate  # , get_particles_per_image_as_array
 
 if __name__ == '__main__':
     video_utility = Video_Utility()
@@ -41,14 +49,33 @@ if __name__ == '__main__':
 
     tracker.set_particle_value_in_array(frames)
 
-    # print_2d(tracker.array)
-
     tracker.arrange_panda(tracker.array)
 
     xx, yy, labels = [], [], []
 
+    try:
+        locatedImages = [f"./static/locatedImages/{f}" for f in
+                         listdir('./static/locatedImages/')
+                         if isfile(join('./static/locatedImages/', f))]
+        sorted(locatedImages, key=lambda i: i[0][-7:-4])
+    except FileNotFoundError:
+        pass
+
 
     def plot_row(series):
+        """
+            Plots the position of a specific particle over time.
+            From frame F0 ... Fn
+            With the given series.
+
+        Parameters
+        ----------
+        series:  pandas.core.series.Series
+            the given series to with xy-coordinates to plot
+        Returns
+        -------
+            A dict of array with all x- and y- position
+        """
         if len(xx) > 0 or len(yy) > 0 or len(labels) > 0:
             xx.clear()
             yy.clear()
@@ -63,12 +90,24 @@ if __name__ == '__main__':
         plt.plot(xx, yy, 'bo')
         plt.gca().invert_yaxis()
         plt.figure(figsize=(14, 10))
-        # plt.gca().set_aspect("equal")
         plt.show()
         return xx, yy
 
 
     def plot_column_points(series):
+        """
+            Plots the position of all particles in one frame.
+            With the given series.
+
+        Parameters
+        ----------
+        series:  pandas.core.series.Series
+            the given series to with xy-coordinates to plot
+        Returns
+        -------
+            A dict of array with
+            all x- and y- positions, labels and colors
+        """
         if len(xx) > 0 or len(yy) > 0 or len(labels) > 0:
             xx.clear()
             yy.clear()
@@ -90,45 +129,79 @@ if __name__ == '__main__':
 
 
     def random_color_generator(no_of_colors):
+        """
+            Generates random x colors.
+
+        Parameters
+        ----------
+        no_of_colors:  int
+            the given number of colors to generate
+        Returns
+        -------
+            An array with x colors
+        """
         import random
         colors = ["#" + ''.join([random.choice('0123456789ABCDEF') for i in range(6)]) for j in range(no_of_colors)]
         return colors
 
+
     def show_rows_particle(number):
+        """
+            Plots the row number from the given number.
+
+        Parameters
+        ----------
+        number:  int
+            the row number to generate the plot from
+        Returns
+        -------
+            Nothing
+        """
         plot_row(tracker.dataframe.iloc[number])
 
-    def show_frames_particle(number):
-        plot_column_points(tracker.dataframe["F"+str(number)])
 
-    def show_tracked_particle(f_no):
-        min = particle_per_frame[f_no]["minmass"]
-        f4 = tp_locate(frames, f_no, tracker.get_diameter(), minmass=min)
-        plt.figure(figsize=(14, 10))
-        fig = tp.annotate(f4, frames[f_no])
-        plt.show()
-        return fig
+    def show_frames_particle(number):
+        """
+            Plots the row number from the given number.
+
+        Parameters
+        ----------
+        number:  int
+            the frame number to generate the plot from
+        Returns
+        -------
+        Nothing
+        """
+        plot_column_points(tracker.dataframe["F" + str(number)])
 
     def non_nan_len(series):
+        """
+            Gives number of element in the given series without
+            counting the NAN values
+
+        Parameters
+        ----------
+        series:  pandas.core.series.Series
+            the given series to count the element from
+        Returns
+        -------
+            number of element in the series
+        """
         res = 0
         for e in series:
             if is_a_dictionary(e):
                 res += 1
         return res
 
-    def save_all_frame():
-        i = 0
-        for i in range(0, len(particle_per_frame)):
-            name = "./locatedImages/frame_" + str(i) + ".png"
-            r = show_tracked_particle(i)
-            r.get_figure().savefig(name)
-            i += 1
+    tracker.save_all_frame()
+    tracker.generate_output()
 
-    plot_column_points(tracker.dataframe["F66"])
-    plot_row(tracker.dataframe.iloc[0])
-    show_tracked_particle(66)
-    print(f"Array len of F66 before: {particle_per_frame[66]['len']}")
-    print(f"Dataframe len of F66 before: {non_nan_len(tracker.dataframe['F66'])}")
+    # plot_column_points(tracker.dataframe["F66"])
+    # plot_row(tracker.dataframe.iloc[0])
+    # tracker.show_tracked_particle(66)
+    # print(f"Array len of F66 before: {particle_per_frame[66]['Len']}")
+    # print(f"Dataframe len of F66 before: {non_nan_len(tracker.dataframe['F66'])}")
     # tracker.updated_frame(frames, 66, minmass=170)
-    # print(f"Array len of F66 after: {particle_per_frame[66]['len']}")
+    # print(f"Array len of F66 after: {particle_per_frame[66]['Len']}")
     # print(f"Dataframe len of F66 after: {non_nan_len(tracker.dataframe['F66'])}")
-    # show_tracked_particle(66)
+    # tracker.show_tracked_particle(66)

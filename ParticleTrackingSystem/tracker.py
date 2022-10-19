@@ -9,20 +9,27 @@ import numpy as np
 import pandas as pd
 # from Cython.Utility.MemoryView import memoryview
 from pandas import DataFrame, Series  # for convenience
-
+from os import listdir, remove
+from os.path import isfile, join
 import pims
 import trackpy as tp
 import inspect
 
-from ParticleTrackingSystem.event import Event, EventType
-from ParticleTrackingSystem.video_utility import Video_Utility
+try:
+    from ParticleTrackingSystem.event import Event, EventType
+    from ParticleTrackingSystem.video_utility import Video_Utility
+except:
+    from event import Event, EventType
+    from video_utility import Video_Utility
 
 
 def set_frames_number_in_array(p_array):
     """
+    Sets the length of the given array.
+    Will be generally use set Tracker._frames
 
-    :param p_array:
-    :return:
+    :param p_array: The given array
+    :return: Nothing
     """
     i = 0
     for n in p_array:
@@ -35,21 +42,53 @@ def tp_locate(frames, image, diameter, minmass=None,
               smoothing_size=None, threshold=None, topn=None, preprocess=True,
               max_iterations=10, characterize=True, engine='python'):
     """
+    Calls the trackpy's function locate.
+    By using only specific parameters of the initial function, which are no longer deprecated.
+    And also those who seems to procure any changes
 
-    :param frames:
+    :param frames: array
+        Processed image used for centroid-finding and most particle
+        measurements.
     :param image:
-    :param diameter:
-    :param minmass:
-    :param separation:
-    :param maxsize:
-    :param noise_size:
-    :param smoothing_size:
-    :param threshold:
-    :param topn:
-    :param preprocess:
-    :param max_iterations:
-    :param characterize:
-    :param engine:
+    :param diameter: odd integer or tuple of odd integers
+        This may be a single number or a tuple giving the feature's
+        extent in each dimension, useful when the dimensions do not have
+        equal resolution (e.g. confocal microscopy). The tuple order is the
+        same as the image shape, conventionally (z, y, x) or (y, x). The
+        number(s) must be odd integers. When in doubt, round up.
+    :param minmass:float
+        The minimum integrated brightness. This is a crucial parameter for
+        eliminating spurious features.
+        Recommended minimum values are 100 for integer images and 1 for float
+        images. Defaults to 0 (no filtering).
+        .. warning:: The mass value is changed since v0.3.0
+        .. warning:: The default behaviour of minmass has changed since v0.4.0
+    :param separation:float or tuple
+        Minimum separation between features.
+        Default is diameter + 1. May be a tuple, see diameter for details.
+    :param maxsize:float
+        maximum radius-of-gyration of brightness, default None
+    :param noise_size:float or tuple
+        Width of Gaussian blurring kernel, in pixels
+        Default is 1. May be a tuple, see diameter for details.
+    :param smoothing_size: float or tuple
+        The size of the sides of the square kernel used in boxcar (rolling
+        average) smoothing, in pixels
+        Default is diameter. May be a tuple, making the kernel rectangular.
+    :param threshold: float
+        Clip bandpass result below this value. Thresholding is done on the
+        already background-subtracted image.
+        By default, 1 for integer images and 1/255 for float images.
+    :param topn: integer
+        Return only the N brightest features above minmass.
+        If None (default), return all features above minmass.
+    :param preprocess: boolean
+        Set to False to turn off bandpass preprocessing.
+    :param max_iterations: integer
+        max number of loops to refine the center of mass, default 10
+    :param characterize:boolean
+        Compute "extras": eccentricity, signal, ep. True by default.
+    :param engine:{'auto', 'python', 'numba'}. Default is 'python'
     :return:
     DataFrame([x, y, mass, size, ecc, signal, raw_mass])
         where "x, y" are appropriate to the dimensionality of the image,
@@ -78,7 +117,13 @@ def tp_locate(frames, image, diameter, minmass=None,
                      engine=engine)
 
 
-def print_2d(array_to_print):
+def print_2d(array_to_print: list):
+    """
+    Prints the 2D-Array in a readable manner for human eye
+    :param array_to_print:  Array
+        The array to print
+    :return:  Nothing
+    """
     for r in array_to_print:
         for c in r:
             print(c, end=" ")
@@ -86,28 +131,43 @@ def print_2d(array_to_print):
 
 
 def elt_decimal(number, decimal_number):
-    """
+    """Rounds up a given number to a specific (decimal_number) amount of number after the comma
 
-    :param number:
-    :param decimal_number:
-    :return:
+    :param number: float
+        Number to round up
+    :param decimal_number: int
+        Amount of number after the comma
+
+    :return: float
+        The rounded 'number'
     """
-    # % 1 ensures that integer part disappears
-    # return round(number % 1, decimal_number)
     return round(number, decimal_number)
 
 
 def is_a_dictionary(element):
+    """
+        Checks if a given parameter 'element' is of type 'dict'.
+    :param element: Any
+        the given parameter
+    :return:
+        True if  :var elment is a 'dict' otherwise returns False
+    """
     return True if isinstance(element, dict) else False
 
 
 def range_with_floats(start, stop, step):
     """
+        Return an object that produces a sequence of integers from start (inclusive) to stop (exclusive) by step.
+        Whereby 'step' is adjustable
 
-    :param start:
-    :param stop:
-    :param step:
+    :param start: float
+        The beginning of the range(included)
+    :param stop: float
+        The end of the range (excluded)
+    :param step: float
+        The step of each skip
     :return:
+        An object that produces a sequence of floats from start (inclusive) to stop (exclusive) by step.
     """
     while stop > start:
         yield start
@@ -116,9 +176,20 @@ def range_with_floats(start, stop, step):
 
 def set_empty_panda(arr: list):
     """
+        Sets an empty Panda.Dataframe with the data from the given 'arr'
+        Whereby the columns of the Panda.Dataframe will be set to the length of the 'arr'
+            (e.g. length of 'arr'=100, Panda.Dataframe' columns => F0, F1,...,F99)
+        And the is a special column named 'Part_index', which could be use to store index of particle.
 
-    :param arr:
-    :return:
+    Parameters
+    ----------
+    arr: Array
+        the given array
+
+    :return: 'dict'
+        A dictionary of a
+        {An arranged  Panda.Dataframe(df),
+        An array of indexes(indexes)}
     """
     df = pd.DataFrame()
     df.insert(0, "Part_index", pd.NA)
@@ -300,15 +371,32 @@ class Tracker:
 
     def updated_frame(self, frames, f_no, minmass=None, separation=None, maxsize=None, topn=None, engine='python'):
         """
+            Updates the particle detection made on a specific image. This is done using the given parameters.
+            Only parameters with values other than None will be considered. Otherwise, their values will be reset.
 
-        :param frames:
-        :param f_no:
-        :param minmass:
-        :param separation:
-        :param maxsize:
-        :param topn:
-        :param engine:
-        :return:
+
+        Parameters
+        ----------
+        frames: Array
+            the list of all frames
+        f_no: int
+            The number of the image to be modified.
+        minmass: float
+            The minimum integrated brightness. This is a crucial parameter for
+            eliminating spurious features.
+            Recommended minimum values are 100 for integer images and 1 for float
+            images. Defaults to 0 (no filtering).
+        separation: float or tuple
+            Minimum separation between features.
+            Default is diameter + 1. May be a tuple, see diameter for details.
+        maxsize:float
+            maximum radius-of-gyration of brightness, default None
+        topn:   integer
+            Return only the N brightest features above minmass.
+            If None (default), return all features above minmass.
+        engine: {'auto', 'python', 'numba'}
+
+        :return: Nothting
         """
         if minmass is None:
             minmass = self.get_minmass()
@@ -319,22 +407,127 @@ class Tracker:
         if topn is None:
             topn = self.get_topn()
         ppf = self.get_particle_per_frame()
-        f = tp_locate(frames, f_no, self.get_diameter(), minmass=minmass, separation=separation, maxsize=maxsize, topn=topn, engine=engine)
-        ppf[f_no] = {"len": len(f), "minmass": minmass}
+        f = tp_locate(frames, f_no, self.get_diameter(), minmass=minmass, separation=separation, maxsize=maxsize,
+                      topn=topn, engine=engine)
+        ppf[f_no] = {"Len": len(f), "Minmass": minmass, "Mod": 0,
+                     "Separation": separation, "Maxsize": maxsize,
+                     "Topn": topn, "Engine": engine}
         self.set_particle_per_frame(ppf)
 
         self.set_particle_value_in_array(frames)
         self.arrange_panda(self.array)
+        self.save_all_frame(frames)
+        self.generate_output()
+
+    def show_tracked_particle(self, f_no, frames=None):
+        """
+            Shows the figure of all the tracked particle from the given frame number.
+
+        Parameters
+        ----------
+        f_no:  int
+            the frame number to show the figure from
+        frames:
+        Returns
+        -------
+            figure
+        """
+        if frames is None:
+            frames = self.get_frames()
+
+        particle_per_frame = self.get_particle_per_frame()
+        # min = particle_per_frame[f_no]["Minmass"]
+        f4 = tp_locate(frames, f_no, self.get_diameter(), minmass=particle_per_frame[f_no]["Minmass"],
+                       separation=particle_per_frame[f_no]["Separation"],
+                       maxsize=particle_per_frame[f_no]["Maxsize"], topn=particle_per_frame[f_no]["Topn"],
+                       engine=particle_per_frame[f_no]["Engine"])
+        plt.figure(figsize=(14, 10))
+        fig = tp.annotate(f4, frames[f_no])
+        plt.show()
+        return fig
+
+    def save_all_frame(self, frames=None):
+        """
+           Save all tracked images in a folder.
+           It firstly, clean up the folder.
+
+        Returns
+        -------
+        Nothing
+        """
+        if len(listdir("./static/locatedImages/")) > 0:
+            for e in listdir('./static/locatedImages/'):
+                remove(f"./static/locatedImages/{e}")
+        i = 0
+        for i in range(0, len(self.particle_per_frame)):
+            if i < 10:
+                name = "./static/locatedImages/frame_00" + str(i) + ".png"
+            elif 10 >= i < 100:
+                name = "./static/locatedImages/frame_0" + str(i) + ".png"
+            else:
+                name = "./static/locatedImages/frame_" + str(i) + ".png"
+            r = self.show_tracked_particle(i, frames)
+            r.get_figure().savefig(name)
+            i += 1
+
+    def generate_output(self):
+        """
+            Generates a csv-file with several data.
+            Such as path to get tracked image of each frame,
+            length of each frame, as well as Minmass  and Mod
+        Returns
+        -------
+        """
+        if 'output.csv' in listdir('./static/'):
+            print("remove(output.csv)")
+            remove("./static/output.csv")
+        for_csv = pd.DataFrame()
+        particle_per_frame = self.get_particle_per_frame()
+        locatedImages = [f"./static/locatedImages/{f}" for f in
+                         listdir('./static/locatedImages/')
+                         if isfile(join('./static/locatedImages/', f))]
+        sorted(locatedImages, key=lambda i: i[0][-7:-4])
+        length = [x["Len"] for x in particle_per_frame]
+        minmass = [x["Minmass"] for x in particle_per_frame]
+        mod = [x["Mod"] for x in particle_per_frame]
+        sep = [x["Separation"] for x in particle_per_frame]
+        maxsize = [x["Maxsize"] for x in particle_per_frame]
+        topn = [x["Topn"] for x in particle_per_frame]
+        engine = [x["Engine"] for x in particle_per_frame]
+        i = 0
+        h = ["Images", "Length", "Minmass", "Mod", "Separation", "Maxsize", "Topn", "Engine"]
+        hh = [locatedImages, length, minmass, mod, sep, maxsize, topn, engine]
+        for i in range(0, 8):
+            for_csv.insert(i, h.pop(0), hh.pop(0))
+            i += 1
+        for_csv.to_csv('./static/output.csv',
+                       columns=["Images", "Length", "Minmass", "Mod", "Separation", "Maxsize", "Topn", "Engine"])
 
     # Stores the number of particles per image in array
     def get_particles_per_image_as_array(self, frames, min_particle_percentage=85.0, max_particle_percentage=110.0):
         """
+            Stores several attributes used to obtain the detection made on an image.
+            These parameters are:
+                len: Number of detected particles
+                minmass:  The minimum integrated brightness
+                mod: Number of times that parameter has been changed to stay within the desired range.
+            Whereby the len will always stay in the range of
+            (min_min_particle_percentage < len > max_particle_percentage).
+            Due to an algorithm that modifies the values of the parameters
+             until the len is in the previously given range.
+
         Parameters
         ----------
-        :param frames:
-        :param min_particle_percentage:
-        :param max_particle_percentage:
-        :return:
+        frames: Array
+            the sequence of image of the video
+        min_particle_percentage: float
+            the minimum percentage of particle that should be detected
+        max_particle_percentage: float
+            the maximum  percentage of particle that should be detected.
+            100% is equal to the amount of particle found on the first frame
+        Returns
+        -------
+        An array of dict.
         """
         # particle_pre_frame = []
         self.particle_per_frame.clear()
@@ -346,81 +539,115 @@ class Tracker:
         max_particle_percentage = max_particle_percentage
         i_percent = 0
         new_minmass = self.minmass
+        mod = 0
         for i in frames:
-            # f = tp_locate(frames, cnt, 5, minmass=210, separation=6.3)
-            f = tp_locate(frames, cnt, self.diameter, minmass=self.minmass, separation=self.separation)
+            f = tp_locate(frames, cnt, self.diameter, minmass=self.minmass, separation=self.separation,
+                          maxsize=self.maxsize, topn=self.topn, engine=self.engine)
             if cnt == 0:
                 max_size = len(f)
-
             if cnt > 0 and ((len(f) / max_size) * 100) <= min_particle_percentage:
                 i_percent = ((len(f) / max_size) * 100)
                 while i_percent <= min_particle_percentage:
+                    mod += 1
                     if new_minmass > 0:
-                        f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass, separation=self.separation)
+                        f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass, separation=self.separation,
+                                      maxsize=self.maxsize, topn=self.topn, engine=self.engine)
                         i_percent = ((len(f) / max_size) * 100)
                         if min_particle_percentage < i_percent < max_particle_percentage:
                             break
                         elif i_percent >= max_particle_percentage:
                             while i_percent >= max_particle_percentage:
+                                mod += 1
                                 new_minmass += 5
                                 f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass,
-                                              separation=self.separation)
+                                              separation=self.separation,
+                                              maxsize=self.maxsize, topn=self.topn, engine=self.engine)
                                 i_percent = ((len(f) / max_size) * 100)
                                 if min_particle_percentage < i_percent < max_particle_percentage:
                                     break
                         new_minmass -= 5
                         # len(f)
-                self.particle_per_frame.append({"len": len(f), "minmass": new_minmass})
+                self.particle_per_frame.append({"Len": len(f), "Minmass": new_minmass, "Mod": mod,
+                                                "Separation": self.separation, "Maxsize": self.maxsize,
+                                                "Topn": self.topn, "Engine": self.engine})
+                mod = 0
 
-            elif cnt > 0 and i_percent >= max_particle_percentage:
+            elif cnt > 0 and ((len(f) / max_size) * 100) >= max_particle_percentage:
+                i_percent = ((len(f) / max_size) * 100)
                 while i_percent >= max_particle_percentage:
+                    mod += 1
                     if new_minmass > 0:
-                        f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass, separation=self.separation)
+                        f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass, separation=self.separation,
+                                      maxsize=self.maxsize, topn=self.topn, engine=self.engine)
                         i_percent = ((len(f) / max_size) * 100)
                         if min_particle_percentage < i_percent < max_particle_percentage:
                             break
                         elif i_percent <= min_particle_percentage:
                             while i_percent >= max_particle_percentage:
+                                mod += 1
                                 new_minmass -= 5
                                 f = tp_locate(frames, cnt, self.diameter, minmass=new_minmass,
-                                              separation=self.separation)
+                                              separation=self.separation,
+                                              maxsize=self.maxsize, topn=self.topn, engine=self.engine)
                                 i_percent = ((len(f) / max_size) * 100)
                                 if min_particle_percentage < i_percent < max_particle_percentage:
                                     break
                         new_minmass += 5
                         # len(f)
-                self.particle_per_frame.append({"len": len(f), "minmass": new_minmass})
+                self.particle_per_frame.append({"Len": len(f), "Minmass": new_minmass, "Mod": mod,
+                                                "Separation": self.separation, "Maxsize": self.maxsize,
+                                                "Topn": self.topn, "Engine": self.engine})
+                mod = 0
 
             else:
-                self.particle_per_frame.append({"len": len(f), "minmass": self.minmass})
+                self.particle_per_frame.append({"Len": len(f), "Minmass": new_minmass, "Mod": mod,
+                                                "Separation": self.separation, "Maxsize": self.maxsize,
+                                                "Topn": self.topn, "Engine": self.engine})
 
             print("Number of particle frame[" + str(cnt) + "]: " + str(len(f)))
             cnt += 1
         return self.particle_per_frame
 
-    def arrange_array(self, frames, particle_pre_frame):
+    def arrange_array(self, frames, particle_per_frame):
         """
-
-        :param frames:
-        :param particle_pre_frame:
-        :return:
+            Sets up the self.array.
+            For each element in particle_per_frame creates an index
+            And fills it with as many zeros as particle_per_frame has len at that particular index.
+        Parameters
+        ----------
+        frames: Array
+            the sequence of image of the video
+        particle_per_frame: Array
+            several attributes used to obtain the detection made on an image
+        Returns
+        -------
+        Nothing
         """
         self.array = []
         ite = 0
         for i in range(len(frames)):
             col = []
-            ppf = particle_pre_frame[ite]["len"]
+            ppf = particle_per_frame[ite]["Len"]
             for j in range(ppf):
                 col.append(0)
             self.array.append(col)
-            if ite < len(particle_pre_frame) - 1:
+            if ite < len(particle_per_frame) - 1:
                 ite += 1
 
     def set_particle_value_in_array(self, frames):
         """
+            Fills the self.array with a dict of
+            {'i': index,
+            'x': x-position of particle,
+            'y': y-position of particle}
 
-        :param frames:
-        :return:
+        Parameters
+        ----------
+        frames: Array
+            the sequence of image of the video
+        Returns
+        -------
+        Nothing
         """
         if self.get_array() is not None and is_a_dictionary(self.get_array()[0][1]):
             self.array.clear()
@@ -432,17 +659,26 @@ class Tracker:
         for r in self.array:
             re = int(len(r))
             if frame_index in range(0, len(frames)):
-                f = tp_locate(frames, frame_index, 5, minmass=self.particle_per_frame[frame_index]["minmass"],
-                              separation=self.separation)
+                f = tp_locate(frames, frame_index, self.diameter,
+                              minmass=self.particle_per_frame[frame_index]["Minmass"],
+                              separation=self.particle_per_frame[frame_index]["Separation"],
+                              maxsize=self.particle_per_frame[frame_index]["Maxsize"],
+                              topn=self.particle_per_frame[frame_index]["Topn"],
+                              engine=self.particle_per_frame[frame_index]["Engine"])
                 index = f.index
                 # print(index)
                 for c in r:
-                    jj = index[particle_index - 1]
-                    self.array[frame_index][particle_index] = {'i': index[particle_index - 1],
-                                                               'x': elt_decimal(f.at[index[particle_index - 1], 'x'],
-                                                                                5),
-                                                               'y': elt_decimal(f.at[index[particle_index - 1], 'y'],
-                                                                                5)}
+                    try:
+                        jj = index[particle_index - 1]
+                        self.array[frame_index][particle_index] = {'i': index[particle_index - 1],
+                                                                   'x': elt_decimal(
+                                                                       f.at[index[particle_index - 1], 'x'],
+                                                                       5),
+                                                                   'y': elt_decimal(
+                                                                       f.at[index[particle_index - 1], 'y'],
+                                                                       5)}
+                    except IndexError:
+                        continue
                     re = int(len(r))
                     re = int(len(r)) - particle_index
                     if int(len(r)) - particle_index != 1:
@@ -456,9 +692,15 @@ class Tracker:
 
     def arrange_panda(self, p_array: list):
         """
+        Fills the self.dataframe with the data of he given p_p_array.
 
-        :param p_array:
-        :return:
+        Parameters
+        ----------
+        p_array: Array
+            The given array. Should be self.array
+        Return
+        ------
+        Nothing
         """
 
         te = set_empty_panda(p_array)
@@ -473,10 +715,13 @@ class Tracker:
                 # print(f"Type of c in data: {type(c)}")
                 if not is_a_dictionary(c) and not isinstance(c, int):
                     try:
-                        # takes the index of the particle within the dictionary in the initial 2D-array
-                        pi_array = p_array[col_ind][cell]["i"]
-                        # takes the index of the particle in the 'Part_index'-column of the dataframe
-                        pi_dataframe = self.dataframe.loc[r_ind, 'Part_index']
+                        try:
+                            # takes the index of the particle within the dictionary in the initial 2D-array
+                            pi_array = p_array[col_ind][cell]["i"]
+                            # takes the index of the particle in the 'Part_index'-column of the dataframe
+                            pi_dataframe = self.dataframe.loc[r_ind, 'Part_index']
+                        except TypeError:
+                            continue
 
                         if pi_array != pi_dataframe:
                             r_ind += 1
