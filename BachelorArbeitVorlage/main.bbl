@@ -1,0 +1,187 @@
+\begin{thebibliography}{10}
+
+\bibitem{pims}
+Daniel~B. Allan, Thomas Caswell, Nathan~C. Keim, Casper~M. van~der Wel, and
+  Thomas Dimiduk.
+\newblock Soft-matter/pims: Python image sequence: Load video and sequential
+  images in many formats with a simple, consistent interface., 2021.
+
+\bibitem{tp_installation}
+Daniel~B. Allan, Thomas Caswell, Nathan~C. Keim, Casper~M. van~der Wel, and
+  Ruben~W. Verweij.
+\newblock Installing trackpy, 2021.
+
+\bibitem{Tp}
+Daniel~B. Allan, Thomas Caswell, Nathan~C. Keim, Casper~M. van~der Wel, and
+  Ruben~W. Verweij.
+\newblock Parameter of the locate funktion.
+\newblock
+  \url{http://soft-matter.github.io/trackpy/v0.5.0/generated/trackpy.locate.html#rd8297186acd3-1},
+  May 2021.
+
+\bibitem{trackpy_allan_daniel_b_2021_4682814}
+Daniel~B. Allan, Thomas Caswell, Nathan~C. Keim, Casper~M. van~der Wel, and
+  Ruben~W. Verweij.
+\newblock soft-matter/trackpy: Trackpy v0.5.0, April 2021.
+
+\bibitem{bokeh}
+{Bokeh Development Team}.
+\newblock {\em Bokeh: Python library for interactive visualization}, 2018.
+
+\bibitem{opencv_library}
+G.~Bradski.
+\newblock {The OpenCV Library}.
+\newblock {\em Dr. Dobb's Journal of Software Tools}, 2000.
+
+\bibitem{chenouard2014objective}
+Nicolas Chenouard, Ihor Smal, Fabrice De~Chaumont, Martin Ma{\v{s}}ka, Ivo~F
+  Sbalzarini, Yuanhao Gong, Janick Cardinale, Craig Carthel, Stefano Coraluppi,
+  Mark Winter, et~al.
+\newblock Objective comparison of particle tracking methods.
+\newblock {\em Nature methods}, 11(3):281--289, 2014.
+
+\bibitem{raduis_of_gyration}
+Mech Content.
+\newblock Radius of gyration: Definition, equation, derivation, units,
+  explained, Apr 2022.
+
+\bibitem{trackpy_algorithm}
+John~C Crocker and David~G Grier.
+\newblock Methods of digital video microscopy for colloidal studies.
+\newblock {\em Journal of colloid and interface science}, 179(1):298--310,
+  1996.
+
+\bibitem{Dachiraju+2020+59+65}
+Rajesh Dachiraju.
+\newblock A function fitting method.
+\newblock {\em Journal of Applied Analysis}, 26(1):59--65, 2020.
+
+\bibitem{galvez2011efficient}
+Akemi G{\'a}lvez and Andr{\'e}s Iglesias.
+\newblock Efficient particle swarm optimization approach for data fitting with
+  free knot b-splines.
+\newblock {\em Computer-Aided Design}, 43(12):1683--1692, 2011.
+
+\bibitem{garousi2013evaluating}
+Golara Garousi, Vahid Garousi, Mahmoud Moussavi, Guenther Ruhe, and Brian
+  Smith.
+\newblock Evaluating usage and quality of technical software documentation: an
+  empirical study.
+\newblock In {\em Proceedings of the 17th international conference on
+  evaluation and assessment in software engineering}, pages 24--35, 2013.
+
+\bibitem{hertzum1996browsing}
+Morten Hertzum and Erik Fr{\o}kj{\ae}r.
+\newblock Browsing and querying in online documentation: A study of user
+  interfaces and the interaction process.
+\newblock {\em ACM Transactions on Computer-Human Interaction (TOCHI)},
+  3(2):136--161, 1996.
+
+\bibitem{what_is_a_image}
+Info@noirlab.edu.
+\newblock Technical document: Introduction to image processing, Mar 2021.
+
+\bibitem{DoG_1}
+tuto java.
+\newblock Difference of gaussians edge enhancement algorithm, 2022.
+
+\bibitem{ju2012multi}
+Dehao Ju, John~S Shrimpton, and Alex Hearn.
+\newblock A multi-thresholding algorithm for sizing out of focus particles.
+\newblock {\em Particle \& Particle Systems Characterization}, 29(2):78--92,
+  2012.
+
+\bibitem{picasso_jungmannlab_2019}
+team Jungmannlab.
+\newblock Jungmannlab/picasso: A collection of tools for painting
+  super-resolution images, 2019.
+
+\bibitem{algo_optimi_2019}
+Mykel~J Kochenderfer and Tim~A Wheeler.
+\newblock {\em Algorithms for optimization}.
+\newblock Mit Press, 2019.
+
+\bibitem{LoG_1}
+Hui Kong, Hatice~Cinar Akakin, and Sanjay~E Sarma.
+\newblock A generalized laplacian of gaussian filter for blob detection and its
+  applications.
+\newblock {\em IEEE transactions on cybernetics}, 43(6):1719--1733, 2013.
+
+\bibitem{diff_imag_vs_video}
+Leonardo.
+\newblock What is the difference between an image and a video frame?, 2019.
+
+\bibitem{poletti2012review}
+Enea Poletti, Francesca Zappelli, Alfredo Ruggeri, and Enrico Grisan.
+\newblock A review of thresholding strategies applied to human chromosome
+  segmentation.
+\newblock {\em Computer methods and programs in biomedicine}, 108(2):679--688,
+  2012.
+
+\bibitem{prigent_2020}
+Sylvain Prigent.
+\newblock Sylvainprigent/stracking: Python library for particles tracking in
+  2d+t and 3d+t scientific images, 2020.
+
+\bibitem{prigent_2021_napari}
+Sylvain Prigent.
+\newblock Sylvainprigent/napari-stracking: Napari plugin for particles
+  tracking, 2021.
+
+\bibitem{picasso_addon_schwille-paint_2020}
+team Schwille-Paint.
+\newblock Schwille-paint/picasso\_addon: Extensions to picasso python package.,
+  2020.
+
+\bibitem{DoH_sellner_2017}
+Jan Sellner.
+\newblock Milania's blog, 2017.
+
+\bibitem{Smith2021}
+Mike~I. Smith and James~G. Downs.
+\newblock Particletracker: a gui based particle tracking software.
+\newblock {\em Journal of Open Source Software}, 6(66):3611, 2021.
+
+\bibitem{soboleva2021raindrops}
+Vera Soboleva and Oleg Shipitko.
+\newblock Raindrops on windshield: Dataset and lightweight gradient-based
+  detection algorithm.
+\newblock In {\em 2021 IEEE Symposium Series on Computational Intelligence
+  (SSCI)}, pages 1--7. IEEE, 2021.
+
+\bibitem{spt_stehr_stein_2020}
+Florian Stehr and Johannes Stein.
+\newblock Schwille-paint/spt: Complete single particle tracking analysis
+  workflow., 2020.
+
+\bibitem{topological_contour_finding}
+Satoshi Suzuki et~al.
+\newblock Topological structural analysis of digitized binary images by border
+  following.
+\newblock {\em Computer vision, graphics, and image processing}, 30(1):32--46,
+  1985.
+
+\bibitem{what_is_a_pixel}
+Techopedia.
+\newblock What is a pixel? - definition from techopedia, Aug 2020.
+
+\bibitem{tsukamoto2016fluid}
+Marcio~Michiharu Tsukamoto, Liang-Yee Cheng, and Fabio~Kenji Motezuki.
+\newblock Fluid interface detection technique based on neighborhood particles
+  centroid deviation (npcd) for particle methods.
+\newblock {\em International Journal for Numerical Methods in Fluids},
+  82(3):148--168, 2016.
+
+\bibitem{yadav2014approach}
+Virendra~Kumar Yadav, Saumya Batham, Anuja~Kumar Acharya, and Rahul Paul.
+\newblock Approach to accurate circle detection: Circular hough transform and
+  local maxima concept.
+\newblock In {\em 2014 International Conference on Electronics and
+  Communication Systems (ICECS)}, pages 1--5. IEEE, 2014.
+
+\bibitem{comparative_hough_transform}
+HK~Yuen, John Princen, John Illingworth, and Josef Kittler.
+\newblock Comparative study of hough transform methods for circle finding.
+\newblock {\em Image and vision computing}, 8(1):71--77, 1990.
+
+\end{thebibliography}

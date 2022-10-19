@@ -1,0 +1,62 @@
+This is BibTeX, Version 0.99d
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+Reallocating 'name_of_file' (item size: 1) to 6 items.
+The style file: plain.bst
+Reallocating 'name_of_file' (item size: 1) to 24 items.
+A level-1 auxiliary file: Formalien/deckblatt.aux
+Reallocating 'name_of_file' (item size: 1) to 30 items.
+A level-1 auxiliary file: Formalien/eidesstaatliche.aux
+Reallocating 'name_of_file' (item size: 1) to 23 items.
+A level-1 auxiliary file: Formalien/abstract.aux
+Reallocating 'name_of_file' (item size: 1) to 25 items.
+A level-1 auxiliary file: Formalien/motivation.aux
+Reallocating 'name_of_file' (item size: 1) to 20 items.
+A level-1 auxiliary file: Kapitel/kapitel.aux
+Reallocating 'name_of_file' (item size: 1) to 19 items.
+Reallocating 'name_of_file' (item size: 1) to 18 items.
+A level-1 auxiliary file: Anhang/anhang.aux
+Database file #1: quellenverzeichnis.bib
+Warning--I didn't find a database entry for "particleTrackingSystem"
+You've used 33 entries,
+            2118 wiz_defined-function locations,
+            685 strings with 9637 characters,
+and the built_in function-call counts, 9921 in all, are:
+= -- 930
+> -- 516
+< -- 3
++ -- 209
+- -- 172
+* -- 656
+:= -- 1658
+add.period$ -- 86
+call.type$ -- 33
+change.case$ -- 181
+chr.to.int$ -- 0
+cite$ -- 33
+duplicate$ -- 327
+empty$ -- 813
+format.name$ -- 172
+if$ -- 2052
+int.to.chr$ -- 0
+int.to.str$ -- 33
+missing$ -- 18
+newline$ -- 153
+num.names$ -- 66
+pop$ -- 247
+preamble$ -- 1
+purify$ -- 150
+quote$ -- 0
+skip$ -- 273
+stack$ -- 0
+substring$ -- 500
+swap$ -- 54
+text.length$ -- 3
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 130
+warning$ -- 0
+while$ -- 98
+width$ -- 35
+write$ -- 319
+(There was 1 warning)

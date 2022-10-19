@@ -1,3 +1,5 @@
+import os
+
 from bokeh.io import curdoc
 from bokeh.plotting import figure, show, output_file
 from bokeh.layouts import layout
@@ -80,7 +82,7 @@ def slider_update(attr, old, new):
     pass
 
 
-slider = Slider(start=0, end=100, value=0, step=1, title="Frames")
+slider = Slider(start=0, end=len(images), value=0, step=1, title="Frames")
 slider.on_change('value', slider_update)
 
 slider_2 = Slider(start=1, end=5, value=1, step=1, title="Speed (frames/second)", width=60)

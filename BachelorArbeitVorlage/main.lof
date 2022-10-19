@@ -1,0 +1,40 @@
+\babel@toc {ngerman}{}\relax 
+\babel@toc {ngerman}{}\relax 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Vergleich zwischen Bild mit 72dpi und eins mit 30dpi.\relax }}{11}{figure.caption.8}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Beispiel von `maxima detection'\relax }}{13}{figure.caption.11}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Rohbild mit zu erkennenden Partikeln.\relax }}{16}{figure.caption.12}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Unzureichend beschriebene Optionsnamen\relax }}{20}{figure.caption.19}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Beispiel einer Partikelerkennung mit der Trackpy-Methode von ParticleTracker.\relax }}{21}{figure.caption.22}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Beispiel von Partikelerkennung mit Trackpy.\relax }}{29}{figure.caption.43}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Vergleich zwischen max\_iterations=1 und max\_iterations=1000 auf demselben Frame.\relax }}{32}{figure.caption.44}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {6.1}{\ignorespaces locate()-Funktion auf 0. Frame mit diameter=3\relax }}{36}{figure.caption.45}%
+\contentsline {figure}{\numberline {6.2}{\ignorespaces locate()-Funktion auf 0. Frame mit diameter=9\relax }}{37}{figure.caption.46}%
+\contentsline {figure}{\numberline {6.3}{\ignorespaces locate()-Funktion auf 0. Frame mit diameter=7\relax }}{38}{figure.caption.47}%
+\contentsline {figure}{\numberline {6.4}{\ignorespaces locate()-Funktion auf 0. Frame mit diameter=5\relax }}{38}{figure.caption.47}%
+\contentsline {figure}{\numberline {6.5}{\ignorespaces locate()-Funktion auf 0. Frame mit diameter=5\relax }}{39}{figure.caption.48}%
+\contentsline {figure}{\numberline {6.6}{\ignorespaces Ein Teil des initialen Dataframes\relax }}{41}{figure.caption.49}%
+\contentsline {figure}{\numberline {6.7}{\ignorespaces Ein Teil des sortierten Dataframes\relax }}{42}{figure.caption.50}%
+\contentsline {figure}{\numberline {6.8}{\ignorespaces locate()-Funktion auf 0. Frame mit 'mimass=189.72805'\relax }}{43}{figure.caption.51}%
+\contentsline {figure}{\numberline {6.9}{\ignorespaces Sortierte Tabelle\relax }}{44}{figure.caption.52}%
+\contentsline {figure}{\numberline {6.10}{\ignorespaces locate()-Funktion auf 0. Frame mit 'mimass=197'\relax }}{45}{figure.caption.53}%
+\contentsline {figure}{\numberline {6.11}{\ignorespaces locate()-Funktion auf 0. Frame mit 'mimass=204'\relax }}{46}{figure.caption.54}%
+\contentsline {figure}{\numberline {6.12}{\ignorespaces locate()-Funktion auf 0. Frame mit 'mimass=210'\relax }}{47}{figure.caption.55}%
+\contentsline {figure}{\numberline {6.13}{\ignorespaces locate()-Funktion auf 0. Frame mit 'mimass=212'\relax }}{48}{figure.caption.56}%
+\contentsline {figure}{\numberline {6.14}{\ignorespaces locate()-Funktion auf 0. Frame mit 'separation=6.0'\relax }}{49}{figure.caption.57}%
+\contentsline {figure}{\numberline {6.15}{\ignorespaces locate()-Funktion auf 0. Frame mit 'separation=7.0'\relax }}{50}{figure.caption.58}%
+\contentsline {figure}{\numberline {6.16}{\ignorespaces locate()-Funktion auf 0. Frame mit 'separation=6.3'\relax }}{51}{figure.caption.59}%
+\contentsline {figure}{\numberline {6.17}{\ignorespaces Vergleich von Bild 1 und Bild 62 mit denselben Parameterwerten.\relax }}{52}{figure.caption.60}%
+\contentsline {figure}{\numberline {6.18}{\ignorespaces Struktogramm der Methode.: get\_particles\_per\_image\_as\_array()\relax }}{54}{figure.caption.61}%
+\contentsline {figure}{\numberline {6.19}{\ignorespaces Vergleich von Bild 62 ohne und mit automatischer Optimierung der Parameter.\relax }}{59}{figure.caption.67}%
+\contentsline {figure}{\numberline {6.20}{\ignorespaces Struktogramm der Methode: update\_frame()\relax }}{60}{figure.caption.68}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {7.1}{\ignorespaces Frontend presentation\relax }}{64}{figure.caption.69}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

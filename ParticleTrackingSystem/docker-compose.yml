@@ -1,0 +1,28 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+#      to named your image
+#    image: test
+    ports:
+      - '5006:5006'
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres
+#    volumes:
+#      - ./../ParticleTrackingSystem:/ParticleTrackingSystem
+
+  db:
+    image: postgres
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - db:/var/lib/postgres/data
+volumes:
+  db:
+    driver: local

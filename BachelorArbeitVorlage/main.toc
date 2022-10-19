@@ -1,0 +1,61 @@
+\babel@toc {ngerman}{}\relax 
+\babel@toc {ngerman}{}\relax 
+\contentsline {chapter}{\numberline {1}Abstract}{2}{chapter.1}%
+\contentsline {chapter}{\numberline {2}Einleitung }{3}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Motivation }{3}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Ausgangssituation }{3}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Zielsetzung }{4}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Abgrenzung }{4}{section.2.4}%
+\contentsline {chapter}{\numberline {3}Grundlage }{8}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Definition }{8}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Bild- und Videoqualität }{9}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Bild-/Imagequalität }{9}{subsection.3.2.1}%
+\contentsline {subparagraph}{\nonumberline Anzahl der Pixel\\}{9}{subparagraph*.5}%
+\contentsline {subparagraph}{\nonumberline Bilddichte\\}{10}{subparagraph*.7}%
+\contentsline {subparagraph}{\nonumberline Bittiefe\\}{12}{subparagraph*.10}%
+\contentsline {subsection}{\numberline {3.2.2}Videoqualität }{12}{subsection.3.2.2}%
+\contentsline {section}{\numberline {3.3}Verfahren }{12}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Erkennung Methoden }{12}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Der Fall Trackpy }{15}{subsection.3.3.2}%
+\contentsline {chapter}{\numberline {4}Bibliotheken/Software }{16}{chapter.4}%
+\contentsline {section}{\numberline {4.1}ParticleTracker }{17}{section.4.1}%
+\contentsline {paragraph}{\nonumberline Ein-/Ausgabe \\}{18}{paragraph*.14}%
+\contentsline {paragraph}{\nonumberline Vorteile}{19}{paragraph*.16}%
+\contentsline {paragraph}{\nonumberline Nachteile}{19}{paragraph*.18}%
+\contentsline {paragraph}{\nonumberline Beispiel\\}{21}{paragraph*.21}%
+\contentsline {section}{\numberline {4.2}STracking}{22}{section.4.2}%
+\contentsline {paragraph}{\nonumberline Ein-/Ausgabe \\}{23}{paragraph*.24}%
+\contentsline {paragraph}{\nonumberline Vorteile}{23}{paragraph*.26}%
+\contentsline {paragraph}{\nonumberline Nachteile}{24}{paragraph*.28}%
+\contentsline {section}{\numberline {4.3}SPT: Single particle tracking analysis }{24}{section.4.3}%
+\contentsline {paragraph}{\nonumberline Ein-/Ausgabe \\}{25}{paragraph*.30}%
+\contentsline {paragraph}{\nonumberline Vorteile}{25}{paragraph*.32}%
+\contentsline {paragraph}{\nonumberline Nachteile}{26}{paragraph*.34}%
+\contentsline {section}{\numberline {4.4}Trackpy }{26}{section.4.4}%
+\contentsline {paragraph}{\nonumberline Ein-/Ausgabe \\}{26}{paragraph*.36}%
+\contentsline {paragraph}{\nonumberline Vorteile}{27}{paragraph*.38}%
+\contentsline {paragraph}{\nonumberline Nachteile}{28}{paragraph*.40}%
+\contentsline {paragraph}{\nonumberline Beispiel:}{28}{paragraph*.42}%
+\contentsline {chapter}{\numberline {5}Trackpy }{30}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Einleitung und Installation }{30}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Benutzererfahrung }{30}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}In Bezug auf das Lesen des Videos }{30}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}In Bezug auf die Einarbeitung in die Bibliothek }{31}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.2.3}In Bezug auf die Geschwindigkeit }{31}{subsection.5.2.3}%
+\contentsline {subsection}{\numberline {5.2.4}In Bezug auf Verwendung bestimmter Parameter der Funktion locate. }{32}{subsection.5.2.4}%
+\contentsline {chapter}{\numberline {6}Partikel-Erkennungssystem }{33}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Partikel-Erkennungssystem}{33}{section.6.1}%
+\contentsline {subsection}{\numberline {6.1.1}Parameter der locate-Funktion }{33}{subsection.6.1.1}%
+\contentsline {subsection}{\numberline {6.1.2}Ermittlung der optimalen Parameterwerte der Locate-Funktion von Trackpy. }{36}{subsection.6.1.2}%
+\contentsline {section}{\numberline {6.2}Automatische Parameter-Optimierung}{52}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Bearbeitung eines einzelnen Bildes }{59}{section.6.3}%
+\contentsline {chapter}{\numberline {7}Auswertung }{62}{chapter.7}%
+\contentsline {section}{\numberline {7.1}App}{62}{section.7.1}%
+\contentsline {subsection}{\numberline {7.1.1}Installation}{62}{subsection.7.1.1}%
+\contentsline {subsection}{\numberline {7.1.2}Bedienung der Anwendung}{63}{subsection.7.1.2}%
+\contentsline {chapter}{\numberline {8}Fazit}{66}{chapter.8}%
+\contentsline {chapter}{\numberline {9}Ausblick}{67}{chapter.9}%
+\contentsline {chapter}{Abbildungsverzeichnis}{68}{section*.70}%
+\contentsline {chapter}{Literaturverzeichnis}{69}{section*.75}%
+\contentsline {chapter}{Anhang}{72}{section*.77}%
+\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 
