@@ -481,6 +481,9 @@ class Tracker:
         if 'output.csv' in listdir('./static/'):
             print("remove(output.csv)")
             remove("./static/output.csv")
+        if 'output2.csv' in listdir('./static/'):
+            print("remove(output2.csv)")
+            remove("./static/output2.csv")
         for_csv = pd.DataFrame()
         particle_per_frame = self.get_particle_per_frame()
         locatedImages = [f"./static/locatedImages/{f}" for f in
@@ -502,6 +505,7 @@ class Tracker:
             i += 1
         for_csv.to_csv('./static/output.csv',
                        columns=["Images", "Length", "Minmass", "Mod", "Separation", "Maxsize", "Topn", "Engine"])
+        self.dataframe.to_csv('./static/output2.csv', sep=';')
 
     # Stores the number of particles per image in array
     def get_particles_per_image_as_array(self, frames, min_particle_percentage=85.0, max_particle_percentage=110.0):
