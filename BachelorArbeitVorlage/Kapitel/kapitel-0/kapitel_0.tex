@@ -73,8 +73,7 @@ Die Bittiefe bezieht sich auf die Gesamtanzahl der Töne (Anzahl der Farben), di
 \begin{equation}
 	2^n = Bittiefe
 \end{equation}   Dabei steht n für die Anzahl der Bits.
-Je höher dieser Wert ist, desto mehr Farben werden gespeichert und angezeigt. Beispiel: Ein Bild mit einer Bittiefe von 1 Bit: $2^1=2$ kann nur zwei Farben speichern, nämlich Schwarz und Weiß.
-
+Je höher dieser Wert ist, desto mehr Farben werden gespeichert und angezeigt.\\ Beispiel: Ein Bild mit einer Bittiefe von 1 Bit: $2^1=2$. Es können dann nur 2 Farben gespeichert werden, und zwar Weiß und Schwarz.
 
 \subsection{Videoqualität \label{kap0_videoQlt}}
 
@@ -83,7 +82,7 @@ Je höher die Anzahl der \textit{fps}, desto flüssiger das Video.
 Der Punkt über die Auflösung von Bildern \ref{kap0_imageQlt} sollte daher noch einmal gelesen werden, um das Konzept der Auflösung besser zu verstehen und auf ein Video anzuwenden.
 
 \section{Verfahren  \label{kap0_verf}}
-Zur Erkennung von Partikeln gibt es eine Vielzahl von Ansätzen. Zu diesen Ansätzen oder Methoden gehören: "Maxima detection", "thresholding", "fitting", "centroid estimation", wie in ''Objective comparison of particle tracking methods" erwähnt.
+Zur Erkennung von Partikeln gibt es eine Vielzahl von Ansätzen. Zu diesen Ansätzen oder Methoden gehören: "Maxima detection", "thresholding", "fitting", "centroid estimation", wie in ''Objective comparison of particle tracking methods'' von  \textit{Nicolas Chenouard et al.(2014)}  \cite{chenouard2014objective}  erwähnt.
 \subsection{Erkennung Methoden \label{kap0_verf_erkenn}}
 
 
@@ -100,7 +99,7 @@ Beispiel: Das Array a = [74, 4, 5, 71, 70, 8, 9, 67] und ein Intervall von 5. Da
 \end{figure}
 
 Dies ermöglicht es, Schritt für Schritt die Bildpunkte mit der höchsten Helligkeit zu ermitteln, bei denen es sich wahrscheinlich um Partikel oder zu erkennende Elemente handelt.
-"VK Yadav et al.'' beschreiben in ihrem Artikel Approach to accurate circle detection: ''Circular Hough Transform and Local Maxima concept'' (Ansatz zur genauen Kreiserkennung: ''Circular Hough Transform und lokales Maxima-Konzept'') 
+"VK Yadav et al.'' beschreiben in ihrem Artikel ''Approach to accurate circle detection: Circular Hough Transform and Local Maxima concept'' (Ansatz zur genauen Kreiserkennung: ''Circular Hough Transform und lokales Maxima-Konzept'') 
 \cite{yadav2014approach} eine explizitere Beschreibung.
 
 
@@ -111,14 +110,14 @@ Die Anwendungsmöglichkeiten werden in ''A Multi-Thresholding Algorithm for Sizi
 
 
 \item \textbf{Fitting}\\
-Das Fitting ist eine Funktion, die in der Regel im Bereich des maschinellen Lernens eingesetzt wird. Die Funktion trainiert ein Modell\footnote{Ein Modell ist eine wohldefinierte Berechnung, die das Ergebnis eines Algorithmus ist, der einen Wert oder eine Reihe von Werten als Eingabe nimmt und einen Wert oder eine Reihe von Werten als Ausgabe erzeugt.}, um Vorhersagen zu treffen (hier Vorhersagen über die Position/Lokalisierung von Partikeln). Dazu verwendet sie Trainingsdaten, die vorab zur Verfügung gestellt werden. Wenn das Modell einmal trainiert ist, wird es die Parameterwerte finden, die am besten geeignet sind, um möglichst viele Partikel aufzuspüren.\\ 
+Das Fitting ist eine Funktion, die in der Regel im '\textit{maschinellen Lernen}` verwendet wird. Die Funktion trainiert ein Modell\footnote{Ein Modell ist eine wohldefinierte Berechnung, die das Ergebnis eines Algorithmus ist, der einen Wert oder eine Reihe von Werten als Eingabe nimmt und einen Wert oder eine Reihe von Werten als Ausgabe erzeugt.}, um Vorhersagen zu treffen (hier Vorhersagen über die Position/Lokalisierung von Partikeln). Dazu verwendet sie Trainingsdaten, die vorab zur Verfügung gestellt werden. Wenn das Modell einmal trainiert ist, wird es die Parameterwerte finden, die am besten geeignet sind, um möglichst viele Partikel aufzuspüren.\\ 
 Sollten die Vorhersagen und die Ergebnisse zu stark voneinander abweichen, sollte das Modell idealerweise erneut mit der Fitting-Methode trainiert werden.\\
 In dem Artikel ''Efficient particle swarm optimization approach for data fitting with free knot B-splines" \cite{galvez2011efficient} von \textit{Y Niu et al}. sowie in ''A function fitting method" \cite{Dachiraju+2020+59+65} von \textit{Rajesh Dachiraju} wird die Funktionstüchtigkeit des Fittings herausgearbeitet und eingehend erläutert.
 
 \item \textbf{Centroid estimation}\\
 Ein Zentroid ist ein Punkt, der dem geometrischen Mittelpunkt eines Objekts entspricht. Je nach Form des Objekts können eine oder mehrere Koordinaten erforderlich sein, um diesen Punkt zu definieren.\\
 Das Konzept der Zentroidenschätzung ermöglicht es also, den geometrischen Mittelpunkt eines jeden vorhandenen Partikels zu ermitteln.\\ 
-Genau zu diesem Zweck haben \textit{Tsukamoto, Marcio Michiharu et al.} in dem Artikel \textit{"Fluid interface detection technique based on neighborhood particles centroid deviation (NPCD) for particle methods}" \cite{tsukamoto2016fluid} die Effektivität der Anwendung dieser Methode im Vergleich zu anderen, weiter verbreiteten und verwendeten Methoden demonstriert.
+Genau zu diesem Zweck haben \textit{Tsukamoto, Marcio Michiharu et al. (2016)} in dem Artikel \textit{"Fluid interface detection technique based on neighborhood particles centroid deviation (NPCD) for particle methods}"  \cite{tsukamoto2016fluid} die Effektivität der Anwendung dieser Methode im Vergleich zu anderen, weiter verbreiteten und verwendeten Methoden demonstriert.
 
 \end{itemize}
 

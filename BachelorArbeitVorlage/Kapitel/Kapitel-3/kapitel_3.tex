@@ -85,7 +85,7 @@ Beachte, dass einfachheitshalber, während der gesamten Parametereinstellung nur
 	Hier wird es ein Antwortversuch auf die zuletzt gestellte Frage eingegangen. Zur Erreichung dieses Zieles wird mit der Erkennung begonnen, indem nur die geforderten Parameter(raw\_image und diameter) verwendet werden und nach und nach weitere hinzugefügt werden, um die Suche zu verfeinern. 
 	
 	\begin{enumerate}
-    			\item {\large \textbf{Ermittlung von diameter}}\\
+    			\item {\large \textbf{Ermittlung von diameter} \label{kap3_Ermittlung_diameter}}\\
     			\textbf{locate(f, d): \textit{Wobei f = raw\_image und d = diameter}} \\ \\
     			 Während frames[0] dem ersten Bild der Videoaufnahme bzw. der Imagesequenz entspricht, \texttt{Frames} bilden der Gesamtheit der Bilder des Videos im Laufe der Zeit.  Diese Angabe, die vom Typ Array ist, stellt eine Voraussetzung für die Ausführung von Funktionen dar. \\
     			 Für den Durchmesser wird zunächst willkürlich eine ziemlich kleine ungerade Zahl genommen, um die Ergebnisse zu sehen und eine Annäherung an den Wert, den wir verwenden sollen, zu erhalten. Zunächst nehmen wir also einen Durchmesser von drei (d=3).  
@@ -147,7 +147,7 @@ Tatsächlich lassen sich insgesamt 475 Partikel finden, von denen ca. 121 unerw�
 \end{figure} 
 
     			
-    			\item  {\large \textbf{Ermittlung von \textbf{minmass}}} \\
+    			\item  {\large \textbf{Ermittlung von \textbf{minmass}} \label{kap3_Ermittlung_minmass}} \\
     			\textbf{locate(f, d, minmass)}:\\ \\
 Wie bereits erwähnt, spiegelt \textit{minmass} die inhärente und eingebaute minimale Helligkeit jedes lokalisierten Partikels wider. Das Ziel ist es nun, die zuvor ermittelten, zu dunklen Partikel herauszufiltern. Daher ist es notwendig, methodisch mit dem Parameter \textit{minmass} zu spielen, um dieses Ziel zu erreichen. Es gibt natürlich mehrere Möglichkeiten, den optimalen Wert für die gesuchte Parameter zu finden. Allerdings wird hier die folgende Logik verfolgt:\\
 
@@ -236,7 +236,7 @@ Deswegen wird es dem weiteren  den Parameter  \textbf{Separation} gewidmet, um w
 \end{figure}
 
 
-		\item {\large \textbf{Ermittlung von \textbf{separation}}} \\
+		\item {\large \textbf{Ermittlung von \textbf{separation}} \label{kap3_Ermittlung_sep}} \\
 		\textbf{locate(f, d, minmass, separation)} \\ \\
     			Hier werden wir Werte für \texttt{separation} ausprobiert, um auf bessere Resultate zu kommen. 
     			Es wäre interessant zu erwähnen, dass es sich dabei um den minimalen Abstand zwischen zwei Teilchen handelt. Der Standardwert ist \textit{Durchmesser + 1}. In diesem Fall ist es 6. 
@@ -295,31 +295,13 @@ Tatsächlich wurden auf dem rechten Bild ungefähr 38 Partikel erkannt, während
 Die Sicherstellung, dass diese Art von Partikeln, die zwischen den Bildern gefunden werden, nicht mehr reproduziert werden, wird Gegenstand unserer Beschäftigung im nächsten Gliederungspunkt sein.
 
 \section{Automatische Parameter-Optimierung}
-Zur Lösung des oben genannten Problems haben wir im Rahmen dieser Arbeit eine Methode namens \textbf{get\_particles\_per\_image\_as\_array} implementiert, die auf alle Bilder des Videos angewendet wird (ein Bild nach dem anderen) und die nach der Bestimmung eines Intervalls sicherstellt, dass die Anzahl der detektierten Partikel in diesem Intervall verbleibt.\\
+Zur Lösung des oben genannten Problems haben wir im Rahmen dieser Arbeit eine Methode namens \textbf{get\_particles\_per\_image\_as\_array()} implementiert, die auf alle Bilder des Videos angewendet wird (ein Bild nach dem anderen) und die nach der Bestimmung eines Intervalls sicherstellt, dass die Anzahl der detektierten Partikel in diesem Intervall verbleibt.\\
 
 Das folgende Struktogramm zeigt, wie die Methode sicherstellt, dass die Anzahl der gefundenen Partikel immer innerhalb des zuvor definierten Intervalls bleibt.
 
 An dieser Stelle sei erwähnt, dass das Ergebnis und die Parameter, die zu diesem Ergebnis geführt haben, in einer Variablen mit dem Namen \textbf{particle\_per\_frame} gespeichert werden.  Diese Variable wird auch der Rückgabewert der Funktion sein. 
 
-Außerdem ist der einzige Parameter, der bei der automatischen Optimierung des Ergebnisses berücksichtigt und geändert wird, der "minmass"\-Parameter. Dieser wird verwendet, weil wir im Laufe unserer Versuche festgestellt haben, dass ein Großteil der Ergebnisse nur mit diesem Wert erzielt werden kann.
-
-%Es ist jedoch möglich, verschiedene Werte für bestimmte Parameter zu testen, und zwar für ein bestimmtes Bild mit Hilfe einer anderen Funktion \textbf{update\_frame}.
-%
-%\begin{figure}\centering
-%\begin{tikzpicture}[zoomboxarray,
-%	zoomboxes below,
-%    zoomboxarray columns=3,
-%    zoomboxarray rows=1,
-%    connect zoomboxes,
-%    zoombox paths/.append style={ultra thick, red}]
-%    \node [image node] { \includegraphics[width=1\textwidth]{Grafiken/pts/structogram.png} };
-%    \zoombox[magnification=4]{0.5,0.9}
-%    \zoombox[magnification=2]{0.7,0.6}
-%%    \zoombox{0.15,0.3}
-%%    \zoombox[magnification=10]{0.86,0.35}
-%\end{tikzpicture}
-%\caption{The National Gallery of Canada}
-%\end{figure}
+Außerdem ist der einzige Parameter, der bei der automatischen Optimierung des Ergebnisses berücksichtigt und geändert wird, der "minmass''-Parameter. Dieser wird verwendet, weil wir im Laufe unserer Versuche festgestellt haben, dass ein Großteil der Ergebnisse nur mit diesem Wert erzielt werden kann.
 
 \newpage
 
@@ -385,7 +367,7 @@ Außerdem ist der einzige Parameter, der bei der automatischen Optimierung des E
 \end{figure}
 
 
-Das Intervall sollte in Prozent angegeben werden, wobei der Standardwert \textit{80\%} für den unteren Grenzwert und \textit{110\%} für den oberen Grenzwert ist. Die 100\% werden durch die Anzahl der im allerersten Bild erkannten Partikel bestimmt. 
+Das Intervall sollte in Prozent angegeben werden, wobei der Standardwert \textit{80\%} für den unteren Grenzwert und \textit{110\%} für den oberen Grenzwert ist. Die 100\% werden durch die Anzahl der im allerersten Bild erkannten Partikel bestimmt. Die untere und obere Grenzwerte müssen dann als Parameter in die Methode (\textbf{get\_particles\_per\_image\_as\_array()}) eingegeben werden. Die heißen an dieser Stelle \textit{min\_particle\_percentage} und \textit{max\_particle\_percentage} für jeweils  den unteren und oberen Grenzwert.\\
 Es wird natürlich davon ausgegangen, dass ein erster Schritt, der manuelle und systematische Suche nach geeigneten Parametern für dieses erste Bild, bereits durchgeführt wurde (\textit{siehe Abschnitt} \ref{kap3_OP}).\\
 
 Nach der Ausführung der Methode mit den Standardprozentwerten für die untere und obere Grenze des Intervalls erhalten wir schließlich das folgende Ergebnis. Dieses Ergebnis wird mit demselben Bild verdeutlicht, bei dem keine automatische Optimierung der Paremeters durchgeführt wurde.
@@ -401,8 +383,8 @@ Es ist jedoch möglich, verschiedene Werte für bestimmte Parameter zu testen, u
 
 \section{Bearbeitung eines einzelnen Bildes \label{kap3_bearb_einz_bild}}
 Die automatische Optimierung hilft zwar dabei, eine gewisse Anzahl von Partikeln in den Ergebnissen zu behalten, aber es kann vorkommen, dass man bei einem bestimmten Bild andere Werte für die Parameter anwenden möchte, ohne die Gesamtheit der enthaltenen Bilder zu verändern. 
-Wir haben daher eine Methode namens \textit{\textbf{update\_frame}} entwickelt, mit der wir die gewünschten Änderungen an einem einzelnen Bild vornehmen können.
-Sie kann insgesamt 7 Parameter aufnehmen, von denen 2 erforderlich und die anderen 5 optional sind. Die obligatorischen Parameter sind: \textit{frames} und \textit{f\_no}(Die Nummer des zu bearbeitenden Bildes)
+Wir haben daher eine Methode namens \textit{\textbf{update\_frame()}} entwickelt, mit der wir die gewünschten Änderungen an einem einzelnen Bild vornehmen können.
+Sie kann insgesamt sieben Parameter aufnehmen, von denen zwei erforderlich und die anderen fünf optional sind. Die obligatorischen Parameter sind: \textit{frames} und \textit{f\_no}(Die Nummer des zu bearbeitenden Bildes)
 Die optionalen sind \textit{minmass}, \textit{separation}, \textit{maxsize}, \textit{topn} und \textit{engine}.
 
 \begin{figure}[H]

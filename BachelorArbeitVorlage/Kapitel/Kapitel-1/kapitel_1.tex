@@ -147,11 +147,11 @@ Es stellt drei Methoden zur Verfügung, um die Partikelerkennung und -verfolgung
 \begin{itemize}
 	\item \textbf{Difference of Gaussians (DoG)}: ist ein Algorithmus zur Verbesserung von Graustufenbildern, bei dem eine unscharfe Version eines Originalgraustufenbildes von einer anderen, weniger unscharfen Version des Originals subtrahiert wird \citep{DoG_1}.
 	
-	\item \textbf{Determinant of Hessian (DoH)}: Der als solche funktioniert, wie in \cite{DoH_sellner_2017} dargestellt,\\ `\textit{An image is scaled to a size defined by the scale parameter $\sigma$. Let \textbf{$H_{\sigma}$} denote the Hessian matrix at a specific image location in level \textbf{$\sigma$} and e.g. \textbf{{\large $\partial_{xx} = \frac{\partial^{2}I}{\partial^{2}x^{2}}$}} denoting the second order derivative of the image $I$ along the $\textbf{x}-axis$. We can use the normalized determinant response of the Hessian 
+	\item \textbf{Determinant of Hessian (DoH)}: Der als solche funktioniert, wie im Artikel von \textit{Jan Sellner (2017)} "\textit{Introduction to the Hessian feature detector for finding blobs in an image}'' \cite{DoH_sellner_2017} dargestellt,\\ `\textit{An image is scaled to a size defined by the scale parameter $\sigma$. Let \textbf{$H_{\sigma}$} denote the Hessian matrix at a specific image location in level \textbf{$\sigma$} and e.g. \textbf{{\large $\partial_{xx} = \frac{\partial^{2}I}{\partial^{2}x^{2}}$}} denoting the second order derivative of the image $I$ along the $\textbf{x}-axis$. We can use the normalized determinant response of the Hessian 
 	\begin{center}
 	 \textbf{{\large $\sigma ^{4} \cdot det(H_{\sigma}) = \sigma ^{4} \cdot (\partial_{xx} \cdot \partial_{yy} \cdot \partial^{2}_{xy})$}}\\
 	 \end{center} 
-to detect image features (blobs and notches) by searching for maxima in each image location across scale.}'	
+to detect image features (blobs and notches) by searching for maxima in each image location across scale.}' \cite{DoH_sellner_2017}	
 	
 	\item \textbf{Laplacian of Gaussians (LoG)}: Er hebt Regionen mit schnellen Intensitätsänderungen hervor und wird daher häufig zur Kantenerkennung verwendet \cite{LoG_1}. 
 \end{itemize}
